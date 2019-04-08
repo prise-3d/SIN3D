@@ -1,12 +1,14 @@
+'use strict'
+
 import express from 'express'
+import routes from './routes'
+
+import { apiConfig } from '../config'
 
 const app = express()
-const port = 8080
 
-app.listen(port, () => {
-  console.log('The server was started on http://localhost:' + port)
+app.listen(apiConfig.port, () => {
+  console.log('The server was started on http://localhost:' + apiConfig.port)
 })
 
-app.get('/', (req, res) => {
-  res.send('it works')
-})
+app.use(apiConfig.routePrefix, routes)
