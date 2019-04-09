@@ -1,9 +1,5 @@
 'use strict'
 
-import _fs, { promises as fs } from 'fs'
-import boom from 'boom'
-import { imagesPath } from '../config'
-
 /**
  * Call the error handler if a middleware function throw an error
  *
@@ -27,21 +23,4 @@ export const errorHandler = (err, req, res, next) => {
   const { output: { payload } } = err
   console.error(`Error ${payload.statusCode} - ${payload.error}\n${payload.message}\n`)
   return res.status(payload.statusCode).json(payload)
-}
-
-/**
- * Get a list of all available scenes
- *
- * @returns {string[]} the available scenes
- */
-export const getAvailableScenes = async () => {
-  try {
-    // Check if the images directory exists
-    await fs.access(imagesPath, _fs.constants.R_OK)
-  }
-  catch (err) {
-    // The images directory does not exist or is not accessible
-    throw boom.badRequest(`Can't access the "${imagesPath}" directory. Check it exists and you have read permission on it.`)
-  }
-  return fs.readdir(imagesPath)
 }

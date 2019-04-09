@@ -5,6 +5,7 @@ import express from 'express'
 import compression from 'compression'
 import serveStatic from 'serve-static'
 import helmet from 'helmet'
+import cors from 'cors'
 
 import routes from './routes'
 import { errorHandler } from './functions'
@@ -26,12 +27,11 @@ if (serveClient) {
 else {
   // Don't serve client files (Client is remote)
   // Turn "Cross-origin resource sharing" on to allow the remote client to connect to the API
-  import('cors').then(({ default: cors }) => app.use(cors()))
+  app.use(cors())
 }
 
 // Serve images. "serve-static" is used because it caches images ("express.static" doesn't)
 app.use(serveStatic(imagesPath))
-
 
 // Load all the API routes in the server
 app.use(apiPrefix, routes)
