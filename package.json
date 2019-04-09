@@ -12,9 +12,13 @@
   },
   "dependencies": {
     "boom": "^7.3.0",
+    "compression": "^1.7.4",
     "core-js": "^2.6.5",
+    "cors": "^2.8.5",
     "esm": "^3.2.22",
     "express": "^4.16.4",
+    "helmet": "^3.16.0",
+    "serve-static": "^1.13.2",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1"
   },
