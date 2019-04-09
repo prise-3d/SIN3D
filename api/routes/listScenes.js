@@ -1,17 +1,14 @@
 'use strict'
 
 import express from 'express'
-import { promises } from 'fs'
-
-import { apiConfig } from '../../config'
-
-const fs = promises
+import { asyncMiddleware, getAvailableScenes } from '../functions'
 
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  const dirContent = await fs.readdir(apiConfig.imagesPath)
+router.get('/', asyncMiddleware(async (req, res) => {
+  const dirContent = await getAvailableScenes()
+  console.log('triggered')
   res.json(dirContent)
-})
+}))
 
 export default router

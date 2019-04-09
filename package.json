@@ -6,12 +6,12 @@
     "api:start": "node -r esm api/index.js",
     "api:dev": "nodemon --exec npm run api:start",
     "api:lint": "eslint api/ --fix",
-
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "boom": "^7.3.0",
     "core-js": "^2.6.5",
     "esm": "^3.2.22",
     "express": "^4.16.4",
