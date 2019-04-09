@@ -1,0 +1,16 @@
+FROM nginx:1.15.10-alpine
+
+RUN apk add yarn
+RUN mkdir app
+
+COPY . /app
+
+WORKDIR /app
+
+RUN yarn install 
+RUN yarn run app:build
+
+CMD ["rm", "/usr/share/nginx/html/*/html"]
+CMD [ "cp", "-r", "/app/dist/*", "/usr/share/nginx/html" ]
+CMD ["chmod", "775", "-R", "/usr/share/nginx/html"]
+CMD ["nginx", "-g", "daemon off;"]

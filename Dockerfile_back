@@ -1,0 +1,7 @@
+FROM node:11.7.0-alpine
+
+# Back docker image
+
+WORKDIR /usr/src/app
+
+EXPOSE 5000
