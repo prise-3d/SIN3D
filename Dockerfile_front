@@ -10,7 +10,7 @@ WORKDIR /app
 RUN yarn install 
 RUN yarn run app:build
 
-CMD ["rm", "/usr/share/nginx/html/*/html"]
-CMD [ "cp", "-r", "/app/dist/*", "/usr/share/nginx/html" ]
-CMD ["chmod", "775", "-R", "/usr/share/nginx/html"]
+RUN ["rm", "-r", "/usr/share/nginx/html"]
+RUN ["mv", "/app/dist", "/usr/share/nginx/html"]
+RUN ["chmod", "775", "-R", "/usr/share/nginx/html"]
 CMD ["nginx", "-g", "daemon off;"]

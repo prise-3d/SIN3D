@@ -20,7 +20,7 @@ services:
   front_vue:
       build:
           context: .
-          dockerfile: Dockerfile_front  
+          dockerfile: Dockerfile_front 
       image: frontwebapp
       ports:
           - "80:80"

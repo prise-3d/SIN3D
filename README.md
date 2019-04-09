@@ -5,14 +5,12 @@ Travaux développés par Antoine dans le cadre de son stage de DUT2.
 ## Run as a Docker instance
 ### Run the server + client version
 ```sh
-# TODO
-# docker-compose -f docker-compose.yml up backapp
+docker-compose up
 ```
 
 ### Run the client only version
 ```sh
-# TODO
-#docker-compose -f docker-compose.yml up backapp
+docker-compose up front_vue
 ```
 
 
