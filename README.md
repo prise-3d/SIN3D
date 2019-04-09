@@ -1,6 +1,6 @@
 # Antoine_Internship
-
 Travaux développés par Antoine dans le cadre de son stage de DUT2.
+
 
 ## Run as a Docker instance
 ### Run the server + client version
@@ -22,6 +22,29 @@ Install project's dependencies.
 ```
 yarn install
 ```
+
+If this is a production build, set the `NODE_ENV` environment variable to `production` to enhance performance.
+
+On Linux hosts :
+```sh
+export NODE_ENV=production
+```
+On Windows hosts :
+```bat
+SET NODE_ENV=production
+```
+
+### Configuration 
+Configure the project by modifying *[config.js](config.js)*.
+
+#### Configuration options
+| Option      | Default value | Description |
+| ----------- | ------------- | ----------- |
+| apiPrefix | `/api` | The url prefix for the API |
+| serverPort | `5000` | The port used by the server |
+| imagesPath | `images` | The directory where the images are stored |
+| serveClient | `true` | Should the server serve client files from the `/dist` directory |
+
 
 ### API
 #### Run the server

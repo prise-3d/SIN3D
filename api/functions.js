@@ -2,7 +2,7 @@
 
 import _fs, { promises as fs } from 'fs'
 import boom from 'boom'
-import { apiConfig } from '../config'
+import { imagesPath } from '../config'
 
 /**
  * Call the error handler if a middleware function throw an error
@@ -17,7 +17,7 @@ export const asyncMiddleware = fn => (req, res, next) => {
       // The error was not recognized, send a 500 HTTP error
       return next(boom.internal(err))
     }
-    // It is a boom error, give it to express to handle it
+    // It is a boom error, pass it to the error handler
     next(err)
   })
 }
@@ -37,11 +37,11 @@ export const errorHandler = (err, req, res, next) => {
 export const getAvailableScenes = async () => {
   try {
     // Check if the images directory exists
-    await fs.access(apiConfig.imagesPath, _fs.constants.R_OK)
+    await fs.access(imagesPath, _fs.constants.R_OK)
   }
   catch (err) {
     // The images directory does not exist or is not accessible
-    throw boom.badRequest(`Can't access the "${apiConfig.imagesPath}" directory. Check it exists and you have read permission on it.`)
+    throw boom.badRequest(`Can't access the "${imagesPath}" directory. Check it exists and you have read permission on it.`)
   }
-  return fs.readdir(apiConfig.imagesPath)
+  return fs.readdir(imagesPath)
 }

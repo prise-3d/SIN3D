@@ -3,7 +3,7 @@
 import express from 'express'
 import { promises } from 'fs'
 
-import { apiConfig } from '../../config'
+import { imagesPath } from '../../config'
 
 const fs = promises
 
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     return
   }
 
-  const dirContent = await fs.readdir(apiConfig.imagesPath)
+  const dirContent = await fs.readdir(imagesPath)
   res.json(req.query)
   res.json({ msg: 'Not ready yet' })
 })
