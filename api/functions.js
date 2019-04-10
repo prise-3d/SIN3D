@@ -1,5 +1,7 @@
 'use strict'
 
+import boom from 'boom'
+
 /**
  * Call the error handler if a middleware function throw an error
  *
@@ -23,4 +25,17 @@ export const errorHandler = (err, req, res, next) => {
   const { output: { payload } } = err
   console.error(`Error ${payload.statusCode} - ${payload.error}\n${payload.message}\n`)
   return res.status(payload.statusCode).json(payload)
+}
+
+
+/**
+ * Check the request contains all the required parameters
+ *
+ * @param {string[]} requiredParameters list of all required parameters
+ * @param {object} parameters parameters provided in the request (req.query)
+ * @returns {void}
+ */
+export const checkRequiredParameters = (requiredParameters, parameters) => {
+  if (!requiredParameters.every(aRequiredParameter => Object.keys(parameters).includes(aRequiredParameter)))
+    throw boom.badRequest(`Missing parameter(s). Required parameters : ${requiredParameters.join(', ')}.`)
 }

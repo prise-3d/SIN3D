@@ -4,25 +4,17 @@ import express from 'express'
 import { promises } from 'fs'
 
 import { imagesPath } from '../../config'
+import { checkRequiredParameters } from '../functions'
 
 const fs = promises
 
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  const requiredParameters = ['sceneName', 'imageQuality']
-  const params = req.query
-
-  // Check if all required parameters were passed
-  if (!requiredParameters.every(parameter => Object.keys(params).includes(parameter))) {
-    // Some parameters are missing
-    res.statusCode = 400
-    res.json({ error: `Missing parameter(s). Required parameters : ${requiredParameters.join(', ')}.` })
-    return
-  }
+  // Check the request contains all the required parameters
+  checkRequiredParameters(['sceneName', 'imageQuality'], req.query)
 
   const dirContent = await fs.readdir(imagesPath)
-  res.json(req.query)
   res.json({ msg: 'Not ready yet' })
 })
 
