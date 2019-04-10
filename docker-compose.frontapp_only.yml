@@ -5,7 +5,7 @@ services:
    frontapp_only:
       build:
           context: .
-          dockerfile: Dockerfile_front
+          dockerfile: front.Dockerfile
       image: frontwebapp
       ports:
           - "${PORT}:80"
