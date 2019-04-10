@@ -3,16 +3,21 @@ Travaux développés par Antoine dans le cadre de son stage de DUT2.
 
 
 ## Run as a Docker instance
-### Run the server + client version
+### Run server + client
 ```sh
-docker-compose up
+PORT=8080 SERVE_CLIENT=true docker-compose up
+```
+### Run only the server
+```sh
+PORT=8080 SERVE_CLIENT=false docker-compose up
 ```
 
-### Run the client only version
+### Run only the client
 ```sh
-docker-compose up front_vue
+PORT=8080 docker-compose -f docker-compose.frontapp_only.yml up
 ```
 
+To change the port the server is running on set the environnements variables if necessary (see project setup part).
 
 ## Run on the file system
 ### Project setup

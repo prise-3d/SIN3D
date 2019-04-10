@@ -2,25 +2,17 @@ version: '3'
 
 services:
 
-  back_node:
+  backapp:
       build:
           context: .
           dockerfile: Dockerfile_back
-      command:    
-          sh -c "yarn install && yarn run api:start"
       image: backapp
       ports:
-          - "5000:5000"
-      volumes:
-          - ./:/usr/src/app
+          - "${PORT}:${PORT}"
       environment:
           NODE_ENV: production
           SERVE_CLIENT: $SERVE_CLIENT
-
-  front_vue:
-      build:
-          context: .
-          dockerfile: Dockerfile_front 
-      image: frontwebapp
-      ports:
-          - "80:80"
+          PORT: $PORT
+      volumes:
+          - ./images:/usr/src/app/images
+  
