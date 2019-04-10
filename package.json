@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "api:start": "node -r esm api/index.js",
-    "api:dev": "nodemon --exec npm run api:start",
-    "api:lint": "eslint api/ --fix",
+    "server:start": "node -r esm server/index.js",
+    "server:dev": "nodemon --exec npm run server:start",
+    "server:lint": "eslint server/ --fix",
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint"

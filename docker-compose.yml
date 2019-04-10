@@ -5,7 +5,7 @@ services:
   backapp:
       build:
           context: .
-          dockerfile: Dockerfile_back
+          dockerfile: back.Dockerfile
       image: backapp
       ports:
           - "${PORT}:${PORT}"
@@ -15,4 +15,3 @@ services:
           PORT: $PORT
       volumes:
           - ./images:/usr/src/app/images
-  
