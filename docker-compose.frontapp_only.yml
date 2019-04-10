@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+   frontapp_only:
+      build:
+          context: .
+          dockerfile: Dockerfile_front
+      image: frontwebapp
+      ports:
+          - "${PORT}:80"

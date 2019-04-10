@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  backapp:
+      build:
+          context: .
+          dockerfile: Dockerfile_back
+      image: backapp
+      ports:
+          - "${PORT}:${PORT}"
+      environment:
+          NODE_ENV: production
+          SERVE_CLIENT: $SERVE_CLIENT
+          PORT: $PORT
+      volumes:
+          - ./images:/usr/src/app/images
+  
