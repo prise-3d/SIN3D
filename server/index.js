@@ -31,7 +31,7 @@ else {
 }
 
 // Serve images. "serve-static" is used because it caches images ("express.static" doesn't)
-app.use(serveStatic(imagesPath))
+app.use(apiPrefix + '/images', serveStatic(imagesPath))
 
 // Load all the API routes in the server
 app.use(apiPrefix, routes)
