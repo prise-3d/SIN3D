@@ -38,23 +38,30 @@ router.get('/', asyncMiddleware(async (req, res) => {
   // Parse file name to get qualities
   const qualities = images.reduce((acc, image) => {
     // Go to next file if its name contains a blacklisted word
-    if (!blackList.every(x => !image.includes(x))) return
+    if (!blackList.every(x => image !== x))
+      return acc
 
-    const sp = image.split('_')
-    const end = sp[sp.length - 1] // 000650.png
-    const qualityString = end.replace(/\..*/g, '') // 000650
-    const qualityInteger = parseInt(qualityString, 10) // 650
-
-    // Check the quality string
-    if (isNaN(qualityInteger))
-      return failList.push(`Failed to parse file name : ${image}`)
-
-    acc.push(qualityInteger)
+    // Check if file name contains "_"
+    if (!/^.*?_[0-9]{5}\..*$/.test(image)) {
+      failList.push(`The file name does not match convention (scene_00150.ext) : "${image}"`)
+      return acc
+    }
+    try {
+      const sp = image.split('_')
+      const end = sp[sp.length - 1] // 000650.png
+      const qualityString = end.replace(/\..*/g, '') // 000650
+      const qualityInteger = parseInt(qualityString, 10) // 650
+      acc.push(qualityInteger)
+    }
+    catch (err) {
+      failList.push(`Failed to parse file name : ${image}`)
+    }
+    return acc
   }, [])
 
   // Check if the parse fail list is empty
   if (failList.length > 0)
-    throw boom.internal(`Fail while parsing file names in the "${sceneName}"'s scene directory.`, failList)
+    throw boom.conflict(`Failed to parse file names in the "${sceneName}"'s scene directory.`, failList)
 
   res.json(qualities)
 }))
