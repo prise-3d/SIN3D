@@ -3,3 +3,5 @@ npm-debug.log
 .git
 images
 dist
+combined.log
+error.log

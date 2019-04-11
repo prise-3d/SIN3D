@@ -10,6 +10,7 @@ cd Antoine_Internship
 ## Run as a Docker instance
 ### Configure
 Use the following environment variables to configure the application.
+
 | Option      | Default value | Description | Server | Client |
 | ----------- | ------------- | ----------- | :------: | :------: |
 | `PORT` | `5000` | The port used by the started application |  ✅  | ✅ |
@@ -79,11 +80,11 @@ yarn install
 
 If this is a production build, set the `NODE_ENV` environment variable to `production` to enhance performance.
 
-On Linux hosts :
+Linux
 ```sh
 export NODE_ENV=production
 ```
-On Windows hosts :
+Windows
 ```bat
 SET NODE_ENV=production
 SET SERVE_CLIENT=false

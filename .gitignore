@@ -21,3 +21,5 @@ yarn-error.log*
 
 /images
 /dist
+combined.log
+error.log

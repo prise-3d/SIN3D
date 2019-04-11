@@ -6,12 +6,15 @@ import compression from 'compression'
 import serveStatic from 'serve-static'
 import helmet from 'helmet'
 import cors from 'cors'
-
 import routes from './routes'
 import { errorHandler } from './functions'
-import { apiPrefix, serverPort, serveClient, imagesPath } from '../config'
+import { apiPrefix, serverPort, serveClient, imagesPath, logger } from '../config'
+const morgan = require('morgan')
 
 const app = express()
+
+// Activating logging
+app.use(morgan('combined', { 'stream': { write: (message, encoding) => logger.info(message) } }))
 
 // Use gzip compression to improve performance
 app.use(compression())
@@ -31,7 +34,7 @@ else {
 }
 
 // Serve images. "serve-static" is used because it caches images ("express.static" doesn't)
-app.use(serveStatic(imagesPath))
+app.use(apiPrefix + '/images', serveStatic(imagesPath))
 
 // Load all the API routes in the server
 app.use(apiPrefix, routes)
@@ -40,4 +43,4 @@ app.use(apiPrefix, routes)
 app.use(errorHandler)
 
 // Start the server on the configured port
-app.listen(serverPort, () => console.log('The server was started on http://localhost:' + serverPort))
+app.listen(serverPort, () => logger.info('The server was started on http://localhost:' + serverPort))

@@ -1,7 +1,7 @@
 'use strict'
 
 import express from 'express'
-import _fs, { promises as fs } from 'fs'
+import { promises as fs } from 'fs'
 import boom from 'boom'
 import { imagesPath } from '../../config'
 import { asyncMiddleware } from '../functions'
