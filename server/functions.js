@@ -1,6 +1,7 @@
 'use strict'
 
 import boom from 'boom'
+import { logger } from '../config'
 
 /**
  * Call the error handler if a middleware function throw an error
@@ -23,8 +24,21 @@ export const asyncMiddleware = fn => (req, res, next) => {
 // Middleware to handle middleware errors
 export const errorHandler = (err, req, res, next) => {
   const { output: { payload } } = err
-  console.error(`Error ${payload.statusCode} - ${payload.error}\n${payload.message}\n`)
-  return res.status(payload.statusCode).json(payload)
+
+  // Pass the error to the logging handler
+  let logMsg = `Error ${payload.statusCode} - ${payload.error}` +
+    ` - Message :\n${payload.message}`
+  if (err.data) logMsg += `\nData : \n${JSON.stringify(err.data, null, 2) || err.data}`
+
+  logger.error(logMsg)
+
+  // Send the error to the client
+  res.status(payload.statusCode).json({
+    message: payload.message,
+    data: err.data || undefined
+  })
+
+  next()
 }
 
 
