@@ -15,39 +15,46 @@ Use the following environment variables to configure the application.
 | ----------- | ------------- | ----------- | :------: | :------: |
 | `PORT` | `5000` | The port used by the started application |  ✅  | ✅ |
 | `SERVE_CLIENT` | `true` | Should the server serve client (Fully local application) |  ✅  | ⬜️ |
+| `IMAGES_PATH` | `./images` | The directory where the images are stored (absolute path if changed ⚠️) |  ✅  | ⬜️ |
+
+Configure more deeply the way the app works by modifying *[config.js](config.js)*.
+
+| Option      | Default value | Description |
+| ----------- | ------------- | ----------- |
+| apiPrefix | `/api` | The url prefix for the API |
+| imageServedUrl | `/api/images` | The url prefix from where the images are served |
+| serverPort | `5000` | The port used by the server |
+| imagesPath | `./images` | The directory where the images are stored |
+| serveClient | `true` | Should the server serve client files from the `/dist` directory |
+| fileNameConvention | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
+| sceneFileNameBlackList | `['config', 'seuilExpe']` | Files to ignore in scenes |
 
 ### Run server + client
 Linux
 ```sh
-PORT=8080 SERVE_CLIENT=true docker-compose up
+PORT=8080 SERVE_CLIENT=true IMAGE_PATH=/var/images docker-compose up
 ```
 Windows
 ```bat
 SET PORT=8080
 SET SERVE_CLIENT=true
+SET IMAGE_PATH=C:\my\images
 docker-compose up
 ```
 
 ### Run server only
 Linux
 ```sh
-PORT=8080 SERVE_CLIENT=false docker-compose up
+SERVE_CLIENT=false docker-compose up
 ```
 Windows
 ```bat
-SET PORT=8080
 SET SERVE_CLIENT=false
 docker-compose up
 ```
 
 ### Run client only
-Linux
 ```sh
-PORT=8080 docker-compose -f docker-compose.frontapp_only.yml up
-```
-Windows
-```bat
-SET PORT=8080
 docker-compose -f docker-compose.frontapp_only.yml up
 ```
 
@@ -64,7 +71,7 @@ docker-compose -f docker-compose.frontapp_only.yml build
 
 ### Using Windows
 When using Windows, it may happen that you can't properly run the containers because of Windows's path system being different. To circumvant this problem, you can do the [following steps](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
-> 1. On **Command Line**: "_set COMPOSE_CONVERT_WINDOWS_PATHS=1_";
+> 1. On **Command Line**: "set COMPOSE_CONVERT_WINDOWS_PATHS=1";
 > 2. Restart **Docker for Windows**;
 > 3. Go to **Docker for Windows** settings **>** Shared Drives **>** Reset credentials **>** select drive **>** Apply;
 > 4. Reopen **Command Line**;
@@ -87,20 +94,7 @@ export NODE_ENV=production
 Windows
 ```bat
 SET NODE_ENV=production
-SET SERVE_CLIENT=false
 ```
-
-### Configuration 
-Configure the project by modifying *[config.js](config.js)*.
-
-#### Configuration options
-| Option      | Default value | Description |
-| ----------- | ------------- | ----------- |
-| apiPrefix | `/api` | The url prefix for the API |
-| serverPort | `5000` | The port used by the server |
-| imagesPath | `images` | The directory where the images are stored |
-| serveClient | `true` | Should the server serve client files from the `/dist` directory |
-
 
 ### API
 #### Run the server
@@ -133,7 +127,7 @@ yarn run app:dev
 
 
 #### Automatically fix the client code syntax with ESLint
-```
+```sh
 yarn run app:lint
 ```
 
