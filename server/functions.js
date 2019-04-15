@@ -67,7 +67,7 @@ export const checkRequiredParameters = (requiredParameters, parameters) => {
  * @throws invalid scene name
  */
 export const checkSceneName = sceneName => {
-  if (!/^(?!.*\.\.).*$/.test(sceneName))
+  if (sceneName === '' || !/^(?!.*\.\.).*$/.test(sceneName))
     throw boom.conflict(`The requested scene name "${sceneName}" is not valid.`)
 }
 

@@ -21,7 +21,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
     checkSceneName(sceneName)
   }
   catch (err) {
-    errorList.push(err)
+    errorList.push(err.message)
   }
 
   // Check `imageQuality` is an integer
