@@ -27,7 +27,8 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `imagesPath` | `./images` | The directory where the images are stored |
 | `serveClient` | `true` | Should the server serve client files from the `/dist` directory |
 | `fileNameConvention` | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
-| `sceneFileNameBlackList` | `['config', 'seuilExpe']` | Files to ignore in scenes |
+| `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
+| `extractsDirName` | `extracts` | Name of the directory containing extracts |
 
 ### Run server + client
 Linux
