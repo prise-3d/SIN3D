@@ -60,11 +60,13 @@ if (!process.env.SERVE_CLIENT || !['true', 'false'].some(x => x === process.env.
   process.exit(1)
 }
 
-const env = {
+let env = {
   PORT: parseInt(process.env.PORT, 10),
   SERVE_CLIENT: process.env.SERVE_CLIENT,
   IMAGES_PATH: process.env.IMAGES_PATH
 }
+env = Object.assign(process.env, env)
+
 // Recap used environment variables
 Object.keys(env).forEach(x => console.log(`${x}=${env[x]}`))
 
