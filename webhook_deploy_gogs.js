@@ -25,6 +25,12 @@ const exec = promisify(require('child_process').exec)
 // The port which this script will listen on
 const port = parseInt(process.env.WEBHOOK_PORT, 10)
 
+// Check the "WEBHOOK_PORT" environment variable is set to a valid integer
+if (!process.env.WEBHOOK_PORT || !parseInt(process.env.WEBHOOK_PORT, 10)) {
+  console.error(`${new Date().toLocaleString()} - The "WEBHOOK_PORT" environment variable is not set or is not an integer.`)
+  process.exit(1)
+}
+
 // The path to the project directory
 const projectPath = path.resolve('.')
 
@@ -66,13 +72,14 @@ let env = {
   IMAGES_PATH: process.env.IMAGES_PATH
 }
 env = Object.assign(process.env, env)
+if (!env.IMAGES_PATH) env.IMAGES_PATH = ''
 
 // Recap used environment variables
 Object.keys(env).forEach(x => console.log(`${x}=${env[x]}`))
 
 // The script that will be executed by the machine
 const deployScript = `cd ${projectPath}` +
-  ' && git reset --hard HEAD' +
+  // ' && git reset --hard HEAD' +
   ' && git pull origin master' +
   ' && docker-compose down' +
   ' && docker-compose build' +
@@ -105,6 +112,7 @@ const deploy = async () => {
     console.error(`\n${new Date().toLocaleString()} - Error deploying project.\n`, err)
   }
 }
+
 
 // Configuration is fine, start the server
 http.createServer((req, res) => {
