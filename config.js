@@ -24,15 +24,18 @@ export const serveClient = process.env.SERVE_CLIENT === 'true' || true
 export const fileNameConvention = /^(.*)?_([0-9]{2,})\.(.*)$/
 
 // Files to ignore in scenes
-export const sceneFileNameBlackList = ['config', 'seuilExpe']
+export const sceneFileNameBlackList = ['config', 'seuilExpe', 'extracts']
+
+// Name of the directory containing extracts
+export const extractsDirName = 'extracts'
 
 // Logger configuration
 export const logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
   transports: [
-    new winston.transports.File({ filename: 'combined.log' }),
-    new winston.transports.File({ filename: 'error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,

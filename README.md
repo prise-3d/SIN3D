@@ -21,13 +21,14 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 
 | Option      | Default value | Description |
 | ----------- | ------------- | ----------- |
-| apiPrefix | `/api` | The url prefix for the API |
-| imageServedUrl | `/api/images` | The url prefix from where the images are served |
-| serverPort | `5000` | The port used by the server |
-| imagesPath | `./images` | The directory where the images are stored |
-| serveClient | `true` | Should the server serve client files from the `/dist` directory |
-| fileNameConvention | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
-| sceneFileNameBlackList | `['config', 'seuilExpe']` | Files to ignore in scenes |
+| `apiPrefix` | `/api` | The url prefix for the API |
+| `imageServedUrl` | `/api/images` | The url prefix from where the images are served |
+| `serverPort` | `5000` | The port used by the server |
+| `imagesPath` | `./images` | The directory where the images are stored |
+| `serveClient` | `true` | Should the server serve client files from the `/dist` directory |
+| `fileNameConvention` | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
+| `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
+| `extractsDirName` | `extracts` | Name of the directory containing extracts |
 
 ### Run server + client
 Linux
@@ -69,7 +70,7 @@ docker-compose build
 docker-compose -f docker-compose.frontapp_only.yml build
 ```
 
-### Using Windows
+#### Using Windows
 When using Windows, it may happen that you can't properly run the containers because of Windows's path system being different. To circumvant this problem, you can do the [following steps](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
 > 1. On **Command Line**: "set COMPOSE_CONVERT_WINDOWS_PATHS=1";
 > 2. Restart **Docker for Windows**;
@@ -130,6 +131,18 @@ yarn run app:dev
 ```sh
 yarn run app:lint
 ```
+
+## Automated deployment
+The app can be automatically deployed when a push event is sent to the master branch using Gogs. Open a port to the web and start *[webhook_deploy_gogs.js](webhook_deploy_gogs.js)*.
+```sh
+WEBHOOK_SECRET=your_webhook_secret WEBHOOK_PORT=5000 SERVE_CLIENT=true PORT=8080 node webhook_deploy_gogs.js
+```
+You can pass any parameters to the script, they will be passed to the Docker instance. The following are required.
+
+| Option      | Description |
+| ----------- | ----------- |
+| `WEBHOOK_SECRET` | The secret set on Gogs to verify the identity |
+| `WEBHOOK_PORT` | The port the script is listening to |
 
 ## License
 [The MIT license](LICENSE)

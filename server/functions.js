@@ -37,7 +37,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // Send the error to the client
   res.status(payload.statusCode).json({
-    message: payload.message,
+    message: err.message,
     data: err.data || undefined
   })
 
@@ -67,7 +67,7 @@ export const checkRequiredParameters = (requiredParameters, parameters) => {
  * @throws invalid scene name
  */
 export const checkSceneName = sceneName => {
-  if (!/^(?!.*\.\.).*$/.test(sceneName))
+  if (sceneName === '' || !/^(?!.*\.\.).*$/.test(sceneName))
     throw boom.conflict(`The requested scene name "${sceneName}" is not valid.`)
 }
 
@@ -87,7 +87,7 @@ export const checkFileName = fileName => {
  * Get all files in a scene
  *
  * @param {string} sceneName the scene name
- * @returns {string[]} the list of all files in the scene
+ * @returns {Promise<string[]>} the list of all files in the scene
  * @throws scene directory is not accessible
  */
 export const getSceneFiles = sceneName => {
@@ -98,7 +98,7 @@ export const getSceneFiles = sceneName => {
   const scenePath = path.resolve(imagesPath, sceneName)
 
   return fs.readdir(scenePath).catch(() => {
-    throw boom.badRequest(`Can't access the "${scenePath}" directory. Check it exists and you have read permission on it.`)
+    throw boom.internal(`Can't access the "${sceneName}" scene directory. Check it exists and you have read permission on it.`)
   })
 }
 
@@ -163,7 +163,7 @@ export const getSceneFilesData = async sceneName => {
 
   // Check if the parse fail list is empty
   if (failList.length > 0)
-    throw boom.conflict(`Failed to parse file names in the "${sceneName}"'s scene directory.`, failList)
+    throw boom.internal(`Failed to parse file names in the "${sceneName}"'s scene directory.`, failList)
 
   return data
 }
