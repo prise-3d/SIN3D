@@ -12,7 +12,7 @@ services:
       environment:
           NODE_ENV: production
           SERVE_CLIENT: "${SERVE_CLIENT:-true}"
-          PORT: "${PORT:-5000}"
+          PORT: "5000"
       volumes:
           - "${IMAGES_PATH:-./images}:/usr/src/app/images"
           - "./logs:/usr/src/app/logs"
