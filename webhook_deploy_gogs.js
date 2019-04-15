@@ -23,7 +23,7 @@ const { promisify } = require('util')
 const exec = promisify(require('child_process').exec)
 
 // The port which this script will listen on
-const port = 12345
+const port = parseInt(process.env.WEBHOOK_PORT, 10)
 
 // The path to the project directory
 const projectPath = path.resolve('.')
