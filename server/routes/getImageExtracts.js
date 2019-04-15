@@ -2,7 +2,7 @@
 
 import express from 'express'
 import sharp from 'sharp'
-import { promises as fs } from 'fs'
+import { constants as fsConstants, promises as fs } from 'fs'
 import path from 'path'
 import boom from 'boom'
 
@@ -66,6 +66,30 @@ const cutImage = async (image, xExtracts, yExtracts) => {
       // URL to the extract on the app
       const extractLink = `${imageServedUrl}/${pathToImage.join('/')}`
 
+      const extractObj = {
+        link: extractLink,
+        path: extractPath,
+        fileName: extractName,
+        sceneName: image.sceneName
+      }
+
+      // Check the file already exist
+      let fileAlreadyExists = false
+      try {
+        await fs.access(extractPath, fsConstants.R_OK)
+        fileAlreadyExists = true
+      }
+      catch (err) {
+        // File does not exist already
+      }
+
+      // File already exist, just send its data
+      if (fileAlreadyExists) {
+        extracts.push(extractObj)
+        continue
+      }
+
+      // File does not already exist, create it
       // Create the arborescence
       try {
         await fs.mkdir(path.resolve(imagesPath, ...pathToImage.slice(0, pathToImage.length - 1)), { recursive: true })
@@ -79,12 +103,7 @@ const cutImage = async (image, xExtracts, yExtracts) => {
       // Cut and save the extract
       try {
         await input.extract(config).toFile(extractPath)
-        extracts.push({
-          link: extractLink,
-          path: extractPath,
-          fileName: extractName,
-          sceneName: image.sceneName
-        })
+        extracts.push(extractObj)
       }
       catch (err) {
         // Error while cutting image
