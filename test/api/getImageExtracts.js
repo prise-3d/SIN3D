@@ -2,6 +2,7 @@
 
 import test from 'ava'
 import request from 'supertest'
+import sharp from 'sharp'
 import fs from 'fs-extra'
 import path from 'path'
 import { apiPrefix, imageServedUrl, imagesPath } from '../../config'
@@ -99,4 +100,10 @@ test.serial('Extracts were successfully generated', async t => {
 
   // Check `bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`
   t.true(await fs.pathExists(aBathroomConfigZoneImg))
+
+  // Check image's type, width and height
+  const metadata = await sharp(aBathroomConfigZoneImg).metadata()
+  t.is(metadata.width, 160, json(metadata))
+  t.is(metadata.height, 400, json(metadata))
+  t.is(metadata.format, 'png', json(metadata))
 })
