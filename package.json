@@ -9,7 +9,7 @@
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint",
-    "test": "ava"
+    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js"
   },
   "dependencies": {
     "boom": "^7.3.0",
