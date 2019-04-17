@@ -37,6 +37,7 @@ const serve = () => {
 
 // Before starting all the tests, copy `test/images_test` to `test/images`
 test.before(async t => {
+  await fs.remove(path.resolve(testDir, 'images'))
   await fs.copy(path.resolve(testDir, 'images_test'), path.resolve(testDir, 'images'))
 })
 
@@ -200,7 +201,7 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtract
   t.truthy(res.body.data.find(x => x.includes('Incompatible number of vertical extracts')), json(res.body))
 })
 
-test('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
+test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
   const res = await request(t.context.server)
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2`)
 
@@ -214,20 +215,22 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtract
 
   t.is(res2.status, 200, json(res2))
   t.is(res2.header['content-type'], 'image/png', json(res2))
+})
 
+test.serial('Extracts were successfully generated', async t => {
   // Check the extract on the file system
   const extracts = path.resolve(imagesPath, 'bathroom', 'extracts')
-  const aBathroomConfig = path.resolve(extracts, 'bathroom', 'x5_y2')
-  const aBathroomConfigZone = path.resolve(extracts, 'bathroom', 'x5_y2', 'zone00001')
-  const aBathroomConfigZoneImg = path.resolve(extracts, 'bathroom', 'x5_y2', 'zone00001', 'bathroom_zone00001_10.png')
+  const aBathroomConfig = path.resolve(extracts, 'x5_y2')
+  const aBathroomConfigZone = path.resolve(aBathroomConfig, 'zone00001')
+  const aBathroomConfigZoneImg = path.resolve(aBathroomConfigZone, 'bathroom_zone00001_10.png')
   const fsp = fs.promises
   // Check `bathroom/extracts`
   t.true(await fs.pathExists(extracts))
-  t.is(await fsp.readdir(extracts), ['x5_y2'])
+  t.deepEqual(await fsp.readdir(extracts), ['x5_y2'])
 
   // Check `bathroom/extracts/x5_y2`
-  t.true(await fs.pathExists(aBathroomConfig))
-  t.is((await fsp.readdir(extracts)).length, 10)
+  t.true(await fs.pathExists(aBathroomConfig), aBathroomConfig)
+  t.is((await fsp.readdir(aBathroomConfig)).length, 10)
 
   // Check `bathroom/extracts/x5_y2/zone00001`
   t.true(await fs.pathExists(aBathroomConfigZone))
