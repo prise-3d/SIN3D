@@ -13,7 +13,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   const { sceneName } = req.query
   const sceneData = await getSceneFilesData(sceneName)
   const data = Array.from(sceneData.values()).map(x => x.quality)
-  res.json(data)
+  res.json({ data })
 }))
 
 export default router
