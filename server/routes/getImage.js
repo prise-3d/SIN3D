@@ -69,7 +69,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
     throw boom.badRequest('Invalid query parameter(s).', errorList)
 
   const { link } = await getImage(sceneName, qualityInt)
-  res.json({ link })
+  res.json({ data: link })
 }))
 
 export default router

@@ -37,7 +37,7 @@ export const errorHandler = (err, req, res, next) => {
 
   // Send the error to the client
   res.status(payload.statusCode).json({
-    message: err.message,
+    message: err.message || payload.message,
     data: err.data || undefined
   })
 
