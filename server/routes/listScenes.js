@@ -24,6 +24,6 @@ export const getSceneList = () => {
 }
 
 // Route which returns a list of all available scenes in the `imagesPath` directory
-router.get('/', asyncMiddleware(async (req, res) => res.json(await getSceneList())))
+router.get('/', asyncMiddleware(async (req, res) => res.json({ data: await getSceneList() })))
 
 export default router
