@@ -5,6 +5,7 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
+# Server port
 EXPOSE 5000
 
 RUN yarn install

@@ -7,14 +7,11 @@ import path from 'path'
 import boom from 'boom'
 
 import { asyncMiddleware, checkSceneName, checkRequiredParameters } from '../functions'
-import { getImage } from './getImage'
 import { imageServedUrl, imagesPath, extractsDirName } from '../../config'
+import { getImage, Image } from './getImage' // eslint-disable-line no-unused-vars
 
 const router = express.Router()
 
-/**
- * @typedef {import('./getImage').Image} Image
- */
 /**
  * Cut an image, save its extracts and get the url of these extracts
  *
@@ -33,8 +30,8 @@ const cutImage = async (image, xExtracts, yExtracts) => {
 
   // Check the image is cuttable with the current parameters
   let errorsList = []
-  if (!Number.isInteger(xCropSize)) errorsList.push('Incompatible number of horizontal extracts (width % numberOfExtracts != 0)')
-  if (!Number.isInteger(yCropSize)) errorsList.push('Incompatible number of vertical extracts (height % numberOfExtracts != 0)')
+  if (!Number.isInteger(xCropSize)) errorsList.push('Incompatible number of horizontal extracts (width % numberOfExtracts != 0).')
+  if (!Number.isInteger(yCropSize)) errorsList.push('Incompatible number of vertical extracts (height % numberOfExtracts != 0).')
   if (errorsList.length > 0) throw boom.badRequest('Invalid query parameter(s).', errorsList)
 
   let extracts = []

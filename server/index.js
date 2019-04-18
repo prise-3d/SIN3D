@@ -9,12 +9,15 @@ import cors from 'cors'
 import routes from './routes'
 import { errorHandler } from './functions'
 import { apiPrefix, imageServedUrl, serverPort, serveClient, imagesPath, logger } from '../config'
+import startWebSocketServer from './webSocket'
 const morgan = require('morgan')
 
 const app = express()
 
 // Activating logging
-app.use(morgan('combined', { 'stream': { write: (message, encoding) => logger.info(message) } }))
+app.use(morgan('combined', {
+  stream: { write: message => logger.info(message) }
+}))
 
 // Use gzip compression to improve performance
 app.use(compression())
@@ -43,4 +46,7 @@ else {
 app.use(errorHandler)
 
 // Start the server on the configured port
-app.listen(serverPort, () => logger.info('The server was started on http://localhost:' + serverPort))
+const server = app.listen(serverPort, () => logger.info('The server was started on http://localhost:' + serverPort))
+
+// Start the WebSocket server on top of the started HTTP server
+startWebSocketServer(server)
