@@ -72,7 +72,7 @@ export const checkSceneName = sceneName => {
 }
 
 /**
- * Check a file name is valid with configure convention
+ * Check a file name is valid with configured convention
  *
  * @param {string} fileName the file name to check
  * @returns {void}
@@ -80,7 +80,7 @@ export const checkSceneName = sceneName => {
  */
 export const checkFileName = fileName => {
   if (!fileNameConvention.test(fileName))
-    throw new Error(`The file name does not match convention (scene_000150.ext - ${fileNameConvention.toString()}) : "${fileName}"`)
+    throw new Error(`The file name does not match convention (scene_000150.ext - ${fileNameConvention.toString()}) : "${fileName}".`)
 }
 
 /**
@@ -156,7 +156,7 @@ export const getSceneFilesData = async sceneName => {
       acc.set(regexRes[0], fileData)
     }
     catch (err) {
-      failList.push(`Failed to parse file name : ${image}`)
+      failList.push(`Failed to parse file name : "${image}".`)
     }
     return acc
   }, new Map())
