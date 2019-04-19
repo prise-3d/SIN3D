@@ -8,14 +8,14 @@ import boom from 'boom'
 
 import { asyncMiddleware, checkSceneName, checkRequiredParameters } from '../functions'
 import { imageServedUrl, imagesPath, extractsDirName } from '../../config'
-import { getImage, Image } from './getImage' // eslint-disable-line no-unused-vars
+import { getImage } from './getImage'
 
 const router = express.Router()
 
 /**
  * Cut an image, save its extracts and get the url of these extracts
  *
- * @param {Image} image the path to the image to cut
+ * @param {object} image the path to the image to cut
  * @param {Number} xExtracts the number of extract to do on the horizontal axis (integer)
  * @param {Number} yExtracts the number of extract to do on the vertical axis (integer)
  * @returns {Promise<Image[]>} the list of extracted images
