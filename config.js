@@ -16,7 +16,7 @@ export const imageServedUrl = apiPrefix + '/images'
 export const serverPort = parseInt(process.env.PORT, 10) || 5000
 
 // MongoDB database connection URI
-export const mongoDatabaseURI = process.env.MONGO_URI || 'mongodb://localhost/webexpe'
+export const mongoDatabaseURI = process.env.MONGO_URI || 'mongodb://mongo:27017/webexpe'
 
 // The directory where the images are stored
 export const imagesPath = TEST_MODE

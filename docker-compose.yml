@@ -4,21 +4,18 @@ services:
 
     # Documentation : https://docs.docker.com/samples/library/mongo/ 
     mongo:
+        container_name: mongo
         image: mongo
         restart: always
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: common 
-            MONGO_INITDB_ROOT_PASSWORD: webexpe
-
-            # TODO : Remove later if unecessary
-            # MONGO_INITDB_DATABASE: webexpe
-            # DATADIR: "${DATADIR:-data}"
         volumes:
             - "./data:/data/db" # get access to database files
         ports:
            - "27017:27017"
+        networks:
+            - backend
  
     backapp:
+        container_name: backapp
         build:
             context: .
             dockerfile: back.Dockerfile
@@ -29,10 +26,15 @@ services:
             NODE_ENV: production
             SERVE_CLIENT: "${SERVE_CLIENT:-true}"
             PORT: "5000"
+        links:
+            - mongo
         volumes:
             - "${IMAGES_PATH:-./images}:/usr/src/app/images"
             - "./logs:/usr/src/app/logs"
         depends_on:
-            - mongo 
+            - mongo
+        networks:
+            - backend
 
-      
+networks:
+    backend:
