@@ -167,3 +167,24 @@ export const getSceneFilesData = async sceneName => {
 
   return data
 }
+
+/**
+ * Format a string or object to a log object
+ *
+ * @param {object|string} data any message or object
+ * @param {('info'|'message'|'error'|any|undefined)} event the type of event
+ * @returns {string} the log object stringified
+ */
+export const formatLog = (data, event = undefined) => (JSON.stringify({
+  event,
+  log: data,
+  date: new Date()
+}))
+
+/**
+ * Format an error object
+ *
+ * @param {Error} errObj an Error object
+ * @returns {string} formatted log object stringified
+ */
+export const formatError = errObj => formatLog({ error: errObj.message, stack: errObj.stack })

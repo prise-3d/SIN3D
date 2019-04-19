@@ -1,7 +1,7 @@
 'use strict'
 
 import path from 'path'
-import winston from 'winston'
+import { logger, wsLogger, dbLogger } from './server/winston.config'
 
 export const PRODUCTION_MODE = process.env.NODE_ENV === 'production'
 export const TEST_MODE = process.env.NODE_ENV === 'test'
@@ -14,6 +14,9 @@ export const imageServedUrl = apiPrefix + '/images'
 
 // The port used by the server
 export const serverPort = parseInt(process.env.PORT, 10) || 5000
+
+// MongoDB database connection URI
+export const mongoDatabaseURI = process.env.MONGO_URI || 'mongodb://localhost/webexpe'
 
 // The directory where the images are stored
 export const imagesPath = TEST_MODE
@@ -32,34 +35,5 @@ export const extractsDirName = 'extracts'
 // Files to ignore in scenes
 export const sceneFileNameBlackList = ['config', 'seuilExpe', extractsDirName]
 
-// Logger configuration
-export const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'logs/server.combined.log' }),
-    new winston.transports.File({ filename: 'logs/server.error.log', level: 'error' }),
-    new winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      format: winston.format.simple()
-    })
-  ],
-  exitOnError: false
-})
-
-// WebSocket logger configuration
-export const wsLogger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'logs/ws.log' }),
-    new winston.transports.File({ filename: 'logs/ws.error.log', level: 'error' }),
-    new winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      format: winston.format.simple()
-    })
-  ],
-  exitOnError: false
-})
+// Logger configurations (Default application, WebSocket, Database)
+export { logger, wsLogger, dbLogger }

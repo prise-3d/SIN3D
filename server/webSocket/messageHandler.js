@@ -1,6 +1,6 @@
 'use strict'
 
-import { formatLog } from './index'
+import { formatLog } from '../functions'
 import { wsLogger } from '../../config'
 
 /**
