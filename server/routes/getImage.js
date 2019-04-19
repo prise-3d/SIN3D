@@ -23,7 +23,7 @@ const router = express.Router()
  * Get the link and path to an image
  * @param {string} sceneName the scene to get the image from
  * @param {number} qualityInt the requested quality
- * @returns {Image} the link and path to the image
+ * @returns {Promise<Image>} the link and path to the image
  */
 export const getImage = async (sceneName, qualityInt) => {
   const sceneData = await getSceneFilesData(sceneName)

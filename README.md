@@ -16,6 +16,7 @@ Use the following environment variables to configure the application.
 | `PORT` | `5000` | The port used by the started application |  ✅  | ✅ |
 | `SERVE_CLIENT` | `true` | Should the server serve client (Fully local application) |  ✅  | ⬜️ |
 | `IMAGES_PATH` | `./images` | The directory where the images are stored (absolute path if changed ⚠️) |  ✅  | ⬜️ |
+| `MONGO_URI` | `mongodb://localhost/webexpe` | MongoDB database connection URI |  ✅  | ⬜️ |
 
 Configure more deeply the way the app works by modifying *[config.js](config.js)*.
 
@@ -24,11 +25,15 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `apiPrefix` | `/api` | The url prefix for the API |
 | `imageServedUrl` | `/api/images` | The url prefix from where the images are served |
 | `serverPort` | `5000` | The port used by the server |
+| `mongoDatabaseURI` | `mongodb://localhost/webexpe` | MongoDB database connection URI |
 | `imagesPath` | `./images` | The directory where the images are stored |
 | `serveClient` | `true` | Should the server serve client files from the `/dist` directory |
 | `fileNameConvention` | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
-| `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
 | `extractsDirName` | `extracts` | Name of the directory containing extracts |
+| `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
+| `logger` | Logs : `logs/server.combined.log` Errors : `logs/server.error.log` | Default application logger |
+| `wsLogger` | Logs : `logs/ws.log` Errors : `logs/ws.error.log` | WebSocket logger configuration |
+| `dbLogger` | Logs : `logs/db.log` Errors : `logs/db.error.log` | Database logger configuration |
 
 ### Run server + client
 Linux
