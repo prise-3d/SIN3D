@@ -58,5 +58,5 @@ const createWsServer = httpServer => {
     ws.on('close', () => wsLogger.info(formatLog('Client disconnected.')))
   })
 }
-errorHandler()()
+
 export default createWsServer

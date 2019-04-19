@@ -2,17 +2,37 @@ version: '3'
 
 services:
 
-  backapp:
-      build:
-          context: .
-          dockerfile: back.Dockerfile
-      image: backapp
-      ports:
+    # Documentation : https://docs.docker.com/samples/library/mongo/ 
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: common 
+            MONGO_INITDB_ROOT_PASSWORD: webexpe
+
+            # TODO : Remove later if unecessary
+            # MONGO_INITDB_DATABASE: webexpe
+            # DATADIR: "${DATADIR:-data}"
+        volumes:
+            - "./data:/data/db" # get access to database files
+        ports:
+           - "27017:27017"
+ 
+    backapp:
+        build:
+            context: .
+            dockerfile: back.Dockerfile
+        image: backapp
+        ports:
           - "${PORT:-5000}:5000"
-      environment:
-          NODE_ENV: production
-          SERVE_CLIENT: "${SERVE_CLIENT:-true}"
-          PORT: "5000"
-      volumes:
-          - "${IMAGES_PATH:-./images}:/usr/src/app/images"
-          - "./logs:/usr/src/app/logs"
+        environment:
+            NODE_ENV: production
+            SERVE_CLIENT: "${SERVE_CLIENT:-true}"
+            PORT: "5000"
+        volumes:
+            - "${IMAGES_PATH:-./images}:/usr/src/app/images"
+            - "./logs:/usr/src/app/logs"
+        depends_on:
+            - mongo 
+
+      
