@@ -1,7 +1,8 @@
 'use strict'
 
 import { formatLog } from '../functions'
-import { wsLogger } from '../../config'
+import { wsLogger, TEST_MODE } from '../../config'
+import DataController from '../database/controllers/Data'
 
 /**
  * @typedef {Function} MessageHandler
@@ -21,7 +22,8 @@ const messageHandler = ws => async data => {
     throw new Error('Invalid JSON data.')
   }
 
-  wsLogger.info(formatLog(json, 'message'))
+  await DataController.add(json)
+  if (!TEST_MODE) wsLogger.info(formatLog(json, 'message'))
   ws.send('ok')
 }
 

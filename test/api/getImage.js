@@ -3,12 +3,12 @@
 import test from 'ava'
 import request from 'supertest'
 import { apiPrefix, imageServedUrl } from '../../config'
-import { json, beforeEachTests } from './_test_functions'
+import { json, getHttpServer } from './_test_functions'
 
 // ROUTE /getImage
 
 // Before each tests, start a server
-test.beforeEach(beforeEachTests)
+test.beforeEach(async t => (t.context.server = await getHttpServer()))
 
 test('GET /getImage', async t => {
   const res = await request(t.context.server)
