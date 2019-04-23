@@ -2,9 +2,8 @@
 
 import WebSocket from 'ws'
 import { formatLog, formatError } from '../functions'
-import { wsLogger } from '../../config'
+import { wsLogger, TEST_MODE } from '../../config'
 import messageHandler from './messageHandler'
-
 
 /**
  * @typedef {function} ErrorLogger
@@ -18,7 +17,7 @@ import messageHandler from './messageHandler'
  */
 export const errorHandler = ws => err => {
   ws.send(err.message)
-  wsLogger.error(formatError(err))
+  if (!TEST_MODE) wsLogger.error(formatError(err))
 }
 
 /**
