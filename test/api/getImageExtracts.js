@@ -6,12 +6,12 @@ import sharp from 'sharp'
 import fs from 'fs-extra'
 import path from 'path'
 import { apiPrefix, imageServedUrl, imagesPath } from '../../config'
-import { json, beforeEachTests } from './_test_functions'
+import { json, getHttpServer } from './_test_functions'
 
 // ROUTE /getImageExtracts
 
 // Before each tests, start a server
-test.beforeEach(beforeEachTests)
+test.beforeEach(async t => (t.context.server = await getHttpServer()))
 
 test('GET /getImageExtracts', async t => {
   const res = await request(t.context.server)
@@ -79,7 +79,7 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
   t.is(res2.header['content-type'], 'image/png', json(res2))
 })
 
-test.serial('Extracts were successfully generated', async t => {
+test.serial('Check extracts were successfully generated', async t => {
   // Check the extract on the file system
   const extracts = path.resolve(imagesPath, 'bathroom', 'extracts')
   const aBathroomConfig = path.resolve(extracts, 'x5_y2')

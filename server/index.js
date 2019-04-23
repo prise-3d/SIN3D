@@ -12,6 +12,7 @@ import { apiPrefix, imageServedUrl, serverPort, serveClient, imagesPath, logger 
 import startWebSocketServer from './webSocket'
 import connectDb from './database'
 const morgan = require('morgan')
+
 const app = express()
 
 // Activating logging
