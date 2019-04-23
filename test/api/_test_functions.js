@@ -17,25 +17,17 @@ export const testDir = path.resolve(__dirname, '..')
 export const json = obj => 'JSON DATA : ' + (JSON.stringify(obj, null, 2) || obj)
 
 /**
- * @typedef PluginConfig
- * @property {boolean} [webSocket=false] should the server start with a WebSocket server
- * @property {boolean} [database=false] should the server start with a WebSocket server
- */
-/**
  * Open an Express server not listening to any port.
  * The server serves images in `test/images`, all api routes and
  * uses a custom error handler (no logging to stdout).
  *
  * Using `request` (supertest) on this object will start the server
  * on an ephemeral port.
+ *
  * @param {PluginConfig} plugins plugins that should be loaded with the server
  * @returns {object} an Express server
  */
-const serve = async (plugins = { webSocket: false, database: false }) => {
-  // Connect to db
-  if (plugins && plugins.database) await connectDb()
-
-  // Open a HTTP server
+export const getHttpServer = () => {
   const app = express()
   app.use(imageServedUrl, serveStatic(imagesPath))
   app.use(apiPrefix, routes)
@@ -45,22 +37,26 @@ const serve = async (plugins = { webSocket: false, database: false }) => {
       data: err.data || undefined
     })
   })
-
-  // Open a WebSocket server
-  if (plugins && plugins.webSocket) {
-    const wss = new WebSocket.Server({ server: app })
-    wss.on('error', err => {
-      throw err
-    })
-    wss.on('connection', ws => {
-      ws.on('message', data => wsMessageHandler(ws)(data).catch(wsErrorHandler(ws)))
-      ws.on('error', wsErrorHandler(ws))
-    })
-  }
-
   return app
 }
 
-// Pass a server to test context
-export const getTestServer = async (t, plugins) => (t.context.server = await serve(plugins))
+/**
+ * Open a WebSocket server on top of a HTTP server
+ *
+ * @param {object} httpServer a HTTP server instance (ie. Express server object)
+ * @returns {object} a WebSocket server instance
+ */
+export const getWebSocketServer = httpServer => {
+  const wss = new WebSocket.Server({ server: httpServer })
+  wss.on('error', err => {
+    throw err
+  })
+  wss.on('connection', ws => {
+    ws.on('message', data => wsMessageHandler(ws)(data).catch(wsErrorHandler(ws)))
+    ws.on('error', wsErrorHandler(ws))
+  })
+  return wss
+}
 
+/** Connect to the database */
+export { connectDb }

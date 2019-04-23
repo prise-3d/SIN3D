@@ -5,6 +5,10 @@ import { dbLogger, TEST_MODE } from '../../../config'
 import { formatLog } from '../../functions'
 
 export default class Data {
+  static get Model() {
+    return DataModel
+  }
+
   static log(data) {
     if (!TEST_MODE) dbLogger.info(formatLog(data))
   }

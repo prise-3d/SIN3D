@@ -16,8 +16,9 @@ import messageHandler from './messageHandler'
  * @returns {ErrorLogger} the actual error logger
  */
 export const errorHandler = ws => err => {
-  ws.send(err.message)
-  if (!TEST_MODE) wsLogger.error(formatError(err))
+  const errStr = formatError(err)
+  ws.send(errStr)
+  if (!TEST_MODE) wsLogger.error(errStr)
 }
 
 /**

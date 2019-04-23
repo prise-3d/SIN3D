@@ -6,12 +6,12 @@ import sharp from 'sharp'
 import fs from 'fs-extra'
 import path from 'path'
 import { apiPrefix, imageServedUrl, imagesPath } from '../../config'
-import { json, getTestServer } from './_test_functions'
+import { json, getHttpServer } from './_test_functions'
 
 // ROUTE /getImageExtracts
 
 // Before each tests, start a server
-test.beforeEach(getTestServer)
+test.beforeEach(async t => (t.context.server = await getHttpServer()))
 
 test('GET /getImageExtracts', async t => {
   const res = await request(t.context.server)
