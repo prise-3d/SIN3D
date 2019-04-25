@@ -155,5 +155,12 @@ The `docker-compose` script will automatically run tests. Use the following comm
 yarn test
 ```
 
+## Documentation
+The `docker-compose` script will automatically build the documentation. Use the following command to build it by hand.
+```console
+yarn doc
+```
+The documentation is generated to the `doc/` directory. If you started the server, the documentation is served at `/doc/`.
+
 ## License
 [The MIT license](LICENSE)
