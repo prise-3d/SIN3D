@@ -20,8 +20,6 @@ const router = express.Router()
  * @apiParam {String} sceneName The selected scene
  * @apiParam {Number} imageQuality The required quality of the image
  *
- * @apiHeader (Response Headers) {String} Content-Type application/json; charset=utf-8
- *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
  *
@@ -32,14 +30,14 @@ const router = express.Router()
  *   "data": "/api/images/bathroom/bathroom_00200.png"
  * }
  *
- * @apiError (Error 4xx) 400 Missing parameter(s)
+ * @apiError (Error 4xx) 400_[1] Missing parameter(s)
  * @apiErrorExample {json} Missing parameter
  * HTTP/1.1 400 Bad Request
  * {
  *   "message": "Missing parameter(s). Required parameters : sceneName, imageQuality."
  * }
  *
- * @apiError (Error 4xx) 400 Invalid query parameter
+ * @apiError (Error 4xx) 400_[2] Invalid query parameter
  * @apiErrorExample {json} Invalid query parameter(s)
  * HTTP/1.1 400 Bad Request
  * {
@@ -50,21 +48,21 @@ const router = express.Router()
  *   ]
  * }
  *
- * @apiError (Error 4xx) 404 Quality not found
+ * @apiError (Error 4xx) 404_[1] Quality not found
  * @apiErrorExample {json} Quality not found
  * HTTP/1.1 404 Not Found
  * {
  *   "message": "The requested quality (9999) was not found for the requested scene (bathroom)."
  * }
  *
- * @apiError (Error 5xx) 500 Can't access the `IMAGES_PATH` directory
+ * @apiError (Error 5xx) 500_[1] Can't access the `IMAGES_PATH` directory
  * @apiErrorExample {json} Images directory not accessible
  * HTTP/1.1 500 Internal Server Error
  * {
  *   "message": "Can't access the \"images\" directory. Check it exists and you have read permission on it"
  * }
  *
- * @apiError (Error 5xx) 500 Failed to parse a file's name
+ * @apiError (Error 5xx) 500_[2] Failed to parse a file's name
  * @apiErrorExample {json} Failed to parse a file's name
  * HTTP/1.1 500 Internal Server Error
  * {
