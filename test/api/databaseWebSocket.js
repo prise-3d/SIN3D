@@ -101,6 +101,6 @@ test('Check WebSocket server is working', async t => {
 
   // Delete every collected data during test
   const db = DataController.Model
-  const found = await db.remove({ 'data.AUTOMATED_TEST_WS': true })
+  const found = await db.deleteMany({ 'data.AUTOMATED_TEST_WS': true })
   t.true(found.deletedCount >= 2)
 })
