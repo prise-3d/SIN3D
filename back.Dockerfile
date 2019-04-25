@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # Server port
 EXPOSE 5000
 
-RUN yarn install
+RUN yarn install && yarn doc
 
 # Build front if SERVE_CLIENT=true
 CMD if [ "$SERVE_CLIENT" == "true" ] ; then NODE_ENV=test yarn test && yarn run app:build && yarn run server:start ; else NODE_ENV=test yarn test && yarn run server:start ; fi

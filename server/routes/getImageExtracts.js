@@ -28,7 +28,7 @@ const router = express.Router()
  * @apiHeader (Response Headers) {String} Content-Type application/json; charset=utf-8
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://localhost:5000/api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2"
+ * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2"
  *
  * @apiSuccess {String[]} data Path to the extracted images
  * @apiSuccessExample {json} Success response example

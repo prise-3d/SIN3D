@@ -21,7 +21,7 @@ const router = express.Router()
  * @apiHeader (Response Headers) {String} Content-Type application/json; charset=utf-8
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://localhost:5000/api/listScenes"
+ * curl -i -L -X GET "http://diran.univ-littoral.fr/api/listScenes"
  *
  * @apiSuccess {String[]} data List of available scenes
  * @apiSuccessExample {json} Success response example
