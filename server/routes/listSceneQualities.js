@@ -15,8 +15,6 @@ const router = express.Router()
  *
  * @apiParam {String} sceneName The selected scene
  *
- * @apiHeader (Response Headers) {String} Content-Type application/json; charset=utf-8
- *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/listSceneQualities?sceneName=bathroom"
  *
@@ -31,28 +29,28 @@ const router = express.Router()
  *   ]
  * }
  *
- * @apiError (Error 4xx) 400 Missing parameter(s)
+ * @apiError (Error 4xx) 400_[1] Missing parameter(s)
  * @apiErrorExample {json} Missing parameter
  * HTTP/1.1 400 Bad Request
  * {
  *   "message": "Missing parameter(s). Required parameters : sceneName."
  * }
  *
- * @apiError (Error 4xx) 400 The requested scene name is not valid
+ * @apiError (Error 4xx) 400_[2] The requested scene name is not valid
  * @apiErrorExample {json} Invalid scene name
  * HTTP/1.1 400 Bad Request
  * {
  *   "message": "The requested scene name \"bathroom/../\" is not valid."
  * }
  *
- * @apiError (Error 5xx) 500 Can't access the `IMAGES_PATH` directory
+ * @apiError (Error 5xx) 500_[1] Can't access the `IMAGES_PATH` directory
  * @apiErrorExample {json} Images directory not accessible
  * HTTP/1.1 500 Internal Server Error
  * {
  *   "message": "Can't access the \"images\" directory. Check it exists and you have read permission on it"
  * }
  *
- * @apiError (Error 5xx) 500 Failed to parse a file's name
+ * @apiError (Error 5xx) 500_[2] Failed to parse a file's name
  * @apiErrorExample {json} Failed to parse a file's name
  * HTTP/1.1 500 Internal Server Error
  * {

@@ -18,8 +18,6 @@ const router = express.Router()
  * @apiDescription List all scenes availables in your `IMAGES_PATH` directory
  * @apiSampleRequest /listScenes
  *
- * @apiHeader (Response Headers) {String} Content-Type application/json; charset=utf-8
- *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/listScenes"
  *
@@ -33,7 +31,7 @@ const router = express.Router()
  *   ]
  * }
  *
- * @apiError (Error 5xx) 500 Can't access the `IMAGES_PATH` directory
+ * @apiError (Error 5xx) 500_[1] Can't access the `IMAGES_PATH` directory
  * @apiErrorExample {json} Images directory not accessible
  * HTTP/1.1 500 Internal Server Error
  * {
