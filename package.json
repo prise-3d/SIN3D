@@ -1,6 +1,6 @@
 {
   "name": "expe-web",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "server:start": "node -r esm server/index.js",
@@ -9,7 +9,8 @@
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint",
-    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js"
+    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js",
+    "doc": "apidoc -i server/routes -o doc"
   },
   "dependencies": {
     "boom": "^7.3.0",
@@ -47,17 +48,11 @@
       "esm"
     ]
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/recommended",
-      "@vue/standard"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+  "apidoc": {
+    "url" : "http://diran.univ-littoral.fr/api",
+    "sampleUrl" : "http://diran.univ-littoral.fr/api",
+    "template": {
+      "forceLanguage": "en"
     }
   },
   "postcss": {
