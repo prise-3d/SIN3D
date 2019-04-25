@@ -2,7 +2,7 @@
 A web app to collect data on noise detection by humans on images.
 
 ## Download project
-```console
+```sh
 git clone https://gogs.univ-littoral.fr/Prise3D/Antoine_Internship.git
 cd Antoine_Internship
 ```
@@ -37,7 +37,7 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 
 ### Run server + client
 Linux
-```console
+```sh
 PORT=8080 SERVE_CLIENT=true IMAGE_PATH=/var/images docker-compose up
 ```
 Windows
@@ -50,7 +50,7 @@ docker-compose up
 
 ### Run server only
 Linux
-```console
+```sh
 SERVE_CLIENT=false docker-compose up
 ```
 Windows
@@ -60,14 +60,14 @@ docker-compose up
 ```
 
 ### Run client only
-```console
+```sh
 docker-compose -f docker-compose.frontapp_only.yml up
 ```
 
 ### Notice
 #### New version Docker build
 When using a new version of the project, you need to re-build the application with Docker.
-```console
+```sh
 # Server / Server + client versions
 docker-compose build
 
@@ -94,7 +94,7 @@ yarn install
 If this is a production build, set the `NODE_ENV` environment variable to `production` to enhance performance.
 
 Linux
-```console
+```sh
 export NODE_ENV=production
 ```
 Windows
@@ -104,17 +104,17 @@ SET NODE_ENV=production
 
 ### API
 #### Run the server
-```console
+```sh
 yarn run server:start
 ```
 
 #### Run the server with hot-reload for development
-```console
+```sh
 yarn run server:dev
 ```
 
 #### Automatically fix the API code syntax with ESLint
-```console
+```sh
 yarn run server:lint
 ```
 
@@ -122,24 +122,24 @@ yarn run server:lint
 ### Client
 #### Compile and minify for production
 Files will be built to the `dist/` directory.
-```console
+```sh
 yarn run app:build
 ```
 
 #### Run a hot-reload server for client development
-```console
+```sh
 yarn run app:dev
 ```
 
 
 #### Automatically fix the client code syntax with ESLint
-```console
+```sh
 yarn run app:lint
 ```
 
 ## Automated deployment
 The app can be automatically deployed when a push event is sent to the master branch using Gogs. Open a port to the web and start *[webhook_deploy_gogs.js](webhook_deploy_gogs.js)*.
-```console
+```sh
 WEBHOOK_SECRET=your_webhook_secret WEBHOOK_PORT=5000 SERVE_CLIENT=true PORT=8080 node webhook_deploy_gogs.js
 ```
 You can pass any parameters to the script, they will be passed to the Docker instance. The following are required.
@@ -151,13 +151,13 @@ You can pass any parameters to the script, they will be passed to the Docker ins
 
 ## Running tests
 The `docker-compose` script will automatically run tests. Use the following command to run them by hand.
-```console
+```sh
 yarn test
 ```
 
 ## Documentation
 The `docker-compose` script will automatically build the documentation. Use the following command to build it by hand.
-```console
+```sh
 yarn doc
 ```
 The documentation is generated to the `doc/` directory. If you started the server, the documentation is served at `/doc/`.

@@ -23,7 +23,7 @@ test('GET /listSceneQualities?sceneName=invalid/../scene', async t => {
   const res = await request(t.context.server)
     .get(`${apiPrefix}/listSceneQualities?sceneName=invalid/../scene`)
 
-  t.is(res.status, 409, json(res))
+  t.is(res.status, 400, json(res))
   t.truthy(res.body.message.match(/The requested scene name.*is not valid/), json(res.body))
 })
 
