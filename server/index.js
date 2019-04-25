@@ -32,16 +32,16 @@ app.use(imageServedUrl, serveStatic(imagesPath))
 // Load all the API routes in the server
 app.use(apiPrefix, routes)
 
-if (serveClient) {
-  // Serve client files (Client is local)
-  app.use('/', express.static(path.resolve(__dirname, '../dist')))
-}
-else {
-  // Don't serve client files (Client is remote)
-  // Turn "Cross-origin resource sharing" on to allow the remote client to connect to the API
-  app.use(cors())
-  app.get('*', (req, res) => res.status(404).send('Client is not served.'))
-}
+// Serve documentation
+app.use('/doc', express.static(path.resolve(__dirname, '../doc')))
+
+// Serve client files
+if (serveClient) app.use('/', express.static(path.resolve(__dirname, '../dist')))
+else app.get('*', (req, res) => res.status(404).send('Client is not served.'))
+
+
+// Turn "Cross-origin resource sharing" on to allow remote clients to connect to the API
+app.use(cors())
 
 // Error handler (Middleware called when throwing in another middleware)
 app.use(errorHandler)
