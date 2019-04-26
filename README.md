@@ -75,14 +75,8 @@ docker-compose build
 docker-compose -f docker-compose.frontapp_only.yml build
 ```
 
-#### Using Windows
-When using Windows, it may happen that you can't properly run the containers because of Windows's path system being different. To circumvant this problem, you can do the [following steps](https://github.com/docker/compose/issues/4303#issuecomment-379563170).
-> 1. On **Command Line**: "set COMPOSE_CONVERT_WINDOWS_PATHS=1";
-> 2. Restart **Docker for Windows**;
-> 3. Go to **Docker for Windows** settings **>** Shared Drives **>** Reset credentials **>** select drive **>** Apply;
-> 4. Reopen **Command Line**;
-> 5. Kill the _Containers_;
-> 6. Rerun the _Containers_.
+#### Docker instance on a Windows host
+As of now, Windows hosts are not supported due to MongoDB volumes not being mappable to this system.
 
 ## Run on the file system
 ### Project setup
