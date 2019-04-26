@@ -1,47 +1,64 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-    <button @click="increment">Increment</button>
-    <button @click="decrement">Decrement</button>
-    {{ count }}
-  </div>
+  <v-app id="inspire" :dark="darkMode">
+    <!-- Sidebar menu -->
+    <v-navigation-drawer
+      v-model="drawer"
+      clipped
+      fixed
+      app
+    >
+      <v-list dense>
+        <v-list-tile to="/" exact>
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile to="/listScenes" exact>
+          <v-list-tile-action>
+            <v-icon>photo_library</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>List scenes</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <!--/ Sidebar menu -->
+
+    <!-- Top bar -->
+    <v-toolbar app fixed clipped-left>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" />
+      <v-toolbar-title>Web experience</v-toolbar-title>
+    </v-toolbar>
+    <!--/ Top bar -->
+
+    <!-- Pages content -->
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout justify-center align-center>
+          <v-scroll-x-reverse-transition mode="out-in">
+            <!-- View injected here -->
+            <router-view />
+            <!--/ View injected here -->
+          </v-scroll-x-reverse-transition>
+        </v-layout>
+      </v-container>
+    </v-content>
+    <!--/ Pages content -->
+  </v-app>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
 export default {
-  name: 'Home',
-  computed: {
-    ...mapState(['count'])
-  },
-  methods: {
-    ...mapActions(['increment', 'decrement'])
+  data() {
+    return {
+      darkMode: true,
+      drawer: false
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>

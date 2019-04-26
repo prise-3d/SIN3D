@@ -1,11 +1,11 @@
-import { delay } from '../functions'
+// import { delay } from '../functions'
 
 export default {
-  async increment({ commit }) {
-    commit('increment')
+  async increment({ commit }, amount = 1) {
+    commit('increment', amount)
   },
 
-  async decrement({ commit }) {
-    commit('decrement')
+  async decrement({ commit }, amount = 1) {
+    commit('increment', -amount)
   }
 }

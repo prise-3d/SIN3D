@@ -4,13 +4,12 @@
   "private": true,
   "scripts": {
     "server:start": "node -r esm server/index.js",
-    "server:dev": "nodemon --exec npm run server:start",
     "server:lint": "eslint server/ --fix",
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint",
-    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js",
-    "doc": "apidoc -i server/routes -o doc"
+    "doc": "apidoc -i server/routes -o doc",
+    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js"
   },
   "dependencies": {
     "boom": "^7.3.0",
@@ -27,6 +26,7 @@
     "sharp": "^0.22.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1",
+    "vuetify": "^1.5.5",
     "vuex": "^3.1.0",
     "vuex-persist": "^2.0.0",
     "winston": "^3.2.1",
@@ -43,21 +43,13 @@
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
     "fs-extra": "^7.0.1",
-    "nodemon": "^1.18.10",
+    "material-design-icons-iconfont": "^4.0.5",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
     "supertest": "^4.0.2",
-    "vue-template-compiler": "^2.5.21"
-  },
-  "ava": {
-    "require": [
-      "esm"
-    ]
-  },
-  "apidoc": {
-    "url": "http://diran.univ-littoral.fr/api",
-    "sampleUrl": "http://diran.univ-littoral.fr/api",
-    "template": {
-      "forceLanguage": "en"
-    }
+    "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-template-compiler": "^2.5.21",
+    "vuetify-loader": "^1.0.5"
   },
   "postcss": {
     "plugins": {
@@ -68,5 +60,17 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "apidoc": {
+    "url": "http://diran.univ-littoral.fr/api",
+    "sampleUrl": "http://diran.univ-littoral.fr/api",
+    "template": {
+      "forceLanguage": "en"
+    }
+  },
+  "ava": {
+    "require": [
+      "esm"
+    ]
+  }
 }

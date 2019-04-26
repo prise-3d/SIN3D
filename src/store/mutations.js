@@ -1,9 +1,5 @@
 export default {
-  increment(state) {
-    state.count++
-  },
-
-  decrement(state) {
-    state.count--
+  increment(state, amount = 1) {
+    state.count += amount
   }
 }

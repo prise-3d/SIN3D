@@ -1,18 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld />
+  <div>
+    Home page
+    <div>
+      <v-btn @click="decrement()">Decrement</v-btn>
+      <v-btn @click="$store.commit('increment', -count)">Reset</v-btn>
+      <v-btn @click="increment()">Increment</v-btn>
+    </div>
+    <div>
+      {{ count }}
+    </div>
+    Count should stay in the same state if you reload the page/close your browser.
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
+  components: {},
+  computed: {
+    ...mapState(['count'])
+  },
+  methods: {
+    ...mapActions(['increment', 'decrement'])
   }
 }
 </script>
