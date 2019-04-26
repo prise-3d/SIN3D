@@ -102,11 +102,6 @@ SET NODE_ENV=production
 yarn run server:start
 ```
 
-#### Run the server with hot-reload for development
-```sh
-yarn run server:dev
-```
-
 #### Automatically fix the API code syntax with ESLint
 ```sh
 yarn run server:lint

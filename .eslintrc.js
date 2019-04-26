@@ -146,6 +146,7 @@ module.exports = {
     // ECMAScript 6
     // These rules are only relevant to ES6 environments and are off by default.
     'no-var': 2,
+    'promise/param-names': 0,
 
     // Vue.js
     'vue/max-attributes-per-line': 0,
