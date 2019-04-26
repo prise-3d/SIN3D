@@ -5,8 +5,24 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view />
+    <button @click="increment">Increment</button>
+    <button @click="decrement">Decrement</button>
+    {{ count }}
   </div>
 </template>
+
+<script>
+import { mapActions, mapState } from 'vuex'
+export default {
+  name: 'Home',
+  computed: {
+    ...mapState(['count'])
+  },
+  methods: {
+    ...mapActions(['increment', 'decrement'])
+  }
+}
+</script>
 
 <style>
 #app {
