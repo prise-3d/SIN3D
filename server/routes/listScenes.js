@@ -55,5 +55,3 @@ export const getSceneList = () => {
 router.get('/', asyncMiddleware(async (req, res) => res.json({ data: await getSceneList() })))
 
 export default router
-
-export default router

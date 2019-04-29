@@ -244,9 +244,3 @@ router.get('/', asyncMiddleware(async (req, res) => {
 }))
 
 export default router
-// Send an array of links
-res.json({ data: extracts.map(x => x.link) })
-  })
-)
-
-export default router

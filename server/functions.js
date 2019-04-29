@@ -188,5 +188,3 @@ export const formatLog = (data, event = undefined) => (JSON.stringify({
  * @returns {string} formatted log object stringified
  */
 export const formatError = errObj => formatLog({ error: errObj.message, stack: errObj.stack })
-  * /
-export const formatError = errObj => formatLog({ error: errObj.message, stack: errObj.stack })
