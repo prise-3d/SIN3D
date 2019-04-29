@@ -3,7 +3,7 @@
 import express from 'express'
 import { promises as fs } from 'fs'
 import path from 'path'
-import boom from 'boom'
+import boom from '@hapi/boom'
 import { asyncMiddleware } from '../functions'
 import { imagesPath } from '../../config'
 
@@ -53,5 +53,7 @@ export const getSceneList = () => {
 
 // Route which returns a list of all available scenes in the `imagesPath` directory
 router.get('/', asyncMiddleware(async (req, res) => res.json({ data: await getSceneList() })))
+
+export default router
 
 export default router
