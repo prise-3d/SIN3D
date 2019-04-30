@@ -8,13 +8,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('./views/About.vue')
+      path: '/experiencesList',
+      name: 'ExperiencesList',
+      component: () => import('./views/ExperiencesList.vue')
     }
   ]
 })
