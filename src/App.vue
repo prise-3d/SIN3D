@@ -54,7 +54,7 @@
 
         <!-- Pages content -->
         <v-content>
-          <v-container fluid fill-height>
+          <v-container fill-height>
             <v-layout justify-center>
               <v-scroll-x-reverse-transition mode="out-in">
                 <!-- View injected here -->
