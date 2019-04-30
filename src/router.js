@@ -12,9 +12,9 @@ export default new Router({
       component: Home
     },
     {
-      path: '/listScenes',
-      name: 'ListScenes',
-      component: () => import('./views/ListScenes.vue')
+      path: '/experiencesList',
+      name: 'ExperiencesList',
+      component: () => import('./views/ExperiencesList.vue')
     }
   ]
 })

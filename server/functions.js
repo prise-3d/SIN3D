@@ -2,7 +2,7 @@
 
 import { promises as fs } from 'fs'
 import path from 'path'
-import boom from 'boom'
+import boom from '@hapi/boom'
 import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList } from '../config'
 
 /**

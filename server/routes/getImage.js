@@ -2,7 +2,7 @@
 
 import express from 'express'
 import path from 'path'
-import boom from 'boom'
+import boom from '@hapi/boom'
 
 import { imagesPath, imageServedUrl } from '../../config'
 import { asyncMiddleware, checkSceneName, checkRequiredParameters, getSceneFilesData } from '../functions'

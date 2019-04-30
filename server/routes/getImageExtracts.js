@@ -4,7 +4,7 @@ import express from 'express'
 import sharp from 'sharp'
 import { constants as fsConstants, promises as fs } from 'fs'
 import path from 'path'
-import boom from 'boom'
+import boom from '@hapi/boom'
 
 import { asyncMiddleware, checkSceneName, checkRequiredParameters } from '../functions'
 import { imageServedUrl, imagesPath, extractsDirName } from '../../config'
