@@ -1,125 +1,82 @@
 <template>
-  <div>
+  <div :class="{ 'bigger-table': $vuetify.breakpoint.lgAndUp }">
     List of experiences
 
-    <v-data-table
-      :headers="headers"
-      :items="desserts"
-      class="elevation-1"
-    >
-      <template v-slot:items="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
-      </template>
-    </v-data-table>
+
+    <v-card>
+      <v-card-title>
+        Choose an experience
+        <v-spacer />
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        />
+      </v-card-title>
+      <v-data-table
+        v-if="items"
+        :headers="headers"
+        :items="items"
+        :search="search"
+        :pagination.sync="pagination"
+      >
+        <template v-slot:items="props">
+          <td>{{ props.item.name }}</td>
+          <td class="text-xs-center">{{ props.item.completion }}</td>
+          <td class="text-xs-center"><v-btn small dark :to="props.item.link">Start experience</v-btn></td>
+        </template>
+        <template v-slot:no-results>
+          <v-alert :value="true" color="error" icon="warning">
+            Your search for "{{ search }}" found no results.
+          </v-alert>
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Experiences from '@/router/experiences'
+
 export default {
   name: 'ExperiencesList',
-  components: {},
   data() {
     return {
+      search: '',
+      pagination: { rowsPerPage: 10 },
       headers: [
-        {
-          text: 'Experience',
-          align: 'left',
-          value: 'name'
-        },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Iron (%)', value: 'iron' }
+        { text: 'Experience name', value: 'name' },
+        { text: 'Completion', value: 'completion', align: 'center' },
+        { text: 'Start', value: 'name', sortable: false, align: 'center' }
       ],
-      desserts: [
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: '1%'
-        },
-        {
-          name: 'Ice cream sandwich',
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: '1%'
-        },
-        {
-          name: 'Eclair',
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: '7%'
-        },
-        {
-          name: 'Cupcake',
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: '8%'
-        },
-        {
-          name: 'Gingerbread',
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: '16%'
-        },
-        {
-          name: 'Jelly bean',
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: '0%'
-        },
-        {
-          name: 'Lollipop',
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: '2%'
-        },
-        {
-          name: 'Honeycomb',
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: '45%'
-        },
-        {
-          name: 'Donut',
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: '22%'
-        },
-        {
-          name: 'KitKat',
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: '6%'
-        }
-      ]
+      items: null
     }
+  },
+  computed: {
+    ...mapState(['scenesList', 'progression'])
+  },
+  mounted() {
+    this.items = Experiences.map(x => {
+      const res = {
+        name: x.fullName,
+        link: x.path
+      }
+      // Check cache has an entry for each scenes in this experience
+      if (this.progression[x.name] && Object.keys(this.progression[x.name]).every(y => this.scenesList.includes(this.progression[x.name][y])))
+        res.completion = `${Object.keys(this.progression[x.name]).filter(y => this.progression[x.name][y]).length / this.scenesList.length * 100}%`
+      else res.completion = '0%'
+
+      return res
+    })
   }
 }
 </script>
+
+<style scoped>
+.bigger-table {
+  width: 50%;
+}
+</style>

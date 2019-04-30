@@ -5,6 +5,7 @@ export const defaultState = {
     port: null
   },
   scenesList: null,
+  progression: {},
   count: 0
 }
 

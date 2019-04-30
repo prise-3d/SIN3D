@@ -42,5 +42,9 @@ export default {
     const URI = getHostURI
     const scenes = await fetch(`${URI}${API_ROUTES.listScenes()}`).then(res => res.json())
     commit('setListScenes', scenes.data)
+  },
+
+  setExperienceDone({ commit }, { experienceName, sceneName }) {
+    commit('setExperienceDone', { experienceName, sceneName })
   }
 }
