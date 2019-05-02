@@ -10,7 +10,7 @@ import { asyncMiddleware, checkSceneName, checkRequiredParameters, getSceneFiles
 const router = express.Router()
 
 /**
- * @api {get} /getImage?sceneName=:sceneName&imageQuality=:imageQuality Get an image from a scene
+ * @api {get} /getImage?sceneName=:sceneName&imageQuality=:imageQuality&nearestQuality=:nearestQuality Get an image from a scene
  * @apiVersion 0.1.0
  * @apiName GetImage
  * @apiGroup API
@@ -19,6 +19,7 @@ const router = express.Router()
  *
  * @apiParam {String} sceneName The selected scene
  * @apiParam {Number|"min"|"max"|"median"} imageQuality The required quality of the image
+ * @apiParam {Boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
  *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
@@ -27,7 +28,13 @@ const router = express.Router()
  * @apiSuccessExample {json} Success response example
  * HTTP/1.1 200 OK /api/getImage?sceneName=bathroom&imageQuality=200
  * {
- *   "data": "/api/images/bathroom/bathroom_00200.png"
+ *   "data": {
+ *     "link": "/api/images/bathroom/bathroom_00200.png",
+ *     "fileName": "bathroom_00200.png",
+ *     "sceneName": "bathroom",
+ *     "quality": 200,
+ *     "ext": "png"
+ *   }
  * }
  *
  * @apiError (Error 4xx) 400_[1] Missing parameter(s)
@@ -44,7 +51,8 @@ const router = express.Router()
  *   "message": "Invalid query parameter(s).",
  *   "data": [
  *     "The requested scene name \".//../\" is not valid.",
- *     "The specified quality is not an integer."
+ *     "The specified quality is not an integer.",
+ *     "Impossible to use \"min\", \"max\" or \"median\" with \"nearestQuality\" on."
  *   ]
  * }
  *
@@ -89,25 +97,46 @@ const router = express.Router()
  * Get the link and path to an image
  * @param {string} sceneName the scene to get the image from
  * @param {number|"min"|"max"|"median"} quality the requested quality
+ * @param {boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
  * @returns {Promise<Image>} the link and path to the image
  */
-export const getImage = async (sceneName, quality) => {
+export const getImage = async (sceneName, quality, nearestQuality = false) => {
+  const throwErrIfTrue = x => {
+    if (x) throw boom.badRequest('Impossible to use "min", "max" or "median" with "nearestQuality" on.')
+  }
   const sceneData = await getSceneFilesData(sceneName)
 
   let imageData = null
   // Search an image with the requested quality in the scene
   if (quality === 'min') {
+    throwErrIfTrue(nearestQuality)
     const toFind = Math.min(...sceneData.map(x => x.quality))
     imageData = sceneData.find(x => x.quality === toFind)
   }
   else if (quality === 'max') {
+    throwErrIfTrue(nearestQuality)
     const toFind = Math.max(...sceneData.map(x => x.quality))
     imageData = sceneData.find(x => x.quality === toFind)
   }
-  else if (quality === 'median')
+  else if (quality === 'median') {
+    throwErrIfTrue(nearestQuality)
     imageData = sceneData.length > 0 ? sceneData[Math.ceil(sceneData.length / 2) - 1] : null
-  else
-    imageData = sceneData.find(x => quality === x.quality)
+  }
+  else {
+    if (nearestQuality && sceneData.length > 0 && !isNaN(parseInt(quality, 10))) {
+      let minGap = Number.MAX_SAFE_INTEGER
+      let minGapImageData = null
+      for (const x of sceneData) {
+        const tempGap = Math.abs(x.quality - quality)
+        if (tempGap < minGap) {
+          minGap = tempGap
+          minGapImageData = x
+        }
+      }
+      imageData = minGapImageData
+    }
+    else imageData = sceneData.find(x => quality === x.quality)
+  }
 
   if (imageData)
     return {
@@ -128,6 +157,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   checkRequiredParameters(['sceneName', 'imageQuality'], req.query)
 
   const { sceneName, imageQuality } = req.query
+  const nearestQuality = req.query.nearestQuality === 'true'
 
   let errorList = []
 
@@ -142,8 +172,11 @@ router.get('/', asyncMiddleware(async (req, res) => {
   // Check `imageQuality` is an integer or `min`, `max` or `median`
   const qualityInt = parseInt(imageQuality, 10)
   let quality = null
-  if (['min', 'median', 'max'].some(x => x === imageQuality))
-    quality = imageQuality
+  if (['min', 'median', 'max'].some(x => x === imageQuality)) {
+    if (nearestQuality)
+      errorList.push('Impossible to use "min", "max" or "median" with "nearestQuality" on.')
+    else quality = imageQuality
+  }
   else if (!isNaN(qualityInt))
     quality = qualityInt
   else
@@ -153,8 +186,9 @@ router.get('/', asyncMiddleware(async (req, res) => {
   if (errorList.length > 0)
     throw boom.badRequest('Invalid query parameter(s).', errorList)
 
-  const { link } = await getImage(sceneName, quality)
-  res.json({ data: link })
+  const data = await getImage(sceneName, quality, nearestQuality)
+  data.path = undefined
+  res.json({ data })
 }))
 
 export default router

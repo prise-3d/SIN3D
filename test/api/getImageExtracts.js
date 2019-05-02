@@ -37,6 +37,15 @@ test('GET /getImageExtracts?sceneName=/../&imageQuality=a&horizontalExtractCount
   t.truthy(res.body.data.find(x => x.includes('vertical axis is not an integer')), json(res.body))
 })
 
+test('GET /getImageExtracts?sceneName=bathroom&horizontalExtractCount=5&verticalExtractCount=2&imageQuality=max&nearestQuality=true', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&horizontalExtractCount=5&verticalExtractCount=2&imageQuality=max&nearestQuality=true`)
+
+  t.is(res.status, 400, json(res))
+  t.true(res.body.message.includes('Invalid query parameter'), json(res.body))
+  t.truthy(res.body.data.find(x => x.match(/Impossible to use.*min.*max.*median.*with.*nearestQuality/)), json(res.body))
+})
+
 test('GET /getImageExtracts?sceneName=unknown-scene-name&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
   const res = await request(t.context.server)
     .get(`${apiPrefix}/getImageExtracts?sceneName=unknown-scene-name&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2`)
@@ -68,8 +77,8 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=min&horizontalExtrac
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=min&horizontalExtractCount=5&verticalExtractCount=2`)
 
   t.is(res.status, 200, json(res))
-  t.true(Array.isArray(res.body.data), json(res.body))
-  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.true(Array.isArray(res.body.data.extracts), json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
 })
 
 test('GET /getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -77,8 +86,8 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExt
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExtractCount=5&verticalExtractCount=2`)
 
   t.is(res.status, 200, json(res))
-  t.true(Array.isArray(res.body.data), json(res.body))
-  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.true(Array.isArray(res.body.data.extracts), json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
 })
 
 test('GET /getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -86,8 +95,16 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtrac
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtractCount=5&verticalExtractCount=2`)
 
   t.is(res.status, 200, json(res))
-  t.true(Array.isArray(res.body.data), json(res.body))
-  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.true(Array.isArray(res.body.data.extracts), json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+})
+
+test('GET /getImageExtracts?sceneName=bathroom&imageQuality=99999&horizontalExtractCount=5&verticalExtractCount=2&nearestQuality=true', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=99999&horizontalExtractCount=5&verticalExtractCount=2&nearestQuality=true`)
+
+  t.is(res.status, 200, json(res))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
 })
 
 test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -95,8 +112,15 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2`)
 
   t.is(res.status, 200, json(res))
-  t.true(Array.isArray(res.body.data), json(res.body))
-  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.true(Array.isArray(res.body.data.extracts), json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.deepEqual(res.body.data.info, {
+    link: `${imageServedUrl}/bathroom/bathroom_00010.png`,
+    fileName: 'bathroom_00010.png',
+    sceneName: 'bathroom',
+    quality: 10,
+    ext: 'png'
+  }, json(res.body))
 
   // Check link is accessible and is an image
   const res2 = await request(t.context.server)
