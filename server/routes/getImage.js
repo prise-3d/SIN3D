@@ -18,7 +18,7 @@ const router = express.Router()
  * @apiDescription Get an image from a scene with the required quality
  *
  * @apiParam {String} sceneName The selected scene
- * @apiParam {Number|"min"|"max"|"median"} imageQuality The required quality of the image
+ * @apiParam {String="min","max","median", "any integer"} imageQuality The required quality of the image (can be an integer, `min`, `max` or `median`)
  * @apiParam {Boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
  *
  * @apiExample Usage example

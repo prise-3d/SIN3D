@@ -21,7 +21,7 @@ const router = express.Router()
  * @apiDescription Get an image from a scene with the required quality and cut it with the requested configuration
  *
  * @apiParam {String} sceneName The selected scene
- * @apiParam {Number|"min"|"max"|"median"} imageQuality The required quality of the image
+ * @apiParam {String="min","max","median", "any integer"} imageQuality The required quality of the image (can be an integer, `min`, `max` or `median`)
  * @apiParam {Number} horizontalExtractCount The amount of extracts for the horizontal axis
  * @apiParam {Number} verticalExtractCount The amount of extracts for the vertical axis
  * @apiParam {Boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
