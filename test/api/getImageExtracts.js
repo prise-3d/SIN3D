@@ -63,6 +63,33 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtract
   t.truthy(res.body.data.find(x => x.includes('Incompatible number of vertical extracts')), json(res.body))
 })
 
+test('GET /getImageExtracts?sceneName=bathroom&imageQuality=min&horizontalExtractCount=5&verticalExtractCount=2', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=min&horizontalExtractCount=5&verticalExtractCount=2`)
+
+  t.is(res.status, 200, json(res))
+  t.true(Array.isArray(res.body.data), json(res.body))
+  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+})
+
+test('GET /getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExtractCount=5&verticalExtractCount=2', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExtractCount=5&verticalExtractCount=2`)
+
+  t.is(res.status, 200, json(res))
+  t.true(Array.isArray(res.body.data), json(res.body))
+  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+})
+
+test('GET /getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtractCount=5&verticalExtractCount=2', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtractCount=5&verticalExtractCount=2`)
+
+  t.is(res.status, 200, json(res))
+  t.true(Array.isArray(res.body.data), json(res.body))
+  t.is(res.body.data[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+})
+
 test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
   const res = await request(t.context.server)
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2`)

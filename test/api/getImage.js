@@ -46,6 +46,30 @@ test('GET /getImage?sceneName=bathroom&imageQuality=999999', async t => {
   t.truthy(res.body.message.match(/requested quality.*not found for.*scene/), json(res.body))
 })
 
+test('GET /getImage?sceneName=bathroom&imageQuality=min', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImage?sceneName=bathroom&imageQuality=min`)
+
+  t.is(res.status, 200, json(res))
+  t.is(res.body.data, `${imageServedUrl}/bathroom/bathroom_00010.png`, json(res.body))
+})
+
+test('GET /getImage?sceneName=bathroom&imageQuality=median', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImage?sceneName=bathroom&imageQuality=median`)
+
+  t.is(res.status, 200, json(res))
+  t.is(res.body.data, `${imageServedUrl}/bathroom/bathroom_00010.png`, json(res.body))
+})
+
+test('GET /getImage?sceneName=bathroom&imageQuality=max', async t => {
+  const res = await request(t.context.server)
+    .get(`${apiPrefix}/getImage?sceneName=bathroom&imageQuality=max`)
+
+  t.is(res.status, 200, json(res))
+  t.is(res.body.data, `${imageServedUrl}/bathroom/bathroom_00010.png`, json(res.body))
+})
+
 test('GET /getImage?sceneName=bathroom&imageQuality=10', async t => {
   const res = await request(t.context.server)
     .get(`${apiPrefix}/getImage?sceneName=bathroom&imageQuality=10`)
@@ -60,3 +84,5 @@ test('GET /getImage?sceneName=bathroom&imageQuality=10', async t => {
   t.is(res2.status, 200, json(res2))
   t.is(res2.header['content-type'], 'image/png', json(res2))
 })
+
+

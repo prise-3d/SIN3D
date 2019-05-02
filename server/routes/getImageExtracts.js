@@ -21,7 +21,7 @@ const router = express.Router()
  * @apiDescription Get an image from a scene with the required quality and cut it with the requested configuration
  *
  * @apiParam {String} sceneName The selected scene
- * @apiParam {Number} imageQuality The required quality of the image
+ * @apiParam {Number|"min"|"max"|"median"} imageQuality The required quality of the image
  * @apiParam {Number} horizontalExtractCount The amount of extracts for the horizontal axis
  * @apiParam {Number} verticalExtractCount The amount of extracts for the vertical axis
  *
@@ -216,15 +216,21 @@ router.get('/', asyncMiddleware(async (req, res) => {
     errorList.push(err.message)
   }
 
-  // Check `imageQuality` is an integer
+  // Check `imageQuality` is an integer or `min`, `max` or `median`
   const qualityInt = parseInt(imageQuality, 10)
-  if (isNaN(qualityInt)) errorList.push('The specified quality is not an integer.')
+  let quality = null
+  if (['min', 'median', 'max'].some(x => x === imageQuality))
+    quality = imageQuality
+  else if (!isNaN(qualityInt))
+    quality = qualityInt
+  else
+    errorList.push('The specified quality is not an integer or "min", "max" or "median".')
 
   // Check `horizontalExtractCount` is an integer
   const horizontalExtractCountInt = parseInt(horizontalExtractCount, 10)
   if (isNaN(horizontalExtractCountInt)) errorList.push('The specified number of extract for the horizontal axis is not an integer.')
 
-  // Check `imageQuality` is an integer
+  // Check `verticalExtractCountInt` is an integer
   const verticalExtractCountInt = parseInt(verticalExtractCount, 10)
   if (isNaN(verticalExtractCountInt)) errorList.push('The specified number of extract for the vertical axis is not an integer.')
 
@@ -234,7 +240,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
     throw boom.badRequest('Invalid query parameter(s).', errorList)
 
   // Get the image path and link
-  const image = await getImage(sceneName, qualityInt)
+  const image = await getImage(sceneName, quality)
 
   // Cut the image
   const extracts = await cutImage(image, horizontalExtractCountInt, verticalExtractCountInt)

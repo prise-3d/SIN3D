@@ -18,7 +18,7 @@ const router = express.Router()
  * @apiDescription Get an image from a scene with the required quality
  *
  * @apiParam {String} sceneName The selected scene
- * @apiParam {Number} imageQuality The required quality of the image
+ * @apiParam {Number|"min"|"max"|"median"} imageQuality The required quality of the image
  *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
@@ -88,26 +88,39 @@ const router = express.Router()
 /**
  * Get the link and path to an image
  * @param {string} sceneName the scene to get the image from
- * @param {number} qualityInt the requested quality
+ * @param {number|"min"|"max"|"median"} quality the requested quality
  * @returns {Promise<Image>} the link and path to the image
  */
-export const getImage = async (sceneName, qualityInt) => {
+export const getImage = async (sceneName, quality) => {
   const sceneData = await getSceneFilesData(sceneName)
 
+  let imageData = null
   // Search an image with the requested quality in the scene
-  for (const [imageName, imageData] of sceneData.entries())
-    if (qualityInt === imageData.quality)
-      return {
-        link: `${imageServedUrl}/${sceneName}/${imageName}`,
-        path: path.resolve(imagesPath, sceneName, imageName),
-        fileName: imageName,
-        sceneName,
-        quality: imageData.quality,
-        ext: imageData.ext
-      }
+  if (quality === 'min') {
+    const toFind = Math.min(...sceneData.map(x => x.quality))
+    imageData = sceneData.find(x => x.quality === toFind)
+  }
+  else if (quality === 'max') {
+    const toFind = Math.max(...sceneData.map(x => x.quality))
+    imageData = sceneData.find(x => x.quality === toFind)
+  }
+  else if (quality === 'median')
+    imageData = sceneData.length > 0 ? sceneData[Math.ceil(sceneData.length / 2) - 1] : null
+  else
+    imageData = sceneData.find(x => quality === x.quality)
+
+  if (imageData)
+    return {
+      link: `${imageServedUrl}/${sceneName}/${imageData.fileName}`,
+      path: path.resolve(imagesPath, sceneName, imageData.fileName),
+      fileName: imageData.fileName,
+      sceneName: imageData.sceneName,
+      quality: imageData.quality,
+      ext: imageData.ext
+    }
 
   // Image not found
-  throw boom.notFound(`The requested quality (${qualityInt}) was not found for the requested scene (${sceneName}).`)
+  throw boom.notFound(`The requested quality "${quality}" was not found for the requested scene "${sceneName}".`)
 }
 
 router.get('/', asyncMiddleware(async (req, res) => {
@@ -126,15 +139,21 @@ router.get('/', asyncMiddleware(async (req, res) => {
     errorList.push(err.message)
   }
 
-  // Check `imageQuality` is an integer
+  // Check `imageQuality` is an integer or `min`, `max` or `median`
   const qualityInt = parseInt(imageQuality, 10)
-  if (isNaN(qualityInt)) errorList.push('The specified quality is not an integer.')
+  let quality = null
+  if (['min', 'median', 'max'].some(x => x === imageQuality))
+    quality = imageQuality
+  else if (!isNaN(qualityInt))
+    quality = qualityInt
+  else
+    errorList.push('The specified quality is not an integer or "min", "max" or "median".')
 
   // Check there is no errors with parameters
   if (errorList.length > 0)
     throw boom.badRequest('Invalid query parameter(s).', errorList)
 
-  const { link } = await getImage(sceneName, qualityInt)
+  const { link } = await getImage(sceneName, quality)
   res.json({ data: link })
 }))
 

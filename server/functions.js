@@ -104,6 +104,8 @@ export const getSceneFiles = sceneName => {
 
 /** Image data type definition (do no remove)
  * @typedef {object} ImageData
+ * @property {string} fileName file name of image
+ * @property {string} sceneName scene name of image
  * @property {string} prefix prefix of image
  * @property {number} quality quality of image
  * @property {string} ext extension of image
@@ -112,7 +114,7 @@ export const getSceneFiles = sceneName => {
  * Get image data from every files in a scene (exclude blacklisted ones)
  * @typedef {string} filename path to the image
  * @param {string} sceneName the scene name
- * @returns {Promise<Map<filename, ImageData>>} the data for all images in a scene (Map key = file name)
+ * @returns {Promise<ImageData[]>} the data for all images in a scene
  * @throws some file names could not be parsed
  */
 export const getSceneFilesData = async sceneName => {
@@ -146,20 +148,22 @@ export const getSceneFilesData = async sceneName => {
       const fileData = {
         prefix: regexRes[1],
         quality: parseInt(regexRes[2], 10),
-        ext: regexRes[3]
+        ext: regexRes[3],
+        fileName: regexRes[0],
+        sceneName
       }
 
       // Check valid quality
       if (isNaN(fileData.quality)) return acc
 
       // Data is valid, set it
-      acc.set(regexRes[0], fileData)
+      acc.push(fileData)
     }
     catch (err) {
       failList.push(`Failed to parse file name : "${image}".`)
     }
     return acc
-  }, new Map())
+  }, [])
 
   // Check if the parse fail list is empty
   if (failList.length > 0)
