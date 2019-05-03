@@ -5,8 +5,7 @@ export const defaultState = {
     port: null
   },
   scenesList: null,
-  progression: {},
-  count: 0
+  progression: {}
 }
 
 // Deep copy defaultState to not modify it with the store

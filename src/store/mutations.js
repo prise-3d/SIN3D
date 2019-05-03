@@ -1,14 +1,16 @@
 import { defaultState } from '@/store/state'
-import Experiences from '@/router/experiences'
+import Experiments from '@/router/experiments'
+
+const checkProgression = (state, experimentName, sceneName) => {
+  if (!state.progression[experimentName])
+    state.progression[experimentName] = {}
+  if (!state.progression[experimentName][sceneName])
+    state.progression[experimentName][sceneName] = { done: false, data: {} }
+}
 
 export default {
-  increment(state, amount = 1) {
-    state.count += amount
-  },
-
-  resetApp(state, { hostConfig, scenesList, progression }) {
+  resetApp(state, { hostConfig, progression }) {
     if (hostConfig) state.hostConfig = defaultState.hostConfig
-    if (scenesList) state.scenesList = defaultState.scenesList
     if (progression) state.progression = defaultState.progression
   },
 
@@ -22,7 +24,7 @@ export default {
       acc[x] = { done: false, data: {} }
       return acc
     }, {})
-    const progressionObj = Experiences.reduce((acc, x) => {
+    const progressionObj = Experiments.reduce((acc, x) => {
       acc[x.name] = scenesProgressObj
       return acc
     }, {})
@@ -30,19 +32,12 @@ export default {
     state.progression = progressionObj
   },
 
-  setExperienceProgress(state, { experienceName, sceneName, data }) {
-    if (!state.progression[experienceName])
-      state.progression[experienceName] = {}
-    if (!state.progression[experienceName][sceneName])
-      state.progression[experienceName][sceneName] = { done: false, data: {} }
-    state.progression[experienceName][sceneName].data = data
+  setExperimentProgress(state, { experimentName, sceneName, data }) {
+    checkProgression(state, experimentName, sceneName)
+    state.progression[experimentName][sceneName].data = data
   },
-  setExperienceDone(state, { experienceName, sceneName, done }) {
-    if (!state.progression[experienceName])
-      state.progression[experienceName] = {}
-    if (!state.progression[experienceName][sceneName])
-      state.progression[experienceName][sceneName] = { done: false, data: {} }
-
-    state.progression[experienceName][sceneName].done = done
+  setExperimentDone(state, { experimentName, sceneName, done }) {
+    checkProgression(state, experimentName, sceneName)
+    state.progression[experimentName][sceneName].done = done
   }
 }

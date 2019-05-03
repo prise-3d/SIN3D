@@ -1,16 +1,8 @@
 import { API_ROUTES, buildURI } from '../functions'
 
 export default {
-  async increment({ commit }, amount = 1) {
-    commit('increment', amount)
-  },
-
-  async decrement({ commit }, amount = 1) {
-    commit('increment', -amount)
-  },
-
-  resetApp({ commit }, { hostConfig = false, scenesList = false, progression = false }) {
-    commit('resetApp', { hostConfig, scenesList, progression })
+  resetApp({ commit }, { hostConfig = false, progression = false }) {
+    commit('resetApp', { hostConfig, progression })
   },
 
   async setHostConfig({ commit }, { protocol, host, port }) {
@@ -44,10 +36,10 @@ export default {
     commit('setListScenes', scenes.data)
   },
 
-  setExperienceProgress({ commit }, { experienceName, sceneName, data }) {
-    commit('setExperienceProgress', { experienceName, sceneName, data })
+  setExperimentProgress({ commit }, { experimentName, sceneName, data }) {
+    commit('setExperimentProgress', { experimentName, sceneName, data })
   },
-  setExperienceDone({ commit }, { experienceName, sceneName, done = true }) {
-    commit('setExperienceDone', { experienceName, sceneName, done })
+  setExperimentDone({ commit }, { experimentName, sceneName, done = true }) {
+    commit('setExperimentDone', { experimentName, sceneName, done })
   }
 }

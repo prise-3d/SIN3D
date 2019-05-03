@@ -4,6 +4,6 @@
 
 <script>
 export default {
-  name: 'ExperienceWithReference'
+  name: 'ExperimentWithReference'
 }
 </script>

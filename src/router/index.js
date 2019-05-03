@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
-import Experiences from './experiences'
+import ExperimentsList from '@/views/ExperimentsList.vue'
+import Experiments from './experiments'
 
 Vue.use(Router)
 
@@ -9,14 +9,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home
+      redirect: '/experimentsList'
     },
     {
-      path: '/experiencesList',
-      name: 'ExperiencesList',
-      component: () => import('@/views/ExperiencesList.vue')
+      path: '/experimentsList',
+      name: 'ExperimentsList',
+      component: ExperimentsList
     },
-    ...Experiences
+    ...Experiments
   ]
 })

@@ -74,7 +74,6 @@ export default {
       selectedItems: [],
       items: [
         { text: 'Host configuration', value: 'hostConfig' },
-        { text: 'Scenes list', value: 'scenesList' },
         { text: 'Progression', value: 'progression' }
       ]
     }

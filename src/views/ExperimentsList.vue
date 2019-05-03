@@ -1,11 +1,11 @@
 <template>
   <div :class="{ 'bigger-table': $vuetify.breakpoint.lgAndUp }">
-    List of experiences
+    List of experiments
 
 
     <v-card>
       <v-card-title>
-        Choose an experience
+        Choose an experiment
         <v-spacer />
         <v-text-field
           v-model="search"
@@ -25,7 +25,7 @@
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-center">{{ props.item.completion }}</td>
-          <td class="text-xs-center"><v-btn small dark :to="props.item.link">Start experience</v-btn></td>
+          <td class="text-xs-center"><v-btn small dark :to="props.item.link">Start experiment</v-btn></td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -39,16 +39,16 @@
 
 <script>
 import { mapState } from 'vuex'
-import Experiences from '@/router/experiences'
+import Experiments from '@/router/experiments'
 
 export default {
-  name: 'ExperiencesList',
+  name: 'ExperimentsList',
   data() {
     return {
       search: '',
       pagination: { rowsPerPage: 10 },
       headers: [
-        { text: 'Experience name', value: 'name' },
+        { text: 'Experiment name', value: 'name' },
         { text: 'Completion', value: 'completion', align: 'center' },
         { text: 'Start', value: 'name', sortable: false, align: 'center' }
       ],
@@ -59,14 +59,18 @@ export default {
     ...mapState(['scenesList', 'progression'])
   },
   mounted() {
-    this.items = Experiences.map(x => {
+    this.items = Experiments.map(expe => {
       const res = {
-        name: x.fullName,
-        link: x.path
+        name: expe.fullName,
+        link: expe.path
       }
-      // Check cache has an entry for each scenes in this experience
-      if (this.progression[x.name] && Object.keys(this.progression[x.name]).every(y => this.scenesList.includes(this.progression[x.name][y])))
-        res.completion = `${Object.keys(this.progression[x.name]).filter(y => this.progression[x.name][y]).length / this.scenesList.length * 100}%`
+      // Check cache has an entry for each scenes in this experiment
+      if (this.progression[expe.name] && Object.keys(this.progression[expe.name]).every(y => this.scenesList.includes(y))) {
+        // Set experiment completion percentage
+        const numberOfDoneScenes = Object.keys(this.progression[expe.name]).filter(y => this.progression[expe.name][y].done).length
+        const percentage = Math.round(numberOfDoneScenes / this.scenesList.length * 100)
+        res.completion = `${percentage}%`
+      }
       else res.completion = '0%'
 
       return res
