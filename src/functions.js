@@ -6,14 +6,15 @@ export const API_ROUTES = {
 
   listSceneQualities: sceneName => `${API_PREFIX}/listSceneQualities?sceneName=${new URLSearchParams({ sceneName })}`,
 
-  getImage: (sceneName, imageQuality) => `${API_PREFIX}/getImage?${new URLSearchParams({ sceneName, imageQuality })}`,
+  getImage: (sceneName, imageQuality, nearestQuality = false) => `${API_PREFIX}/getImage?${new URLSearchParams({ sceneName, imageQuality, nearestQuality })}`,
 
-  getImageExtracts: (sceneName, imageQuality, horizontalExtractCount, verticalExtractCount) =>
+  getImageExtracts: (sceneName, imageQuality, horizontalExtractCount, verticalExtractCount, nearestQuality = false) =>
     `${API_PREFIX}/getImage?${new URLSearchParams({
       sceneName,
       imageQuality,
       horizontalExtractCount,
-      verticalExtractCount
+      verticalExtractCount,
+      nearestQuality
     })}`
 }
 

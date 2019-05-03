@@ -57,11 +57,13 @@
         <v-content>
           <v-container fill-height>
             <v-layout justify-center>
-              <v-scroll-x-reverse-transition mode="out-in">
-                <!-- View injected here -->
-                <router-view />
+              <v-flex xs12>
+                <v-scroll-x-reverse-transition mode="out-in">
+                  <!-- View injected here -->
+                  <router-view />
                 <!--/ View injected here -->
-              </v-scroll-x-reverse-transition>
+                </v-scroll-x-reverse-transition>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-content>

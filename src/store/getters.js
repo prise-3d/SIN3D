@@ -12,4 +12,9 @@ export default {
   areScenesLoaded(state) {
     return state.scenesList !== null
   }
+
+  // TODO: Cache scene thumb URI
+  // areScenesThumbsLoaded(state) {
+  //   return state.scenesList !== null
+  // }
 }

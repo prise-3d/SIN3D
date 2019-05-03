@@ -117,6 +117,7 @@ export default {
       catch (err) {
         this.$refs.toast.show(err.message, 'error', 10000)
       }
+      this.$router.push('/')
     }
   }
 }

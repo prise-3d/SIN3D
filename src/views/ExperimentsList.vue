@@ -1,7 +1,6 @@
 <template>
-  <div :class="{ 'bigger-table': $vuetify.breakpoint.lgAndUp }">
+  <div>
     List of experiments
-
 
     <v-card>
       <v-card-title>
@@ -62,7 +61,7 @@ export default {
     this.items = Experiments.map(expe => {
       const res = {
         name: expe.fullName,
-        link: expe.path
+        link: `/experiments/selectScene/${expe.name}`
       }
       // Check cache has an entry for each scenes in this experiment
       if (this.progression[expe.name] && Object.keys(this.progression[expe.name]).every(y => this.scenesList.includes(y))) {
@@ -78,9 +77,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.bigger-table {
-  width: 50%;
-}
-</style>

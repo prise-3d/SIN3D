@@ -1,14 +1,16 @@
 export default [
   {
-    path: '/experiments/noReference',
+    path: '/experiments/ExperimentNoReference/:sceneId',
     name: 'ExperimentNoReference',
     fullName: 'No reference image',
-    component: () => import('@/views/Experiments/NoReference.vue')
+    component: () => import('@/views/Experiments/NoReference.vue'),
+    props: true
   },
   {
-    path: '/experiments/withReference',
+    path: '/experiments/ExperimentWithReference/:sceneId',
     name: 'ExperimentWithReference',
     fullName: 'With reference image',
-    component: () => import('@/views/Experiments/WithReference.vue')
+    component: () => import('@/views/Experiments/WithReference.vue'),
+    props: true
   }
 ]
