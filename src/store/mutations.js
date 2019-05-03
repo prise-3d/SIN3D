@@ -6,9 +6,10 @@ export default {
     state.count += amount
   },
 
-  resetApp(state, { hostConfig, scenesList }) {
+  resetApp(state, { hostConfig, scenesList, progression }) {
     if (hostConfig) state.hostConfig = defaultState.hostConfig
     if (scenesList) state.scenesList = defaultState.scenesList
+    if (progression) state.progression = defaultState.progression
   },
 
   setHostConfig(state, newConfig) {
@@ -18,7 +19,7 @@ export default {
   setListScenes(state, scenes) {
     state.scenesList = scenes
     const scenesProgressObj = scenes.reduce((acc, x) => {
-      acc[x] = false
+      acc[x] = { done: false, data: {} }
       return acc
     }, {})
     const progressionObj = Experiences.reduce((acc, x) => {
@@ -29,10 +30,19 @@ export default {
     state.progression = progressionObj
   },
 
-  setExperienceDone(state, { experienceName, sceneName }) {
+  setExperienceProgress(state, { experienceName, sceneName, data }) {
     if (!state.progression[experienceName])
       state.progression[experienceName] = {}
+    if (!state.progression[experienceName][sceneName])
+      state.progression[experienceName][sceneName] = { done: false, data: {} }
+    state.progression[experienceName][sceneName].data = data
+  },
+  setExperienceDone(state, { experienceName, sceneName, done }) {
+    if (!state.progression[experienceName])
+      state.progression[experienceName] = {}
+    if (!state.progression[experienceName][sceneName])
+      state.progression[experienceName][sceneName] = { done: false, data: {} }
 
-    state.progression[experienceName][sceneName] = true
+    state.progression[experienceName][sceneName].done = done
   }
 }

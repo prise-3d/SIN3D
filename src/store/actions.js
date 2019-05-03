@@ -9,8 +9,8 @@ export default {
     commit('increment', -amount)
   },
 
-  resetApp({ commit }, { hostConfig = false, scenesList = false }) {
-    commit('resetApp', { hostConfig, scenesList })
+  resetApp({ commit }, { hostConfig = false, scenesList = false, progression = false }) {
+    commit('resetApp', { hostConfig, scenesList, progression })
   },
 
   async setHostConfig({ commit }, { protocol, host, port }) {
@@ -44,7 +44,10 @@ export default {
     commit('setListScenes', scenes.data)
   },
 
-  setExperienceDone({ commit }, { experienceName, sceneName }) {
-    commit('setExperienceDone', { experienceName, sceneName })
+  setExperienceProgress({ commit }, { experienceName, sceneName, data }) {
+    commit('setExperienceProgress', { experienceName, sceneName, data })
+  },
+  setExperienceDone({ commit }, { experienceName, sceneName, done = true }) {
+    commit('setExperienceDone', { experienceName, sceneName, done })
   }
 }
