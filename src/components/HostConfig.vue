@@ -10,6 +10,14 @@
               <v-slide-y-transition mode="out-in">
                 <loader v-if="loadingMessage" :message="loadingMessage" />
                 <v-form v-else ref="form">
+                  <v-flex xs3>
+                    <v-select
+                      v-model="config.protocol"
+                      :items="['HTTP', 'HTTPS']"
+                      label="Protocol"
+                    />
+                  </v-flex>
+
                   <v-text-field
                     v-model="config.host"
                     label="Host IP address or hostname"
@@ -24,6 +32,7 @@
                     :rules="[v => !!v || 'Port is required']"
                     required
                   />
+
 
                   <v-btn color="error" @click="reset">Reset Form</v-btn>
 
@@ -61,6 +70,12 @@ export default {
 
       loadingMessage: null,
       configErrorMessage: null
+    }
+  },
+
+  watch: {
+    'config.protocol'(newValue) {
+      if (newValue === 'HTTPS') this.config.port = 443
     }
   },
 
