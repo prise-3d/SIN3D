@@ -134,7 +134,7 @@ module.exports = {
     'no-mixed-spaces-and-tabs': 1,
     'no-multiple-empty-lines': [1, { max: 2 }],
     'no-trailing-spaces': 1,
-    'no-underscore-dangle': 1,
+    'no-underscore-dangle': 0,
     'quote-props': [1, 'consistent'],
     'quotes': [1, 'single'],
     'semi': ['error', 'never'],

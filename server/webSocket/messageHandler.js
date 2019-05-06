@@ -24,7 +24,7 @@ const messageHandler = ws => async data => {
 
   await DataController.add(json)
   if (!TEST_MODE) wsLogger.info(formatLog(json, 'message'))
-  ws.send('ok')
+  ws.send('{"message":"ok"}')
 }
 
 export default messageHandler

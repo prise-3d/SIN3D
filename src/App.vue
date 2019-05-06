@@ -90,8 +90,6 @@ export default {
       darkMode: true,
       drawer: false,
 
-      hostConfigured: false,
-
       loadingErrorMessage: null,
       loadingMessage: null
     }
@@ -101,24 +99,23 @@ export default {
   },
   watch: {
     isHostConfigured(value) {
-      if (!this.areScenesLoaded && value) this.loadAppData()
+      if (value) this.loadAppData()
     }
   },
   mounted() {
-    if (this.isHostConfigured && !this.areScenesLoaded) this.loadAppData()
+    this.loadAppData()
   },
   methods: {
-    ...mapActions(['loadScenesList']),
+    ...mapActions(['loadScenesList', 'connectToWs']),
     async loadAppData() {
-      if (this.isHostConfigured && !this.areScenesLoaded) {
-        await this.loadScenes()
-      }
+      if (this.isHostConfigured) await this.loadWebSocket()
+      if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
     },
 
-    async loadScenes() {
-      this.loadingMessage = 'Loading scenes list...'
+    async load(fn, loadingMessage) {
       try {
-        await this.loadScenesList()
+        this.loadingMessage = loadingMessage
+        await fn()
       }
       catch (err) {
         this.loadingErrorMessage = err.message
@@ -127,7 +124,15 @@ export default {
       finally {
         this.loadingMessage = null
       }
+    },
+
+    loadScenes() {
+      return this.load(this.loadScenesList, 'Loading scenes list...')
+    },
+    loadWebSocket() {
+      return this.load(this.connectToWs, 'Connecting to WebSocket server...')
     }
+
   }
 }
 </script>

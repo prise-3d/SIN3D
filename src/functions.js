@@ -20,4 +20,5 @@ export const API_ROUTES = {
 
 export const delay = ms => new Promise(res => setTimeout(res, ms))
 
-export const buildURI = (protocol, host, port, route = '') => `${protocol}://${host}:${port}${route}`
+export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
+export const buildWsURI = (ssl, host, port) => `${ssl ? 'wss' : 'ws'}://${host}:${port}`
