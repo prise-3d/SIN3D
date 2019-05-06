@@ -10,9 +10,9 @@ import { imagesPath } from '../../config'
 const router = express.Router()
 
 /**
- * @api {get} /listScenes Get a list of all available scenes
+ * @api {get} /listScenes /listScenes
  * @apiVersion 0.1.0
- * @apiName GetListScenes
+ * @apiName listScenes
  * @apiGroup API
  *
  * @apiDescription List all scenes availables in your `IMAGES_PATH` directory

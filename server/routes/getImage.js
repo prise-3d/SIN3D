@@ -10,9 +10,9 @@ import { asyncMiddleware, checkSceneName, checkRequiredParameters, getSceneFiles
 const router = express.Router()
 
 /**
- * @api {get} /getImage?sceneName=:sceneName&imageQuality=:imageQuality&nearestQuality=:nearestQuality Get an image from a scene
+ * @api {get} /getImage?sceneName=:sceneName&imageQuality=:imageQuality&nearestQuality=:nearestQuality /getImage
  * @apiVersion 0.1.0
- * @apiName GetImage
+ * @apiName getImage
  * @apiGroup API
  *
  * @apiDescription Get an image from a scene with the required quality
@@ -24,7 +24,12 @@ const router = express.Router()
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
  *
- * @apiSuccess {String} data Path to the image
+ * @apiSuccess {Object} data Informations on the image
+ * @apiSuccess {String} data.link Path to the image
+ * @apiSuccess {String} data.fileName File name of the image
+ * @apiSuccess {String} data.sceneName Scene name of the image
+ * @apiSuccess {Number} data.quality Quality of the image
+ * @apiSuccess {String} data.ext Extension of the image
  * @apiSuccessExample {json} Success response example
  * HTTP/1.1 200 OK /api/getImage?sceneName=bathroom&imageQuality=200
  * {

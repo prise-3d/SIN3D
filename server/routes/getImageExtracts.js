@@ -13,12 +13,12 @@ import { getImage } from './getImage'
 const router = express.Router()
 
 /**
- * @api {get} /getImageExtracts?sceneName=:sceneName&imageQuality=:imageQuality&horizontalExtractCount=:horizontalExtractCount&verticalExtractCount=:verticalExtractCount&nearestQuality=:nearestQuality Get image extracts
+ * @api {get} /getImageExtracts?sceneName=:sceneName&imageQuality=:imageQuality&horizontalExtractCount=:horizontalExtractCount&verticalExtractCount=:verticalExtractCount&nearestQuality=:nearestQuality /getImageExtracts
  * @apiVersion 0.1.0
- * @apiName GetImageExtracts
+ * @apiName getImageExtracts
  * @apiGroup API
  *
- * @apiDescription Get an image from a scene with the required quality and cut it with the requested configuration
+ * @apiDescription Get an image from a scene with the required quality and cut it into multiple extracts with the requested configuration
  *
  * @apiParam {String} sceneName The selected scene
  * @apiParam {String="min","max","median", "any integer"} imageQuality The required quality of the image (can be an integer, `min`, `max` or `median`)
@@ -29,12 +29,19 @@ const router = express.Router()
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2"
  *
- * @apiSuccess {String[]} data Path to the extracted images
+ * @apiSuccess {Object} data Path to the extracted images
+ * @apiSuccess {String[]} data.extracts Path to the extracted images
+ * @apiSuccess {Object} data.info Informations on the original image
+ * @apiSuccess {String} data.info.link Path to the original image
+ * @apiSuccess {String} data.info.fileName File name of the original image
+ * @apiSuccess {String} data.info.sceneName Scene name of the original image
+ * @apiSuccess {Number} data.info.quality Quality of the original image
+ * @apiSuccess {String} data.info.ext Extension of the original image
  * @apiSuccessExample {json} Success response example
  * HTTP/1.1 200 OK /api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2
  * {
  *   "data": {
- *     extracts: [
+ *     "extracts": [
  *       "/api/images/bathroom/extracts/x1_y2/zone00001/bathroom_zone00001_200.png",
  *       "/api/images/bathroom/extracts/x1_y2/zone00002/bathroom_zone00002_200.png"
  *     ],
