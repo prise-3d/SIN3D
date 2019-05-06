@@ -62,14 +62,14 @@ test('Check WebSocket server is working', async t => {
       received++
       if (sent === 1) {
         // Send data on receive
-        t.is('ok', receivedData, json(receivedData))
+        t.is('{"message":"ok"}', receivedData, json(receivedData))
         ws.send(JSON.stringify({ AUTOMATED_TEST_WS: true, TEST_OBJECT: { msg: 'message' } }))
         t.pass()
         sent++
       }
       else if (sent === 2) {
         // Send invalid JSON data
-        t.is('ok', receivedData, json(receivedData))
+        t.is('{"message":"ok"}', receivedData, json(receivedData))
         ws.send('Not a valid JSON string')
         t.pass()
         sent++
