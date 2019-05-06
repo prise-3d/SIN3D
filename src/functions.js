@@ -6,17 +6,19 @@ export const API_ROUTES = {
 
   listSceneQualities: sceneName => `${API_PREFIX}/listSceneQualities?sceneName=${new URLSearchParams({ sceneName })}`,
 
-  getImage: (sceneName, imageQuality) => `${API_PREFIX}/getImage?${new URLSearchParams({ sceneName, imageQuality })}`,
+  getImage: (sceneName, imageQuality, nearestQuality = false) => `${API_PREFIX}/getImage?${new URLSearchParams({ sceneName, imageQuality, nearestQuality })}`,
 
-  getImageExtracts: (sceneName, imageQuality, horizontalExtractCount, verticalExtractCount) =>
+  getImageExtracts: (sceneName, imageQuality, horizontalExtractCount, verticalExtractCount, nearestQuality = false) =>
     `${API_PREFIX}/getImage?${new URLSearchParams({
       sceneName,
       imageQuality,
       horizontalExtractCount,
-      verticalExtractCount
+      verticalExtractCount,
+      nearestQuality
     })}`
 }
 
 export const delay = ms => new Promise(res => setTimeout(res, ms))
 
-export const buildURI = (protocol, host, port, route = '') => `${protocol}://${host}:${port}${route}`
+export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
+export const buildWsURI = (ssl, host, port) => `${ssl ? 'wss' : 'ws'}://${host}:${port}`

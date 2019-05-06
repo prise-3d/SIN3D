@@ -7,13 +7,14 @@
     <!--/ Application cache reset button -->
 
     <v-slide-y-transition mode="out-in">
+      <!-- Loading screen -->
+      <loader v-if="loadingMessage" :message="loadingMessage" />
+      <!--/ Loading screen -->
+
       <!-- Host connection configuration -->
-      <host-config v-if="!isHostConfigured" />
+      <host-config v-else-if="!isHostConfigured" />
       <!--/ Host connection configuration -->
 
-      <!-- Loading screen -->
-      <loader v-else-if="loadingMessage" :message="loadingMessage" />
-      <!--/ Loading screen -->
 
       <div v-else>
         <!-- Sidebar menu -->
@@ -24,21 +25,21 @@
           app
         >
           <v-list dense>
-            <v-list-tile to="/" exact>
+            <v-list-tile to="/experimentsList" exact>
               <v-list-tile-action>
-                <v-icon>home</v-icon>
+                <v-icon>library_books</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>Home</v-list-tile-title>
+                <v-list-tile-title>List of experiments</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile to="/experiencesList" exact>
+            <v-list-tile @click="loadScenes">
               <v-list-tile-action>
-                <v-icon>photo_library</v-icon>
+                <v-icon>refresh</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
-                <v-list-tile-title>Experiences list</v-list-tile-title>
+                <v-list-tile-title>Refresh list of scenes</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
@@ -48,19 +49,21 @@
         <!-- Top bar -->
         <v-toolbar app fixed clipped-left>
           <v-toolbar-side-icon @click.stop="drawer = !drawer" />
-          <v-toolbar-title>Web experience</v-toolbar-title>
+          <v-toolbar-title>Web experiment</v-toolbar-title>
         </v-toolbar>
         <!--/ Top bar -->
 
         <!-- Pages content -->
         <v-content>
-          <v-container fluid fill-height>
+          <v-container fill-height>
             <v-layout justify-center>
-              <v-scroll-x-reverse-transition mode="out-in">
-                <!-- View injected here -->
-                <router-view />
+              <v-flex xs12>
+                <v-scroll-x-reverse-transition mode="out-in">
+                  <!-- View injected here -->
+                  <router-view />
                 <!--/ View injected here -->
-              </v-scroll-x-reverse-transition>
+                </v-scroll-x-reverse-transition>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-content>
@@ -87,7 +90,7 @@ export default {
       darkMode: true,
       drawer: false,
 
-      hostConfigured: false,
+      loadingErrorMessage: null,
       loadingMessage: null
     }
   },
@@ -96,29 +99,40 @@ export default {
   },
   watch: {
     isHostConfigured(value) {
-      if (!this.areScenesLoaded && value) this.loadAppData()
+      if (value) this.loadAppData()
     }
   },
   mounted() {
-    if (this.isHostConfigured && !this.areScenesLoaded) this.loadAppData()
+    this.loadAppData()
   },
   methods: {
-    ...mapActions(['loadScenesList']),
+    ...mapActions(['loadScenesList', 'connectToWs']),
     async loadAppData() {
-      if (this.isHostConfigured && !this.areScenesLoaded) {
-        this.loadingMessage = 'Loading scenes list...'
-        try {
-          await this.loadScenesList()
-        }
-        catch (err) {
-          this.loadingErrorMessage = err.message
-          return
-        }
-        finally {
-          this.loadingMessage = null
-        }
+      if (this.isHostConfigured) await this.loadWebSocket()
+      if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
+    },
+
+    async load(fn, loadingMessage) {
+      try {
+        this.loadingMessage = loadingMessage
+        await fn()
       }
+      catch (err) {
+        this.loadingErrorMessage = err.message
+        return
+      }
+      finally {
+        this.loadingMessage = null
+      }
+    },
+
+    loadScenes() {
+      return this.load(this.loadScenesList, 'Loading scenes list...')
+    },
+    loadWebSocket() {
+      return this.load(this.connectToWs, 'Connecting to WebSocket server...')
     }
+
   }
 }
 </script>

@@ -13,7 +13,7 @@ import { getImage } from './getImage'
 const router = express.Router()
 
 /**
- * @api {get} /getImageExtracts?sceneName=:sceneName&imageQuality=:imageQuality&horizontalExtractCount=:horizontalExtractCount&verticalExtractCount=:verticalExtractCount Get image extracts
+ * @api {get} /getImageExtracts?sceneName=:sceneName&imageQuality=:imageQuality&horizontalExtractCount=:horizontalExtractCount&verticalExtractCount=:verticalExtractCount&nearestQuality=:nearestQuality Get image extracts
  * @apiVersion 0.1.0
  * @apiName GetImageExtracts
  * @apiGroup API
@@ -21,9 +21,10 @@ const router = express.Router()
  * @apiDescription Get an image from a scene with the required quality and cut it with the requested configuration
  *
  * @apiParam {String} sceneName The selected scene
- * @apiParam {Number} imageQuality The required quality of the image
+ * @apiParam {String="min","max","median", "any integer"} imageQuality The required quality of the image (can be an integer, `min`, `max` or `median`)
  * @apiParam {Number} horizontalExtractCount The amount of extracts for the horizontal axis
  * @apiParam {Number} verticalExtractCount The amount of extracts for the vertical axis
+ * @apiParam {Boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
  *
  * @apiExample Usage example
  * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2"
@@ -32,10 +33,19 @@ const router = express.Router()
  * @apiSuccessExample {json} Success response example
  * HTTP/1.1 200 OK /api/getImageExtracts?sceneName=bathroom&imageQuality=200&horizontalExtractCount=1&verticalExtractCount=2
  * {
- *   "data": [
- *     "/api/images/bathroom/extracts/x1_y2/zone00001/bathroom_zone00001_200.png",
- *     "/api/images/bathroom/extracts/x1_y2/zone00002/bathroom_zone00002_200.png"
- *   ]
+ *   "data": {
+ *     extracts: [
+ *       "/api/images/bathroom/extracts/x1_y2/zone00001/bathroom_zone00001_200.png",
+ *       "/api/images/bathroom/extracts/x1_y2/zone00002/bathroom_zone00002_200.png"
+ *     ],
+ *     "info": {
+ *       "link": "/api/images/bathroom/bathroom_00200.png",
+ *       "fileName": "bathroom_00200.png",
+ *       "sceneName": "bathroom",
+ *       "quality": 200,
+ *       "ext": "png"
+ *     }
+ *   }
  * }
  *
  * @apiError (Error 4xx) 400_[1] Missing parameter(s)
@@ -54,7 +64,8 @@ const router = express.Router()
  *     "The requested scene name \".//../\" is not valid.",
  *     "The specified quality is not an integer.",
  *     "The specified number of extract for the horizontal axis is not an integer.",
- *     "The specified number of extract for the vertical axis is not an integer."
+ *     "The specified number of extract for the vertical axis is not an integer.",
+ *     "Impossible to use \"min\", \"max\" or \"median\" with \"nearestQuality\" on."
  *   ]
  * }
  *
@@ -205,6 +216,7 @@ router.get('/', asyncMiddleware(async (req, res) => {
   checkRequiredParameters(['sceneName', 'imageQuality', 'horizontalExtractCount', 'verticalExtractCount'], req.query)
 
   const { sceneName, imageQuality, horizontalExtractCount, verticalExtractCount } = req.query
+  const nearestQuality = req.query.nearestQuality === 'true'
 
   let errorList = []
 
@@ -216,15 +228,24 @@ router.get('/', asyncMiddleware(async (req, res) => {
     errorList.push(err.message)
   }
 
-  // Check `imageQuality` is an integer
+  // Check `imageQuality` is an integer or `min`, `max` or `median`
   const qualityInt = parseInt(imageQuality, 10)
-  if (isNaN(qualityInt)) errorList.push('The specified quality is not an integer.')
+  let quality = null
+  if (['min', 'median', 'max'].some(x => x === imageQuality)) {
+    if (nearestQuality)
+      errorList.push('Impossible to use "min", "max" or "median" with "nearestQuality" on.')
+    else quality = imageQuality
+  }
+  else if (!isNaN(qualityInt))
+    quality = qualityInt
+  else
+    errorList.push('The specified quality is not an integer or "min", "max" or "median".')
 
   // Check `horizontalExtractCount` is an integer
   const horizontalExtractCountInt = parseInt(horizontalExtractCount, 10)
   if (isNaN(horizontalExtractCountInt)) errorList.push('The specified number of extract for the horizontal axis is not an integer.')
 
-  // Check `imageQuality` is an integer
+  // Check `verticalExtractCountInt` is an integer
   const verticalExtractCountInt = parseInt(verticalExtractCount, 10)
   if (isNaN(verticalExtractCountInt)) errorList.push('The specified number of extract for the vertical axis is not an integer.')
 
@@ -234,13 +255,20 @@ router.get('/', asyncMiddleware(async (req, res) => {
     throw boom.badRequest('Invalid query parameter(s).', errorList)
 
   // Get the image path and link
-  const image = await getImage(sceneName, qualityInt)
+  const image = await getImage(sceneName, quality, nearestQuality)
 
   // Cut the image
   const extracts = await cutImage(image, horizontalExtractCountInt, verticalExtractCountInt)
 
+  image.path = undefined
+
   // Send an array of links
-  res.json({ data: extracts.map(x => x.link) })
+  res.json({
+    data: {
+      extracts: extracts.map(x => x.link),
+      info: image
+    }
+  })
 }))
 
 export default router

@@ -1,12 +1,15 @@
-export const defaultState = {
+// Deep copy to not mutate it with the store (default state is needed when reloading after a refresh)
+export default () => JSON.parse(JSON.stringify({
   hostConfig: {
-    protocol: null,
+    ssl: null,
     host: null,
     port: null
   },
   scenesList: null,
-  count: 0
-}
-
-// Deep copy defaultState to not modify it with the store
-export default JSON.parse(JSON.stringify(defaultState))
+  progression: {},
+  socket: {
+    isConnected: false,
+    message: '',
+    reconnectError: false
+  }
+}))

@@ -10,6 +10,14 @@
               <v-slide-y-transition mode="out-in">
                 <loader v-if="loadingMessage" :message="loadingMessage" />
                 <v-form v-else ref="form">
+                  <v-flex xs3>
+                    <v-select
+                      v-model="config.ssl"
+                      :items="[true, false]"
+                      label="SSL"
+                    />
+                  </v-flex>
+
                   <v-text-field
                     v-model="config.host"
                     label="Host IP address or hostname"
@@ -24,6 +32,7 @@
                     :rules="[v => !!v || 'Port is required']"
                     required
                   />
+
 
                   <v-btn color="error" @click="reset">Reset Form</v-btn>
 
@@ -54,7 +63,7 @@ export default {
   data() {
     return {
       config: {
-        protocol: 'HTTP',
+        ssl: true,
         host: 'diran.univ-littoral.fr',
         port: '80'
       },
@@ -64,10 +73,16 @@ export default {
     }
   },
 
+  watch: {
+    'config.ssl'(newValue) {
+      if (newValue === true) this.config.port = 443
+    }
+  },
+
   methods: {
     ...mapActions(['setHostConfig']),
     reset() {
-      this.config.protocol = 'HTTP'
+      this.config.ssl = true
       this.config.host = ''
       this.config.port = null
       this.configErrorMessage = null
