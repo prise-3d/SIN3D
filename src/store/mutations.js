@@ -10,6 +10,10 @@ const checkProgression = (state, experimentName, sceneName) => {
 }
 
 export default {
+  setAppUniqueId(state) {
+    state.uuid = [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
+  },
+
   resetApp(state, { hostConfig, progression }) {
     if (hostConfig) {
       if (state.socket.isConnected)

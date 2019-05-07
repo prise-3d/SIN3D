@@ -12,6 +12,7 @@ const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   key: 'webexpe-state',
   reducer: state => ({
+    uuid: state.uuid,
     hostConfig: state.hostConfig,
     scenesList: state.scenesList,
     progression: state.progression

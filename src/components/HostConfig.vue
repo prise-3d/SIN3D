@@ -13,7 +13,7 @@
                   <v-flex xs3>
                     <v-select
                       v-model="config.ssl"
-                      :items="[true, false]"
+                      :items="[false, true]"
                       label="SSL"
                     />
                   </v-flex>
@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       config: {
-        ssl: true,
+        ssl: false,
         host: 'diran.univ-littoral.fr',
         port: '80'
       },

@@ -2,10 +2,13 @@ import Vue from 'vue'
 import { API_ROUTES, buildURI, buildWsURI, delay } from '../functions'
 
 export default {
+  setAppUniqueId({ state, commit }) {
+    if (!state.uuid) commit('setAppUniqueId')
+  },
+
   resetApp({ commit }, { hostConfig = false, progression = false }) {
     commit('resetApp', { hostConfig, progression })
   },
-
   async setHostConfig({ state, commit }, { ssl, host, port }) {
     // Timeout after 1s
     const controller = new AbortController()

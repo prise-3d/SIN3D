@@ -103,11 +103,12 @@ export default {
     }
   },
   async mounted() {
+    this.setAppUniqueId()
     if (this.isHostConfigured) await this.loadWebSocket()
     if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
   },
   methods: {
-    ...mapActions(['loadScenesList', 'connectToWs']),
+    ...mapActions(['setAppUniqueId', 'loadScenesList', 'connectToWs']),
 
     async load(fn, loadingMessage) {
       try {
