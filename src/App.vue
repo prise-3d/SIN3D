@@ -98,19 +98,16 @@ export default {
     ...mapGetters(['isHostConfigured', 'areScenesLoaded'])
   },
   watch: {
-    isHostConfigured(value) {
-      if (value) this.loadAppData()
+    isHostConfigured(isConfigured) {
+      if (isConfigured) this.loadScenes()
     }
   },
-  mounted() {
-    this.loadAppData()
+  async mounted() {
+    if (this.isHostConfigured) await this.loadWebSocket()
+    if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
   },
   methods: {
     ...mapActions(['loadScenesList', 'connectToWs']),
-    async loadAppData() {
-      if (this.isHostConfigured) await this.loadWebSocket()
-      if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
-    },
 
     async load(fn, loadingMessage) {
       try {

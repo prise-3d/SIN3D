@@ -115,7 +115,8 @@ export default {
         this.showDialog = false
       }
       catch (err) {
-        this.$refs.toast.show(err.message, 'error', 10000)
+        console.error('Error while resetting the app', err)
+        this.$refs.toast.show('Error while resetting the app. ' + err.message, 'error', 10000)
       }
       this.$router.push('/')
     }

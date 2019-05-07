@@ -98,6 +98,7 @@ export default {
       }
       catch (err) {
         this.configErrorMessage = err.message
+        console.error(err)
         return
       }
       finally {
