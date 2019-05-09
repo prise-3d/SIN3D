@@ -94,11 +94,23 @@ test('GET /getImage?sceneName=bathroom&imageQuality=10', async t => {
   t.is(res.status, 200, json(res))
   t.is(res.body.data.link, `${imageServedUrl}/bathroom/bathroom_00010.png`, json(res.body))
   t.deepEqual(res.body.data, {
-    'link': `${imageServedUrl}/bathroom/bathroom_00010.png`,
-    'fileName': 'bathroom_00010.png',
-    'sceneName': 'bathroom',
-    'quality': 10,
-    'ext': 'png'
+    link: `${imageServedUrl}/bathroom/bathroom_00010.png`,
+    fileName: 'bathroom_00010.png',
+    sceneName: 'bathroom',
+    quality: 10,
+    ext: 'png',
+    metadata: {
+      format: 'png',
+      width: 800,
+      height: 800,
+      space: 'srgb',
+      channels: 3,
+      depth: 'uchar',
+      density: 72,
+      isProgressive: false,
+      hasProfile: false,
+      hasAlpha: false
+    }
   }, json(res.body))
 
   // Check link is accessible and is an image

@@ -2,6 +2,7 @@
 
 import express from 'express'
 import path from 'path'
+import sharp from 'sharp'
 import boom from '@hapi/boom'
 
 import { imagesPath, imageServedUrl } from '../../config'
@@ -30,6 +31,7 @@ const router = express.Router()
  * @apiSuccess {String} data.sceneName Scene name of the image
  * @apiSuccess {Number} data.quality Quality of the image
  * @apiSuccess {String} data.ext Extension of the image
+ * @apiSuccess {Object} data.metadata Metadata of the image, @see https://sharp.dimens.io/en/stable/api-input/#metadata
  * @apiSuccessExample {json} Success response example
  * HTTP/1.1 200 OK /api/getImage?sceneName=bathroom&imageQuality=200
  * {
@@ -38,7 +40,19 @@ const router = express.Router()
  *     "fileName": "bathroom_00200.png",
  *     "sceneName": "bathroom",
  *     "quality": 200,
- *     "ext": "png"
+ *     "ext": "png",
+ *     "metadata": {
+ *       "format": "png",
+ *        "width": 800,
+ *        "height": 800,
+ *        "space": "rgb16",
+ *        "channels": 3,
+ *        "depth": "ushort",
+ *        "density": 72,
+ *        "isProgressive": false,
+ *        "hasProfile": false,
+ *        "hasAlpha": false
+ *      }
  *   }
  * }
  *
@@ -143,8 +157,10 @@ export const getImage = async (sceneName, quality, nearestQuality = false) => {
     else imageData = sceneData.find(x => quality === x.quality)
   }
 
-  if (imageData)
-    return {
+
+  if (imageData) {
+    // Data gathered from file system
+    const result = {
       link: `${imageServedUrl}/${sceneName}/${imageData.fileName}`,
       path: path.resolve(imagesPath, sceneName, imageData.fileName),
       fileName: imageData.fileName,
@@ -152,6 +168,14 @@ export const getImage = async (sceneName, quality, nearestQuality = false) => {
       quality: imageData.quality,
       ext: imageData.ext
     }
+
+    // Data gathered by analysing the image
+    const input = sharp(result.path)
+    const metadata = await input.metadata()
+    result.metadata = metadata
+
+    return result
+  }
 
   // Image not found
   throw boom.notFound(`The requested quality "${quality}" was not found for the requested scene "${sceneName}".`)

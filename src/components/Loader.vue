@@ -7,7 +7,7 @@
           color="primary"
           indeterminate
         />
-        <div class="mt-3">{{ message }}</div>
+        <div class="mt-3" v-if="message">{{ message }}</div>
       </v-layout>
     </v-container>
   </v-content>
@@ -19,7 +19,8 @@ export default {
   props: {
     message: {
       type: String,
-      default: 'Loading...'
+      default: null,
+      required: false
     }
   }
 }

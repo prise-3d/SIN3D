@@ -115,11 +115,33 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
   t.true(Array.isArray(res.body.data.extracts), json(res.body))
   t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
   t.deepEqual(res.body.data.info, {
-    link: `${imageServedUrl}/bathroom/bathroom_00010.png`,
-    fileName: 'bathroom_00010.png',
-    sceneName: 'bathroom',
-    quality: 10,
-    ext: 'png'
+    extractsConfig: {
+      x: 5,
+      y: 2
+    },
+    extractsSize: {
+      width: 160,
+      height: 400
+    },
+    image: {
+      link: `${imageServedUrl}/bathroom/bathroom_00010.png`,
+      fileName: 'bathroom_00010.png',
+      sceneName: 'bathroom',
+      quality: 10,
+      ext: 'png',
+      metadata: {
+        format: 'png',
+        width: 800,
+        height: 800,
+        space: 'srgb',
+        channels: 3,
+        depth: 'uchar',
+        density: 72,
+        isProgressive: false,
+        hasProfile: false,
+        hasAlpha: false
+      }
+    }
   }, json(res.body))
 
   // Check link is accessible and is an image
