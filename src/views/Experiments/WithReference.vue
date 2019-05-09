@@ -17,6 +17,8 @@
                     always-dirty
                     persistent-hint
                     thumb-label="always"
+                    min="1"
+                    max="25"
                   />
 
                   <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
@@ -25,6 +27,8 @@
                     always-dirty
                     persistent-hint
                     thumb-label="always"
+                    min="1"
+                    max="25"
                   />
 
                   <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
@@ -53,9 +57,22 @@
                       :key="`extract-${i}-${extractConfig.x}-${extractConfig.y}-${index}-${anExtract.quality}`"
                       class="pa-0"
                     >
-                      <v-card flat tile class="d-flex">
+                      <v-card flat tile class="d-flex height100">
+                        <div
+                          v-if="anExtract.loading"
+                          class="img-loader"
+                          @click.right.prevent
+                        >
+                          <v-progress-circular
+                            :indeterminate="true"
+                          />
+                        </div>
                         <v-img
+                          v-else
                           :src="anExtract.link"
+                          @click.left.prevent="extractAction($event, anExtract)"
+                          @click.right.prevent="extractAction($event, anExtract)"
+                          class="cursor extract"
                         >
                           <template v-slot:placeholder>
                             <v-layout
@@ -90,7 +107,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { API_ROUTES } from '@/functions'
+import { API_ROUTES, findNearestUpper, findNearestLower } from '@/functions'
 import Loader from '@/components/Loader.vue'
 
 export default {
@@ -152,7 +169,7 @@ export default {
       this.qualities = data
     },
 
-    async getExtracts(quality = 'min') {
+    async getExtracts(quality = 'max') {
       const URI = `${this.getHostURI}${API_ROUTES.getImageExtracts(this.sceneId, quality, this.extractConfig.x, this.extractConfig.y)}`
       const { data } = await fetch(URI)
         .then(async res => {
@@ -177,9 +194,14 @@ export default {
         this.extractConfig.y = this.experimentConfig.y
         const data = await this.getExtracts()
         const hostURI = this.getHostURI
-        this.extracts = data.extracts.map(url => ({
+        this.extracts = data.extracts.map((url, i) => ({
           link: hostURI + url,
-          quality: data.info.image.quality
+          quality: data.info.image.quality,
+          zone: i + 1,
+          index: i,
+          nextQuality: findNearestUpper(data.info.image.quality, this.qualities),
+          precQuality: findNearestLower(data.info.image.quality, this.qualities),
+          loading: false
         }))
       }
       catch (err) {
@@ -187,7 +209,58 @@ export default {
         this.loadingErrorMessage = 'Failed to load new configuration. ' + err.message
       }
       this.loadingMessage = null
+    },
+
+    async extractAction(event, extractObj) {
+      console.log(event, extractObj)
+      const { index, nextQuality, precQuality, quality } = extractObj
+
+      let newQuality
+      if (event.button === 0) newQuality = precQuality // Left click
+      if (event.button === 2) newQuality = nextQuality // Right click
+
+      // Do not load a new extract if same quality
+      if (newQuality === quality) return
+
+      // Set loading state
+      this.extracts[index].loading = true
+      try {
+        // Loading new extract
+        const data = await this.getExtracts(newQuality)
+        this.extracts[index].link = this.getHostURI + data.extracts[index]
+        this.extracts[index].quality = data.info.image.quality
+        this.extracts[index].nextQuality = findNearestUpper(data.info.image.quality, this.qualities)
+        this.extracts[index].precQuality = findNearestLower(data.info.image.quality, this.qualities)
+        this.extracts[index].loading = false
+      }
+      catch (err) {
+        // TODO: toast message if fail
+        console.error('Failed to load extract', err)
+      }
+      finally {
+        this.extracts[index].loading = false
+      }
     }
   }
 }
 </script>
+
+<style scoped>
+.height100 {
+  height: 100%;
+}
+.img-loader {
+  height: 100%;
+  width: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cursor {
+  cursor: pointer;
+}
+.extract:hover {
+  z-index: 999999;
+  outline: 2px #f4f4f4 solid;
+}
+</style>

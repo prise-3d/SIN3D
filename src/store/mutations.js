@@ -54,6 +54,8 @@ export default {
   },
 
   SOCKET_ONOPEN(state, event) {
+    if (event === null) return
+
     console.info('Connected to WebSocket server')
     Vue.prototype.$socket = event.currentTarget
     state.socket.isConnected = true
