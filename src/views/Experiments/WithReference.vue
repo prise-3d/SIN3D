@@ -2,43 +2,191 @@
   <div>
     <v-container grid-list-md text-xs-center fluid>
       <v-layout row wrap>
-        <v-flex xs6>
-          <v-card dark color="primary">
-            <v-card-text class="px-0">Experience image</v-card-text>
-            <v-img src="https://diran.univ-littoral.fr/api/images/Appart1opt02/appartAopt_00900.png" />
+        <v-flex xs12>
+          <h1>Experiment with reference</h1>
+          <v-card dark>
+            <v-container grid-list-sm fluid>
+              <v-layout row wrap>
+                <v-flex
+                  xs12
+                >
+                  <h1>Configuration</h1>
+                  <v-card-text class="px-0">Extracts per line (horizontal)</v-card-text>
+                  <v-slider
+                    v-model="experimentConfig.x"
+                    always-dirty
+                    persistent-hint
+                    thumb-label="always"
+                  />
+
+                  <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
+                  <v-slider
+                    v-model="experimentConfig.y"
+                    always-dirty
+                    persistent-hint
+                    thumb-label="always"
+                  />
+
+                  <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
+
+                  <v-alert v-if="loadingErrorMessage" :value="true" type="error" v-text="loadingErrorMessage" />
+                </v-flex>
+              </v-layout>
+            </v-container>
           </v-card>
         </v-flex>
-        <v-flex xs6>
-          <v-card dark color="primary">
-            <v-card-text>Reference image</v-card-text>
-            <v-img src="https://diran.univ-littoral.fr/api/images/Appart1opt02/appartAopt_00900.png" />
-          </v-card>
-        </v-flex>
+        <!-- Loading screen -->
+        <loader v-if="loadingMessage" :message="loadingMessage" />
+        <!--/ Loading screen -->
+
+        <!-- Experiment -->
+        <template v-else-if="!loadingErrorMessage">
+          <v-flex xs12 sm6>
+            <v-card dark color="primary">
+              <v-card-text class="px-0">Experiment image</v-card-text>
+
+              <v-container class="pa-1">
+                <template v-for="i in extractConfig.x">
+                  <v-layout row wrap :key="`row-${i}`">
+                    <v-flex
+                      v-for="(anExtract, index) in extracts.slice(extractConfig.x * (i - 1), (extractConfig.x * i))"
+                      :key="`extract-${i}-${extractConfig.x}-${extractConfig.y}-${index}-${anExtract.quality}`"
+                      class="pa-0"
+                    >
+                      <v-card flat tile class="d-flex">
+                        <v-img
+                          :src="anExtract.link"
+                        >
+                          <template v-slot:placeholder>
+                            <v-layout
+                              fill-height
+                              align-center
+                              justify-center
+                              ma-0
+                            >
+                              <v-progress-circular indeterminate color="grey lighten-5" />
+                            </v-layout>
+                          </template>
+                        </v-img>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </template>
+              </v-container>
+            </v-card>
+          </v-flex>
+          <v-flex sm6 xs12>
+            <v-card dark color="primary">
+              <v-card-text>Reference image</v-card-text>
+              <v-img v-if="referenceImage" :src="referenceImage" />
+            </v-card>
+          </v-flex>
+        </template>
+      <!--/ Experiment -->
       </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { API_ROUTES } from '@/functions'
+import Loader from '@/components/Loader.vue'
 
 export default {
   name: 'ExperimentWithReference',
+  components: {
+    Loader
+  },
   props: {
     sceneId: {
       type: String,
       required: true
     }
   },
-  computed: {
+  data() {
+    return {
+      referenceImage: null,
+      qualities: null,
+
+      experimentConfig: { // Experiment config sliders
+        x: 8,
+        y: 4,
+        error: null
+      },
+      extractConfig: { // Updated when `setConfig` is called
+        x: 8,
+        y: 4
+      },
+      loadingMessage: null,
+      loadingErrorMessage: null,
+      extracts: []
+    }
   },
+  computed: {
+    ...mapGetters(['getHostURI']),
+    isConfigNew() {
+      return this.extractConfig.x !== this.experimentConfig.x || this.extractConfig.y !== this.experimentConfig.y
+    }
+  },
+
   async mounted() {
-    await this.getExtracts()
+    await this.getReferenceImage()
+    await this.getQualitiesList()
+
+    // Get default extracts : min quality, cut config : x = 4, y = 4
+    await this.setConfig()
   },
   methods: {
-    async getExtracts() {
-      const scenes = await fetch(`${this.getHostURI}${API_ROUTES.getImage()}`).then(res => res.json())
+    ...mapActions([]),
+
+    async getReferenceImage() {
+      const URI = `${this.getHostURI}${API_ROUTES.getImage(this.sceneId, 'max')}`
+      const { data } = await fetch(URI).then(res => res.json())
+      this.referenceImage = this.getHostURI + data.link
+    },
+
+    async getQualitiesList() {
+      const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(this.sceneId)}`
+      const { data } = await fetch(URI).then(res => res.json())
+      this.qualities = data
+    },
+
+    async getExtracts(quality = 'min') {
+      const URI = `${this.getHostURI}${API_ROUTES.getImageExtracts(this.sceneId, quality, this.extractConfig.x, this.extractConfig.y)}`
+      const { data } = await fetch(URI)
+        .then(async res => {
+          res.json = await res.json()
+          return res
+        })
+        .then(res => {
+          if (!res.ok) throw new Error(res.json.message + res.json.data ? `\n${res.json.data}` : '')
+          return res.json
+        })
+      return data
+    },
+
+    async setConfig() {
+      // Check if the config is the same
+      if (this.extracts.length > 0 && !this.isConfigNew) return
+
+      this.loadingMessage = 'Loading configuration extracts...'
+      this.loadingErrorMessage = null
+      try {
+        this.extractConfig.x = this.experimentConfig.x
+        this.extractConfig.y = this.experimentConfig.y
+        const data = await this.getExtracts()
+        const hostURI = this.getHostURI
+        this.extracts = data.extracts.map(url => ({
+          link: hostURI + url,
+          quality: data.info.image.quality
+        }))
+      }
+      catch (err) {
+        console.error('Failed to load new configuration', err)
+        this.loadingErrorMessage = 'Failed to load new configuration. ' + err.message
+      }
+      this.loadingMessage = null
     }
   }
 }

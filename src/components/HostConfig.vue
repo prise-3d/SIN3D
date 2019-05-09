@@ -79,6 +79,10 @@ export default {
     }
   },
 
+  mounted() {
+    this.$router.push('/')
+  },
+
   methods: {
     ...mapActions(['setHostConfig']),
     reset() {
@@ -97,8 +101,8 @@ export default {
         await this.setHostConfig(this.config)
       }
       catch (err) {
-        this.configErrorMessage = err.message
         console.error(err)
+        this.configErrorMessage = err.message
         return
       }
       finally {

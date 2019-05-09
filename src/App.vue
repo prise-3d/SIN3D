@@ -116,6 +116,7 @@ export default {
         await fn()
       }
       catch (err) {
+        console.error(err)
         this.loadingErrorMessage = err.message
         return
       }
@@ -137,7 +138,7 @@ export default {
 
 <style scoped>
 .reset-button {
-  position: absolute;
+  position: fixed;
   right: 0;
   bottom: 0;
   z-index: 999;
