@@ -98,19 +98,17 @@ export default {
     ...mapGetters(['isHostConfigured', 'areScenesLoaded'])
   },
   watch: {
-    isHostConfigured(value) {
-      if (value) this.loadAppData()
+    isHostConfigured(isConfigured) {
+      if (isConfigured) this.loadScenes()
     }
   },
-  mounted() {
-    this.loadAppData()
+  async mounted() {
+    this.setAppUniqueId()
+    if (this.isHostConfigured) await this.loadWebSocket()
+    if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
   },
   methods: {
-    ...mapActions(['loadScenesList', 'connectToWs']),
-    async loadAppData() {
-      if (this.isHostConfigured) await this.loadWebSocket()
-      if (this.isHostConfigured && !this.areScenesLoaded) await this.loadScenes()
-    },
+    ...mapActions(['setAppUniqueId', 'loadScenesList', 'connectToWs']),
 
     async load(fn, loadingMessage) {
       try {
@@ -118,6 +116,7 @@ export default {
         await fn()
       }
       catch (err) {
+        console.error(err)
         this.loadingErrorMessage = err.message
         return
       }
@@ -139,7 +138,7 @@ export default {
 
 <style scoped>
 .reset-button {
-  position: absolute;
+  position: fixed;
   right: 0;
   bottom: 0;
   z-index: 999;

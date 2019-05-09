@@ -1,12 +1,15 @@
 import Vue from 'vue'
-import { API_ROUTES, buildURI, buildWsURI } from '../functions'
+import { API_ROUTES, buildURI, buildWsURI, delay } from '../functions'
 
 export default {
+  setAppUniqueId({ state, commit }) {
+    if (!state.uuid) commit('setAppUniqueId')
+  },
+
   resetApp({ commit }, { hostConfig = false, progression = false }) {
     commit('resetApp', { hostConfig, progression })
   },
-
-  async setHostConfig({ commit }, { ssl, host, port }) {
+  async setHostConfig({ state, commit }, { ssl, host, port }) {
     // Timeout after 1s
     const controller = new AbortController()
     const signal = controller.signal
@@ -22,6 +25,11 @@ export default {
 
         this._vm.$connect(buildWsURI(ssl, host, port))
 
+        // $connect does not return a Promise, so we wait to know if it worked
+        await delay(300)
+        if (!state.socket.isConnected)
+          throw new Error('Could not connect to remote WebSocket server.')
+
         // Configuration is valid
         commit('setHostConfig', { ssl, host, port })
       })
@@ -35,6 +43,10 @@ export default {
     if (state.socket.isConnected) return /*eslint-disable-line */
     else if (getters.isHostConfigured) {
       this._vm.$connect(getters.getHostWsURI)
+      // $connect does not return a Promise, so we wait to know if it worked
+      await delay(300)
+      if (!state.socket.isConnected)
+        throw new Error('Could not connect to remote WebSocket server.')
     }
     else throw new Error('Could not connect to WebSocket server. Host is not configured.')
   },

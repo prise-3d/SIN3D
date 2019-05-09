@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { defaultState } from '@/store/state'
+import defaultState from '@/store/state'
 import Experiments from '@/router/experiments'
 
 const checkProgression = (state, experimentName, sceneName) => {
@@ -10,9 +10,17 @@ const checkProgression = (state, experimentName, sceneName) => {
 }
 
 export default {
+  setAppUniqueId(state) {
+    state.uuid = [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
+  },
+
   resetApp(state, { hostConfig, progression }) {
-    if (hostConfig) state.hostConfig = defaultState.hostConfig
-    if (progression) state.progression = defaultState.progression
+    if (hostConfig) {
+      if (state.socket.isConnected)
+        this._vm.$disconnect()
+      state.hostConfig = defaultState().hostConfig
+    }
+    if (progression) state.progression = defaultState().progression
   },
 
   setHostConfig(state, newConfig) {
@@ -46,14 +54,19 @@ export default {
   },
 
   SOCKET_ONOPEN(state, event) {
+    if (event === null) return
+
+    console.info('Connected to WebSocket server')
     Vue.prototype.$socket = event.currentTarget
     state.socket.isConnected = true
   },
-  SOCKET_ONCLOSE(state, event) {
+  SOCKET_ONCLOSE(state, _event) {
+    console.info('Disconnected from WebSocket server')
+    state.hostConfig = defaultState().hostConfig
     state.socket.isConnected = false
   },
   SOCKET_ONERROR(state, event) {
-    console.error(state, event)
+    console.error('WebSocket connection error', state, event)
   },
   // default handler called for all methods
   SOCKET_ONMESSAGE(state, { data: rawMessage }) {
@@ -62,9 +75,10 @@ export default {
   },
   // mutations for reconnect methods
   SOCKET_RECONNECT(state, count) {
-    console.info(state, count)
+    console.info('Reconnect to WebSocket server', state, count)
   },
   SOCKET_RECONNECT_ERROR(state) {
+    console.error('Could not reconnect to WebSocket server')
     state.socket.reconnectError = true
   }
 }

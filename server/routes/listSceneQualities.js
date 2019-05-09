@@ -6,9 +6,9 @@ import { asyncMiddleware, checkRequiredParameters, getSceneFilesData } from '../
 const router = express.Router()
 
 /**
- * @api {get} /listSceneQualities?sceneName=:sceneName Get a list of available qualities for a scene
+ * @api {get} /listSceneQualities?sceneName=:sceneName /listSceneQualities
  * @apiVersion 0.1.0
- * @apiName ListScenesQualities
+ * @apiName listScenesQualities
  * @apiGroup API
  *
  * @apiDescription List all available qualities for a given scene

@@ -11,7 +11,7 @@ Vue.use(VueNativeSock, 'ws://example.com', {
   store,
   connectManually: true,
   reconnection: true,
-  reconnectionAttempts: 5,
+  reconnectionAttempts: 2,
   reconnectionDelay: 1000
 })
 store.$socket = Vue.prototype.$socket

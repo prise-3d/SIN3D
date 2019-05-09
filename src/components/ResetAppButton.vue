@@ -115,7 +115,8 @@ export default {
         this.showDialog = false
       }
       catch (err) {
-        this.$refs.toast.show(err.message, 'error', 10000)
+        console.error('Failed to reset the app', err)
+        this.$refs.toast.show('Failed to reset the app. ' + err.message, 'error', 10000)
       }
       this.$router.push('/')
     }
