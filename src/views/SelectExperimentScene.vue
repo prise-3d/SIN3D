@@ -80,8 +80,7 @@ export default {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
 
-      let sceneObj = {}
-      sceneObj = {
+      let sceneObj = {
         name: thumb.sceneName,
         thumbLink: `${this.getHostURI}${thumb.link}`,
         experimentLink: `/experiments/${this.experimentName}/${thumb.sceneName}`

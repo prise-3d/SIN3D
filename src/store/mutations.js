@@ -8,6 +8,20 @@ const checkProgression = (state, experimentName, sceneName) => {
   if (!state.progression[experimentName][sceneName])
     state.progression[experimentName][sceneName] = { done: false, data: {} }
 }
+const createProgressionObj = (state, scenes) => {
+  const progressionObj = Experiments.reduce((accExpe, expe) => {
+    const scenesProgressObj = scenes.reduce((accScene, scene) => {
+      // Do not overwrite current progression
+      if (state.progression[expe.name] && state.progression[expe.name][scene])
+        accScene[scene] = state.progression[expe.name][scene]
+      else accScene[scene] = { done: false, data: {} }
+      return accScene
+    }, {})
+    accExpe[expe.name] = scenesProgressObj
+    return accExpe
+  }, {})
+  state.progression = progressionObj
+}
 
 export default {
   setAppUniqueId(state) {
@@ -20,7 +34,11 @@ export default {
         this._vm.$disconnect()
       state.hostConfig = defaultState().hostConfig
     }
-    if (progression) state.progression = defaultState().progression
+    if (progression) {
+      // Reset progression and recreate the progression object
+      state.progression = defaultState().progression
+      createProgressionObj(state, state.scenesList)
+    }
   },
 
   setHostConfig(state, newConfig) {
@@ -29,19 +47,7 @@ export default {
 
   setListScenes(state, scenes) {
     state.scenesList = scenes
-    const progressionObj = Experiments.reduce((accExpe, expe) => {
-      const scenesProgressObj = scenes.reduce((accScene, scene) => {
-        // Do not overwrite current progression
-        if (state.progression[expe.name] && state.progression[expe.name][scene])
-          accScene[scene] = state.progression[expe.name][scene]
-        else accScene[scene] = { done: false, data: {} }
-        return accScene
-      }, {})
-      accExpe[expe.name] = scenesProgressObj
-      return accExpe
-    }, {})
-
-    state.progression = progressionObj
+    createProgressionObj(state, scenes)
   },
 
   setExperimentProgress(state, { experimentName, sceneName, data }) {
