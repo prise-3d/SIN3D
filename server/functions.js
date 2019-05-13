@@ -28,12 +28,9 @@ export const errorHandler = (err, req, res, next) => {
   const { output: { payload } } = err
 
   // Pass the error to the logging handler
-  let logMsg = `Error ${payload.statusCode} - ${payload.error}` +
-    ` - Message :\n${payload.message}`
-  if (err.data) logMsg += `\nData : \n${JSON.stringify(err.data, null, 2) || err.data}`
-  logMsg += `\nStack trace : \n${err.stack}`
-
-  logger.error(logMsg)
+  let errorLogged = new Error(`Error ${payload.statusCode} - ${payload.error} - Message :\n${payload.message}`)
+  errorLogged.stack = err.stack
+  logger.error(formatError(errorLogged, err.data))
 
   // Send the error to the client
   res.status(payload.statusCode).json({
@@ -179,7 +176,7 @@ export const getSceneFilesData = async sceneName => {
  * @param {('info'|'message'|'error'|any|undefined)} event the type of event
  * @returns {string} the log object stringified
  */
-export const formatLog = (data, event = undefined) => (JSON.stringify({
+export const formatLog = (data, event = undefined) => (({
   event,
   log: data,
   date: new Date()
@@ -189,6 +186,7 @@ export const formatLog = (data, event = undefined) => (JSON.stringify({
  * Format an error object
  *
  * @param {Error} errObj an Error object
+ * @param {any} data any data to pass to the formatter
  * @returns {string} formatted log object stringified
  */
-export const formatError = errObj => formatLog({ error: errObj.message, stack: errObj.stack })
+export const formatError = (errObj, data = undefined) => formatLog({ error: errObj.message, stack: errObj.stack, data })

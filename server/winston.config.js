@@ -12,7 +12,7 @@ export const logger = winston.createLogger({
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,
-      format: winston.format.simple()
+      format: winston.format.json()
     })
   ],
   exitOnError: false
@@ -28,7 +28,7 @@ export const wsLogger = winston.createLogger({
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,
-      format: winston.format.simple()
+      format: winston.format.json()
     })
   ],
   exitOnError: false
@@ -44,7 +44,7 @@ export const dbLogger = winston.createLogger({
     new winston.transports.Console({
       level: 'debug',
       handleExceptions: true,
-      format: winston.format.simple()
+      format: winston.format.json()
     })
   ],
   exitOnError: false

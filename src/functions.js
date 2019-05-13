@@ -23,7 +23,7 @@ export const delay = ms => new Promise(res => setTimeout(res, ms))
 export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
 export const buildWsURI = (ssl, host, port, uuid = '') => `${ssl ? 'wss' : 'ws'}://${host}:${port}?uuid=${uuid}`
 
-export const sortIntArray = intArray => intArray.sort((a, b) => a - b)
+export const sortIntArray = intArray => intArray ? intArray.sort((a, b) => a - b) : null
 
 export const findNearestUpper = (value, arrInt) => {
   const arr = sortIntArray(arrInt)
