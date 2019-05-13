@@ -11,7 +11,7 @@
             persistent-hint
             thumb-label="always"
             min="1"
-            max="25"
+            max="15"
           />
 
           <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
@@ -21,7 +21,7 @@
             persistent-hint
             thumb-label="always"
             min="1"
-            max="25"
+            max="15"
           />
 
           <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>

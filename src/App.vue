@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import './style.css'
 import ResetAppButton from '@/components/ResetAppButton.vue'
 import Loader from '@/components/Loader.vue'
 import HostConfig from '@/components/HostConfig.vue'

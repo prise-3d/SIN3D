@@ -61,7 +61,7 @@ export default {
     this.items = Experiments.map(expe => {
       const res = {
         name: expe.fullName,
-        link: `/experiments/selectScene/${expe.name}`
+        link: `/experiments/${expe.name}`
       }
       // Check cache has an entry for each scenes in this experiment
       if (this.progression[expe.name] && Object.keys(this.progression[expe.name]).every(y => this.scenesList.includes(y))) {

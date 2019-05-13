@@ -17,7 +17,7 @@ export default new Router({
       component: ExperimentsList
     },
     {
-      path: '/experiments/selectScene/:experimentName',
+      path: '/experiments/:experimentName',
       name: 'SelectExperimentScene',
       component: () => import('@/views/SelectExperimentScene.vue'),
       props: true

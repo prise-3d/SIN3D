@@ -1,10 +1,18 @@
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+
 <script>
-import ExperimentBase from '@/mixins/ExperimentBase.vue'
+import './style.css'
+import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
 import { API_ROUTES, findNearestUpper, findNearestLower } from '@/functions'
 
 export default {
+  name: 'ExperimentBaseExtracts',
   mixins: [ExperimentBase],
   data() {
     return {
