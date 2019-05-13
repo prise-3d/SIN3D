@@ -17,7 +17,7 @@ import messageHandler from './messageHandler'
  */
 export const errorHandler = ws => err => {
   const errStr = formatError(err)
-  ws.send(errStr)
+  ws.send(JSON.stringify(errStr))
   if (!TEST_MODE) wsLogger.error(errStr)
 }
 
