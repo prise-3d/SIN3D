@@ -8,11 +8,6 @@ export default {
   mixins: [ExperimentBase],
   data() {
     return {
-      // Experiment config sliders
-      experimentConfig: {
-        x: 4,
-        y: 4
-      },
       // Updated when `setConfig` is called
       extractConfig: {
         x: 4,
@@ -22,10 +17,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getHostURI']),
-    isConfigNew() {
-      return this.extractConfig.x !== this.experimentConfig.x || this.extractConfig.y !== this.experimentConfig.y
-    }
+    ...mapGetters(['getHostURI'])
   },
   methods: {
     // Load extracts from the API
@@ -44,15 +36,14 @@ export default {
     },
 
     // Config was updated, load extracts and save progression
-    async setConfig() {
-      // Check if the config is the same
-      if (this.extracts.length > 0 && !this.isConfigNew) return
+    async setConfig(config) {
+      if (!config) return
 
       this.loadingMessage = 'Loading configuration extracts...'
       this.loadingErrorMessage = null
       try {
-        this.extractConfig.x = this.experimentConfig.x
-        this.extractConfig.y = this.experimentConfig.y
+        this.extractConfig.x = config.x
+        this.extractConfig.y = config.y
         const data = await this.getExtracts()
         const hostURI = this.getHostURI
         this.extracts = data.extracts.map((url, i) => ({

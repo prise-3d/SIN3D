@@ -22,7 +22,7 @@ export default {
     ...mapGetters(['getHostURI', 'getExperimentProgress'])
   },
   methods: {
-    ...mapActions(['setExperimentProgress']),
+    ...mapActions(['setExperimentProgress', 'sendMessage']),
 
     // Load progress from store into local state
     loadProgress() {
@@ -31,7 +31,7 @@ export default {
 
       const progress = this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName })
       Object.assign(this.$data, progress)
-      console.log('Loaded data from store to local state.', progress)
+      // console.log('Loaded data from store to local state.', progress)
     },
 
     // Save progress from local state into store
@@ -39,7 +39,7 @@ export default {
       if (!this.experimentName || !this.sceneName)
         console.warn('Could not load progress : experimentName and sceneName must be defined')
       this.setExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName, data: this.$data })
-      console.log('Saved data from local state to store.', this.$data)
+      // console.log('Saved data from local state to store.', this.$data)
     },
 
     // Load qualities list from the API

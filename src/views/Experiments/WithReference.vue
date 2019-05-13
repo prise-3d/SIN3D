@@ -4,40 +4,9 @@
       <v-layout row wrap>
         <v-flex xs12>
           <h1>Experiment with reference</h1>
-          <v-card dark>
-            <v-container grid-list-sm fluid>
-              <v-layout row wrap>
-                <v-flex
-                  xs12
-                >
-                  <h1>Configuration</h1>
-                  <v-card-text class="px-0">Extracts per line (horizontal)</v-card-text>
-                  <v-slider
-                    v-model="experimentConfig.x"
-                    always-dirty
-                    persistent-hint
-                    thumb-label="always"
-                    min="1"
-                    max="25"
-                  />
-
-                  <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
-                  <v-slider
-                    v-model="experimentConfig.y"
-                    always-dirty
-                    persistent-hint
-                    thumb-label="always"
-                    min="1"
-                    max="25"
-                  />
-
-                  <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
-
-                  <v-alert v-if="loadingErrorMessage" :value="true" type="error" v-text="loadingErrorMessage" />
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card>
+          <!-- Extract configuration -->
+          <extract-configuration @setConfig="setConfig" :loading-error-message="loadingErrorMessage" ref="configurator" />
+          <!--/ Extract configuration -->
         </v-flex>
         <!-- Loading screen -->
         <loader v-if="loadingMessage" :message="loadingMessage" />
@@ -109,11 +78,13 @@
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts.vue'
 import { API_ROUTES } from '@/functions'
 import Loader from '@/components/Loader.vue'
+import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
 
 export default {
   name: 'ExperimentWithReference',
   components: {
-    Loader
+    Loader,
+    ExtractConfiguration
   },
   mixins: [ExperimentBaseExtracts],
 
@@ -123,20 +94,20 @@ export default {
       referenceImage: null
     }
   },
-  computed: {
-
-  },
 
   async mounted() {
     // Load progress from store into local state
     this.loadProgress()
 
     // Load scene data from the API
-    await this.getReferenceImage()
-    await this.getQualitiesList()
+    await Promise.all([
+      this.getReferenceImage(),
+      this.getQualitiesList()
+    ])
 
     // Get default extracts : min quality, cut config : x = 4, y = 4
-    await this.setConfig()
+    await this.setConfig(this.extractConfig)
+    this.$refs.configurator.setDefaultConfig(this.extractConfig)
     this.saveProgress()
   },
   methods: {
