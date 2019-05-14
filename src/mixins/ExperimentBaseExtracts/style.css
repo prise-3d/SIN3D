@@ -1,0 +1,7 @@
+.img-extract-loader {
+  height: 100%;
+  width: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

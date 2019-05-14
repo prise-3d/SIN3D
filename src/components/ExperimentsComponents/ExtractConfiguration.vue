@@ -4,27 +4,37 @@
       <v-layout row wrap>
         <v-flex xs12>
           <h1>Configuration</h1>
-          <v-card-text class="px-0">Extracts per line (horizontal)</v-card-text>
-          <v-slider
-            v-model="experimentConfig.x"
-            always-dirty
-            persistent-hint
-            thumb-label="always"
-            min="1"
-            max="25"
-          />
 
-          <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
-          <v-slider
-            v-model="experimentConfig.y"
-            always-dirty
-            persistent-hint
-            thumb-label="always"
-            min="1"
-            max="25"
-          />
+          <v-slide-y-transition mode="out-in">
+            <div v-if="isExpanded" key="configurator">
+              <v-card-text class="px-0">Extracts per line (horizontal)</v-card-text>
+              <v-slider
+                v-model="experimentConfig.x"
+                always-dirty
+                persistent-hint
+                thumb-label="always"
+                min="1"
+                max="15"
+              />
 
-          <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
+              <v-card-text class="px-0">Extracts per row (vertical)</v-card-text>
+              <v-slider
+                v-model="experimentConfig.y"
+                always-dirty
+                persistent-hint
+                thumb-label="always"
+                min="1"
+                max="15"
+              />
+
+              <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
+            </div>
+            <div v-else key="arrow">
+              <v-btn flat round @click="isExpanded = true">
+                <v-icon>keyboard_arrow_down</v-icon>
+              </v-btn>
+            </div>
+          </v-slide-y-transition>
 
           <v-alert v-if="loadingErrorMessage" :value="true" type="error" v-text="loadingErrorMessage" />
         </v-flex>
@@ -45,6 +55,8 @@ export default {
   },
   data() {
     return {
+      isExpanded: true,
+
       // Experiment config sliders
       experimentConfig: {
         x: 4,
@@ -63,6 +75,10 @@ export default {
     }
   },
   methods: {
+    setVisibility(bool) {
+      this.isExpanded = bool
+    },
+
     setDefaultConfig(config) {
       this.experimentConfig.x = config.x
       this.experimentConfig.y = config.y

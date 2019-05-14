@@ -5,7 +5,7 @@
         <v-flex xs12>
           <h1>Experiment with reference</h1>
           <!-- Extract configuration -->
-          <extract-configuration @setConfig="setConfig" :loading-error-message="loadingErrorMessage" ref="configurator" />
+          <extract-configuration @setConfig="setConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
           <!--/ Extract configuration -->
         </v-flex>
         <!-- Loading screen -->
@@ -19,7 +19,7 @@
               <v-card-text class="px-0">Experiment image</v-card-text>
 
               <v-container class="pa-1">
-                <template v-for="i in extractConfig.x">
+                <template v-for="i in extractConfig.y">
                   <v-layout row wrap :key="`row-${i}`">
                     <v-flex
                       v-for="(anExtract, index) in extracts.slice(extractConfig.x * (i - 1), (extractConfig.x * i))"
@@ -29,7 +29,7 @@
                       <v-card flat tile class="d-flex height100">
                         <div
                           v-if="anExtract.loading"
-                          class="img-loader"
+                          class="img-extract-loader"
                           @click.right.prevent
                         >
                           <v-progress-circular
@@ -67,15 +67,20 @@
               <v-img v-if="referenceImage" :src="referenceImage" />
             </v-card>
           </v-flex>
+          <!-- Experiment validation button -->
+          <v-layout justify-end align-content-end>
+            <v-btn @click="finishExperiment" color="primary" large right>Finish experiment</v-btn>
+          </v-layout>
+          <!--/ Experiment validation button -->
         </template>
-      <!--/ Experiment -->
+        <!--/ Experiment -->
       </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
-import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts.vue'
+import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import { API_ROUTES } from '@/functions'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
@@ -105,9 +110,12 @@ export default {
       this.getQualitiesList()
     ])
 
-    // Get default extracts : min quality, cut config : x = 4, y = 4
-    await this.setConfig(this.extractConfig)
+    // Load the cached configuration in the configurator component
     this.$refs.configurator.setDefaultConfig(this.extractConfig)
+
+    // Load extracts of none were cached
+    if (this.extracts.length === 0) await this.setConfig(this.extractConfig, this.$refs.configurator)
+
     this.saveProgress()
   },
   methods: {
@@ -125,21 +133,8 @@ export default {
 </script>
 
 <style scoped>
-.height100 {
-  height: 100%;
-}
-.img-loader {
-  height: 100%;
-  width: 0px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.cursor {
-  cursor: pointer;
-}
-.extract:hover {
-  z-index: 999999;
+/* White border when hovering on extracts
+ .extract:hover {
   outline: 2px #f4f4f4 solid;
-}
+} */
 </style>

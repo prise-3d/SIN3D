@@ -43,7 +43,7 @@
                 </v-card-actions>
                 <v-spacer />
                 <v-card-actions>
-                  <v-btn flat round :to="aScene.experimentLink">Start experiment</v-btn>
+                  <v-btn round :disabled="aScene.progression === 'done'" :to="aScene.experimentLink">Start experiment</v-btn>
                 </v-card-actions>
               </v-card-title>
             </v-card>
@@ -56,7 +56,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { API_ROUTES } from '@/functions'
+import { API_ROUTES, shuffleArray } from '@/functions'
 
 export default {
   name: 'SelectExperimentScene',
@@ -76,6 +76,10 @@ export default {
     ...mapGetters(['getHostURI'])
   },
   async mounted() {
+    let todo = []
+    let working = []
+    let done = []
+
     for (const aScene of this.scenesList) {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
@@ -87,15 +91,27 @@ export default {
       }
       if (this.progression[this.experimentName] && this.progression[this.experimentName][thumb.sceneName]) {
         const obj = this.progression[this.experimentName][thumb.sceneName]
-        if (obj.done)
+        if (obj.done) {
           sceneObj.progression = 'done'
-        else if (Object.entries(obj.data).length !== 0 && obj.constructor === Object)
+          done.push(sceneObj)
+        }
+        else if (Object.entries(obj.data).length !== 0 && obj.constructor === Object) {
           sceneObj.progression = 'working'
-        else
+          working.push(sceneObj)
+        }
+        else {
           sceneObj.progression = 'todo'
+          todo.push(sceneObj)
+        }
       }
-      this.scenes.push(sceneObj)
     }
+    // Randomize each group
+    todo = shuffleArray(todo)
+    working = shuffleArray(working)
+    done = shuffleArray(done)
+
+    // Render the scenes, in the following order : working, todo, done
+    this.scenes = this.scenes.concat(working, todo, done)
   }
 }
 </script>

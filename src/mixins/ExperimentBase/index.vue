@@ -1,8 +1,15 @@
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { API_ROUTES } from '@/functions'
 
 export default {
+  name: 'ExperimentBase',
   props: {
     sceneName: {
       type: String,
@@ -19,15 +26,22 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getHostURI', 'getExperimentProgress'])
+    ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
+  },
+  mounted() {
+    // Check if the experiment is already finished
+    if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {
+      console.warn('Redirected from experiment. You can\'t go back in an experiment after finishing it.')
+      this.$router.push(`/experiments/${this.experimentName}`)
+    }
   },
   methods: {
-    ...mapActions(['setExperimentProgress', 'sendMessage']),
+    ...mapActions(['setExperimentProgress', 'setExperimentDone', 'sendMessage']),
 
     // Load progress from store into local state
     loadProgress() {
       if (!this.experimentName || !this.sceneName)
-        console.warn('Could not load progress : experimentName and sceneName must be defined')
+        return console.warn('Could not load progress : experimentName and sceneName must be defined')
 
       const progress = this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName })
       Object.assign(this.$data, progress)
@@ -37,10 +51,16 @@ export default {
     // Save progress from local state into store
     saveProgress() {
       if (!this.experimentName || !this.sceneName)
-        console.warn('Could not load progress : experimentName and sceneName must be defined')
+        return console.warn('Could not save progress : experimentName and sceneName must be defined')
       this.setExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName, data: this.$data })
       // console.log('Saved data from local state to store.', this.$data)
     },
+
+    async finishExperiment() {
+      this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
+      this.$router.push(`/experiments/${this.experimentName}`)
+    },
+
 
     // Load qualities list from the API
     async getQualitiesList() {

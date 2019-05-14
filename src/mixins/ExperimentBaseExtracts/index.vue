@@ -1,10 +1,18 @@
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+
 <script>
-import ExperimentBase from '@/mixins/ExperimentBase.vue'
+import './style.css'
+import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
 import { API_ROUTES, findNearestUpper, findNearestLower } from '@/functions'
 
 export default {
+  name: 'ExperimentBaseExtracts',
   mixins: [ExperimentBase],
   data() {
     return {
@@ -36,8 +44,8 @@ export default {
     },
 
     // Config was updated, load extracts and save progression
-    async setConfig(config) {
-      if (!config) return
+    async setConfig(config, configuratorRef) {
+      if (!config || !configuratorRef) return
 
       this.loadingMessage = 'Loading configuration extracts...'
       this.loadingErrorMessage = null
@@ -55,6 +63,7 @@ export default {
           precQuality: findNearestLower(data.info.image.quality, this.qualities),
           loading: false
         }))
+        configuratorRef.setVisibility(false)
       }
       catch (err) {
         console.error('Failed to load new configuration', err)
