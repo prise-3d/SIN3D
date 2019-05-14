@@ -26,7 +26,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getHostURI', 'getExperimentProgress'])
+    ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
+  },
+  mounted() {
+    // Check if the experiment is already finished
+    if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {
+      console.warn('Redirected from experiment. You can\'t go back in an experiment after finishing it.')
+      this.$router.push(`/experiments/${this.experimentName}`)
+    }
   },
   methods: {
     ...mapActions(['setExperimentProgress', 'setExperimentDone', 'sendMessage']),

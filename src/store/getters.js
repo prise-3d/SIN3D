@@ -31,6 +31,11 @@ export default {
     if (!state) return
     if (state.progression && state.progression[experimentName])
       return state.progression[experimentName][sceneName].data
-  }
+  },
 
+  isExperimentDone: state => ({ experimentName, sceneName }) => {
+    if (!state) return
+    if (state.progression && state.progression[experimentName])
+      return state.progression[experimentName][sceneName].done
+  }
 }
