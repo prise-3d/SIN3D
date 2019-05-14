@@ -3,7 +3,14 @@
     <v-container grid-list-md text-xs-center fluid>
       <v-layout row wrap>
         <v-flex xs12>
-          <h1>Experiment with reference</h1>
+          <v-layout justify-start>
+            <v-btn flat exact :to="`/experiments/${experimentName}`">
+              <v-icon left>arrow_back</v-icon>
+              Back to scene selection
+            </v-btn>
+          </v-layout>
+
+          <h1>Experiment with reference - {{ sceneName }}</h1>
           <!-- Extract configuration -->
           <extract-configuration @setConfig="setConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
           <!--/ Extract configuration -->

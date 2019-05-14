@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import ExperimentsList from '@/views/ExperimentsList.vue'
+import GdprNotice from '@/views/GdprNotice.vue'
+import HostConfig from '@/views/HostConfig.vue'
 import Experiments from './experiments'
 
 Vue.use(Router)
@@ -9,12 +10,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/experimentsList'
+      redirect: 'gdpr'
     },
     {
-      path: '/experimentsList',
+      path: '/gdpr',
+      name: 'GdprNotice',
+      component: GdprNotice
+    },
+    {
+      path: '/hostConfig',
+      name: 'HostConfig',
+      component: HostConfig
+    },
+    {
+      path: '/experiments',
       name: 'ExperimentsList',
-      component: ExperimentsList
+      component: () => import('@/views/ExperimentsList.vue')
     },
     {
       path: '/experiments/:experimentName',

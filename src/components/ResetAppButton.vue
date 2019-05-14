@@ -73,6 +73,7 @@ export default {
 
       selectedItems: [],
       items: [
+        { text: 'GDPR consent', value: 'gdprConsent' },
         { text: 'Host configuration', value: 'hostConfig' },
         { text: 'Progression', value: 'progression' }
       ]

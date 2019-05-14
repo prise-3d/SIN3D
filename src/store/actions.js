@@ -1,13 +1,21 @@
 import Vue from 'vue'
+import router from '../router'
 import { API_ROUTES, buildURI, buildWsURI, delay } from '../functions'
 
 export default {
+  setGdprValidated({ state, commit }) {
+    if (!state.gdprConsent) {
+      commit('setGdprValidated')
+      router.push('/hostConfig')
+    }
+  },
+
   setAppUniqueId({ state, commit }) {
     if (!state.uuid) commit('setAppUniqueId')
   },
 
-  resetApp({ commit }, { hostConfig = false, progression = false }) {
-    commit('resetApp', { hostConfig, progression })
+  resetApp({ commit }, { gdprConsent = false, hostConfig = false, progression = false }) {
+    commit('resetApp', { gdprConsent, hostConfig, progression })
   },
 
   async setHostConfig({ state, commit }, { ssl, host, port }) {
@@ -33,6 +41,7 @@ export default {
 
         // Configuration is valid
         commit('setHostConfig', { ssl, host, port })
+        router.push('/experiments')
       })
       .catch(err => {
         // Host not reachable or invalid HTTP status code
