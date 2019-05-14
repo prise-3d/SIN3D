@@ -10,6 +10,7 @@ import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
 import { API_ROUTES, findNearestUpper, findNearestLower } from '@/functions'
+import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 
 export default {
   name: 'ExperimentBaseExtracts',
@@ -97,6 +98,9 @@ export default {
         this.extracts[index].nextQuality = findNearestUpper(data.info.image.quality, this.qualities)
         this.extracts[index].precQuality = findNearestLower(data.info.image.quality, this.qualities)
         this.extracts[index].loading = false
+
+        // Sending event to WebSocket server
+      // this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
       }
       catch (err) {
         // TODO: toast message if fail
@@ -106,6 +110,29 @@ export default {
         this.extracts[index].loading = false
         this.saveProgress()
       }
+    },
+
+    // Finish an experiment, sending full data to the server
+    // Don't forget to surcharge this function when using this mixin to add more data
+    finishExperiment() {
+      const obj = {
+        experimentName: this.experimentName,
+        sceneName: this.sceneName,
+        extractConfig: this.extractConfig,
+        extracts: this.extracts.map(x => ({
+          index: x.index,
+          link: x.link,
+          nextQuality: x.nextQuality,
+          precQuality: x.precQuality,
+          quality: x.quality,
+          zone: x.zone
+        })),
+        qualities: this.qualities,
+        referenceImage: this.referenceImage
+      }
+      this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
+      this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
+      this.$router.push(`/experiments/${this.experimentName}`)
     }
   }
 }

@@ -7,6 +7,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { API_ROUTES } from '@/functions'
+import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 
 export default {
   name: 'ExperimentBase',
@@ -29,6 +30,9 @@ export default {
     ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
   },
   mounted() {
+    if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
+      this.sendMessage({ msgId: experimentMsgId.STARTED })
+
     // Check if the experiment is already finished
     if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {
       console.warn('Redirected from experiment. You can\'t go back in an experiment after finishing it.')
@@ -56,7 +60,13 @@ export default {
       // console.log('Saved data from local state to store.', this.$data)
     },
 
-    async finishExperiment() {
+    // Finish an experiment, sending full data to the server
+    // Don't forget to surcharge this function when using this mixin to add more data
+    finishExperiment() {
+      const obj = Object.assign(this.$data, { sceneName: this.sceneName })
+      obj.loadingMessage = undefined
+      obj.loadingErrorMessage = undefined
+      this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
       this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
       this.$router.push(`/experiments/${this.experimentName}`)
     },

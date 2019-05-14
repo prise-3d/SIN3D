@@ -52,8 +52,8 @@ export default {
     else throw new Error('Could not connect to WebSocket server. Host is not configured.')
   },
 
-  sendMessage(_, message) {
-    Vue.prototype.$socket.send(JSON.stringify(message) || message)
+  sendMessage(_, { msgId, msg = undefined }) {
+    Vue.prototype.$socket.send(JSON.stringify({ msgId, msg }))
   },
 
   async loadScenesList({ getters: { isHostConfigured, getHostURI }, commit }) {
