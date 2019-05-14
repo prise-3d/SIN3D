@@ -1,6 +1,10 @@
 import { buildURI, buildWsURI } from '../functions'
 
 export default {
+  isGdprValidated(state) {
+    if (!state) return
+    return state.gdprConsent
+  },
   isHostConfigured(state) {
     if (!state) return
     return !!(state.hostConfig.ssl !== null && state.hostConfig.host && state.hostConfig.port)

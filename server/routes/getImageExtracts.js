@@ -181,9 +181,10 @@ const cutImage = async (image, xExtracts, yExtracts) => {
 
       // Zone number of the extract `00020`
       const fileNameCount = (extracts.length + 1).toString().padStart(5, '0')
+      const fileNameQuality = image.quality.toString().padStart(5, '0')
 
       // File name of the extract : `Scene2_zone00199_100.png`
-      const extractName = `${image.sceneName}_zone${fileNameCount}_${image.quality}.${image.ext}`
+      const extractName = `${image.sceneName}_zone${fileNameCount}_${fileNameQuality}.${image.ext}`
 
       // Configured path to the image (Check defined convention)
       const pathToImage = [image.sceneName, extractsDirName, `x${xExtracts}_y${yExtracts}`, `zone${fileNameCount}`, extractName]

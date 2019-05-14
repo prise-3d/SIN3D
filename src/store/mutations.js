@@ -24,19 +24,25 @@ const createProgressionObj = (state, scenes) => {
 }
 
 export default {
+  setGdprValidated(state) {
+    state.gdprConsent = true
+  },
+
   setAppUniqueId(state) {
     state.uuid = [...Array(30)].map(() => Math.random().toString(36)[2]).join('')
   },
 
-  resetApp(state, { hostConfig, progression }) {
+  resetApp(state, { gdprConsent, hostConfig, progression }) {
+    const defaultStateObj = defaultState()
+    if (gdprConsent) state.gdprConsent = false
     if (hostConfig) {
       if (state.socket.isConnected)
         this._vm.$disconnect()
-      state.hostConfig = defaultState().hostConfig
+      state.hostConfig = defaultStateObj.hostConfig
     }
     if (progression) {
       // Reset progression and recreate the progression object
-      state.progression = defaultState().progression
+      state.progression = defaultStateObj.progression
       createProgressionObj(state, state.scenesList)
     }
   },

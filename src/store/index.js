@@ -13,6 +13,7 @@ const vuexLocal = new VuexPersistence({
   key: 'webexpe-state',
   reducer: state => ({
     uuid: state.uuid,
+    gdprConsent: state.gdprConsent,
     hostConfig: state.hostConfig,
     scenesList: state.scenesList,
     progression: state.progression

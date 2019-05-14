@@ -117,7 +117,7 @@ const router = express.Router()
  * @param {string} sceneName the scene to get the image from
  * @param {number|"min"|"max"|"median"} quality the requested quality
  * @param {boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
- * @returns {Promise<Image>} the link and path to the image
+ * @returns {Promise<Image>} the image data
  */
 export const getImage = async (sceneName, quality, nearestQuality = false) => {
   const throwErrIfTrue = x => {

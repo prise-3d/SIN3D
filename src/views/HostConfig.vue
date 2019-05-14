@@ -2,11 +2,11 @@
   <v-layout justify-center align-center>
     <v-flex xs12 sm5>
       <v-card>
-        <v-content>
-          <v-container fluid fill-height>
-            <v-layout style="flex-direction: column; text-align: center">
-              <h1>Host configuration</h1>
+        <v-container fluid fill-height>
+          <v-layout column align-center>
+            <v-card-title class="headline d-block text-md-center font-weight-bold">Host configuration</v-card-title>
 
+            <v-card-text>
               <v-slide-y-transition mode="out-in">
                 <loader v-if="loadingMessage" :message="loadingMessage" />
                 <v-form v-else ref="form">
@@ -43,9 +43,9 @@
                   </v-slide-y-transition>
                 </v-form>
               </v-slide-y-transition>
-            </v-layout>
-          </v-container>
-        </v-content>
+            </v-card-text>
+          </v-layout>
+        </v-container>
       </v-card>
     </v-flex>
   </v-layout>
@@ -77,10 +77,6 @@ export default {
     'config.ssl'(newValue) {
       if (newValue === true) this.config.port = 443
     }
-  },
-
-  mounted() {
-    this.$router.push('/')
   },
 
   methods: {

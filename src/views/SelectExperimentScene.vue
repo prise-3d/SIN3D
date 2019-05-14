@@ -1,5 +1,12 @@
 <template>
   <div>
+    <v-layout justify-start>
+      <v-btn flat exact :to="`/experiments`">
+        <v-icon left>arrow_back</v-icon>
+        Back to experiment selection
+      </v-btn>
+    </v-layout>
+
     Select a scene for the experiment "{{ experimentName }}"
 
     <v-card>
