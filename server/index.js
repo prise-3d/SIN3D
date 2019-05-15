@@ -6,6 +6,8 @@ import compression from 'compression'
 import serveStatic from 'serve-static'
 import helmet from 'helmet'
 import cors from 'cors'
+import bodyParser from 'body-parser'
+
 import routes from './routes'
 import { errorHandler, formatLog } from './functions'
 import { apiPrefix, imageServedUrl, serverPort, serveClient, imagesPath, logger } from '../config'
@@ -14,6 +16,7 @@ import connectDb from './database'
 const morgan = require('morgan')
 
 const app = express()
+app.enable('trust proxy')
 
 // Activating logging
 app.use(morgan('combined', {
@@ -28,6 +31,9 @@ app.use(helmet())
 
 // Turn "Cross-origin resource sharing" on to allow remote clients to connect to the API
 app.use(cors())
+
+// Parse JSON body
+app.use(bodyParser.json())
 
 // Serve images. "serve-static" is used because it caches images ("express.static" doesn't)
 app.use(imageServedUrl, serveStatic(imagesPath))

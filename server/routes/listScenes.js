@@ -45,11 +45,9 @@ const router = express.Router()
  * @returns {string[]} the list of files
  * @throws the directory does not exist or is not accessible
  */
-export const getSceneList = () => {
-  return fs.readdir(imagesPath).catch(() => {
-    throw boom.internal(`Can't access the "${path.basename(imagesPath)}" directory. Check it exists and you have read permission on it.`)
-  })
-}
+export const getSceneList = () => fs.readdir(imagesPath).catch(() => {
+  throw boom.internal(`Can't access the "${path.basename(imagesPath)}" directory. Check it exists and you have read permission on it.`)
+})
 
 // Route which returns a list of all available scenes in the `imagesPath` directory
 router.get('/', asyncMiddleware(async (req, res) => res.json({ data: await getSceneList() })))
