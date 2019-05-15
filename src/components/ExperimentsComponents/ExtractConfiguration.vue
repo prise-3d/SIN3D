@@ -29,12 +29,13 @@
 
               <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
             </div>
-            <div v-else key="arrow">
-              <v-btn flat round @click="isExpanded = true">
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-btn>
-            </div>
           </v-slide-y-transition>
+
+          <div>
+            <v-btn flat round @click="isExpanded = !isExpanded">
+              <v-icon class="rotated180-duration" :class="{ rotated180: isExpanded }" key="arrow-down">keyboard_arrow_down</v-icon>
+            </v-btn>
+          </div>
 
           <v-alert v-if="loadingErrorMessage" :value="true" type="error" v-text="loadingErrorMessage" />
         </v-flex>
@@ -93,3 +94,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.rotated180 {
+  transform: rotate(180deg);
+}
+.rotated180-duration {
+  transition: transform .5s ease-in-out !important;
+}
+</style>
