@@ -78,7 +78,7 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=min&horizontalExtrac
 
   t.is(res.status, 200, json(res))
   t.true(Array.isArray(res.body.data.extracts), json(res.body))
-  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`, json(res.body))
 })
 
 test('GET /getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -87,7 +87,7 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=median&horizontalExt
 
   t.is(res.status, 200, json(res))
   t.true(Array.isArray(res.body.data.extracts), json(res.body))
-  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`, json(res.body))
 })
 
 test('GET /getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -96,7 +96,7 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=max&horizontalExtrac
 
   t.is(res.status, 200, json(res))
   t.true(Array.isArray(res.body.data.extracts), json(res.body))
-  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`, json(res.body))
 })
 
 test('GET /getImageExtracts?sceneName=bathroom&imageQuality=99999&horizontalExtractCount=5&verticalExtractCount=2&nearestQuality=true', async t => {
@@ -104,7 +104,7 @@ test('GET /getImageExtracts?sceneName=bathroom&imageQuality=99999&horizontalExtr
     .get(`${apiPrefix}/getImageExtracts?sceneName=bathroom&imageQuality=99999&horizontalExtractCount=5&verticalExtractCount=2&nearestQuality=true`)
 
   t.is(res.status, 200, json(res))
-  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`, json(res.body))
 })
 
 test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontalExtractCount=5&verticalExtractCount=2', async t => {
@@ -113,7 +113,7 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
 
   t.is(res.status, 200, json(res))
   t.true(Array.isArray(res.body.data.extracts), json(res.body))
-  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`, json(res.body))
+  t.is(res.body.data.extracts[0], `${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`, json(res.body))
   t.deepEqual(res.body.data.info, {
     extractsConfig: {
       x: 5,
@@ -146,7 +146,7 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
 
   // Check link is accessible and is an image
   const res2 = await request(t.context.server)
-    .get(`${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`)
+    .get(`${imageServedUrl}/bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`)
 
   t.is(res2.status, 200, json(res2))
   t.is(res2.header['content-type'], 'image/png', json(res2))
@@ -157,7 +157,7 @@ test.serial('Check extracts were successfully generated', async t => {
   const extracts = path.resolve(imagesPath, 'bathroom', 'extracts')
   const aBathroomConfig = path.resolve(extracts, 'x5_y2')
   const aBathroomConfigZone = path.resolve(aBathroomConfig, 'zone00001')
-  const aBathroomConfigZoneImg = path.resolve(aBathroomConfigZone, 'bathroom_zone00001_10.png')
+  const aBathroomConfigZoneImg = path.resolve(aBathroomConfigZone, 'bathroom_zone00001_00010.png')
   const fsp = fs.promises
   // Check `bathroom/extracts`
   t.true(await fs.pathExists(extracts))
@@ -171,7 +171,7 @@ test.serial('Check extracts were successfully generated', async t => {
   t.true(await fs.pathExists(aBathroomConfigZone))
   t.is((await fsp.readdir(aBathroomConfigZone)).length, 1)
 
-  // Check `bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_10.png`
+  // Check `bathroom/extracts/x5_y2/zone00001/bathroom_zone00001_00010.png`
   t.true(await fs.pathExists(aBathroomConfigZoneImg))
 
   // Check image's type, width and height
