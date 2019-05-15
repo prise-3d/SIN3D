@@ -21,8 +21,9 @@ const messageHandler = ws => async data => {
   catch (err) {
     throw new Error('Invalid JSON data.')
   }
+  if (!json.uuid)
+    throw new Error('"uuid" was not provided.')
 
-  json.WS_UNIQUE_UUID = ws.uuid
   await DataController.add(json)
   if (!TEST_MODE) wsLogger.info(formatLog(json, 'message'))
   ws.send('{"message":"ok"}')

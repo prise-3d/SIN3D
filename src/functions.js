@@ -2,6 +2,8 @@ export const API_PREFIX = '/api'
 export const API_ROUTES = {
   ping: () => `${API_PREFIX}/ping`,
 
+  dataCollect: () => `${API_PREFIX}/dataCollect`,
+
   listScenes: () => `${API_PREFIX}/listScenes`,
 
   listSceneQualities: sceneName => `${API_PREFIX}/listSceneQualities?${new URLSearchParams({ sceneName })}`,
