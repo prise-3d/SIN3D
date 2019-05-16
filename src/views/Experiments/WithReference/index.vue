@@ -91,6 +91,7 @@ import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import { API_ROUTES } from '@/functions'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
+import getSceneConfig from './config'
 
 export default {
   name: 'ExperimentWithReference',

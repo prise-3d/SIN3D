@@ -1,3 +1,5 @@
+'use strict'
+
 // List of IDs for messages sent using WebSockets
 
 // Message IDs for experiments events
