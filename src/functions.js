@@ -57,3 +57,13 @@ export const shuffleArray = array => {
   }
   return array
 }
+
+/**
+ * Build a configuration file by merging the default config with the asked scene.
+ * The asked scene config will overwrite the default config.
+ * @param {Object} defaultConfig The default configuration object
+ * @param {Object} scenesConfig The scenes specific configuration
+ * @returns {Function} A function that will return the scene configuration
+ */
+export const buildConfig = (defaultConfig = {}, scenesConfig = {}) =>
+  sceneName => Object.assign(defaultConfig, scenesConfig[sceneName])

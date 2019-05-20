@@ -27,7 +27,7 @@
                 max="15"
               />
 
-              <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
+              <v-btn @click="setExtractConfig" :disabled="!isConfigNew">Confirm</v-btn>
             </div>
           </v-slide-y-transition>
 
@@ -63,7 +63,7 @@ export default {
         x: 4,
         y: 4
       },
-      // Updated when `setConfig` is called
+      // Updated when `setExtractConfig` is called
       extractConfig: {
         x: 4,
         y: 4
@@ -86,10 +86,10 @@ export default {
       this.extractConfig.x = this.experimentConfig.x
       this.extractConfig.y = this.experimentConfig.y
     },
-    setConfig() {
+    setExtractConfig() {
       this.extractConfig.x = this.experimentConfig.x
       this.extractConfig.y = this.experimentConfig.y
-      this.$emit('setConfig', this.experimentConfig)
+      this.$emit('setExtractConfig', this.experimentConfig)
     }
   }
 }

@@ -12,7 +12,7 @@
 
           <h1>Experiment with reference - {{ sceneName }}</h1>
           <!-- Extract configuration -->
-          <extract-configuration @setConfig="setConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
+          <extract-configuration v-if="lockConfig === false" @setExtractConfig="setExtractConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
           <!--/ Extract configuration -->
         </v-flex>
         <!-- Loading screen -->
@@ -48,7 +48,8 @@
                           :src="anExtract.link"
                           @click.left.prevent="extractAction($event, anExtract)"
                           @click.right.prevent="extractAction($event, anExtract)"
-                          class="cursor extract"
+                          class="cursor"
+                          :class="{ 'extract-hover-border': showHoverBorder === true }"
                         >
                           <template v-slot:placeholder>
                             <v-layout
@@ -91,6 +92,7 @@ import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import { API_ROUTES } from '@/functions'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
+import experimentConfig from './config'
 
 export default {
   name: 'ExperimentWithReference',
@@ -108,6 +110,9 @@ export default {
   },
 
   async mounted() {
+    // Load config for this scene to local state
+    await this.loadConfig(experimentConfig)
+
     // Load progress from store into local state
     this.loadProgress()
 
@@ -118,13 +123,14 @@ export default {
     ])
 
     // Load the cached configuration in the configurator component
-    this.$refs.configurator.setDefaultConfig(this.extractConfig)
+    if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
     // Load extracts of none were cached
-    if (this.extracts.length === 0) await this.setConfig(this.extractConfig, this.$refs.configurator)
+    if (this.extracts.length === 0) await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
     this.saveProgress()
   },
+
   methods: {
     // Load the reference image from the API
     async getReferenceImage() {
@@ -138,10 +144,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-/* White border when hovering on extracts
- .extract:hover {
-  outline: 2px #f4f4f4 solid;
-} */
-</style>

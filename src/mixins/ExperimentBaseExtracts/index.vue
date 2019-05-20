@@ -17,12 +17,14 @@ export default {
   mixins: [ExperimentBase],
   data() {
     return {
-      // Updated when `setConfig` is called
+      // Updated when `setExtractConfig` is called
       extractConfig: {
-        x: 4,
-        y: 4
+        x: null,
+        y: null
       },
-      extracts: []
+      extracts: [],
+
+      showHoverBorder: null
     }
   },
   computed: {
@@ -45,8 +47,8 @@ export default {
     },
 
     // Config was updated, load extracts and save progression
-    async setConfig(config, configuratorRef) {
-      if (!config || !configuratorRef) return
+    async setExtractConfig(config, configuratorRef) {
+      if (!config) return
 
       this.loadingMessage = 'Loading configuration extracts...'
       this.loadingErrorMessage = null
@@ -64,7 +66,9 @@ export default {
           precQuality: findNearestLower(data.info.image.quality, this.qualities),
           loading: false
         }))
-        configuratorRef.setVisibility(false)
+
+        // If there is a configurator, retract it
+        if (configuratorRef) configuratorRef.setVisibility(false)
       }
       catch (err) {
         console.error('Failed to load new configuration', err)
@@ -137,3 +141,11 @@ export default {
   }
 }
 </script>
+
+<style>
+/* White border when hovering on extracts */
+ .extract-hover-border:hover {
+  z-index: 1;
+  outline: 2px #f4f4f4 solid;
+}
+</style>
