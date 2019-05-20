@@ -23,12 +23,6 @@
     "morgan": "^1.9.1",
     "serve-static": "^1.13.2",
     "sharp": "^0.22.1",
-    "vue": "^2.6.10",
-    "vue-native-websocket": "^2.0.13",
-    "vue-router": "^3.0.6",
-    "vuetify": "^1.5.14",
-    "vuex": "^3.1.0",
-    "vuex-persist": "^2.0.0",
     "winston": "^3.2.1",
     "ws": "^7.0.0"
   },
@@ -40,6 +34,7 @@
     "apidoc": "^0.17.7",
     "ava": "^1.4.1",
     "babel-eslint": "^10.0.1",
+    "deepmerge": "^3.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "fs-extra": "^7.0.1",
@@ -47,9 +42,15 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "supertest": "^4.0.2",
+    "vue": "^2.6.10",
     "vue-cli-plugin-vuetify": "^0.5.0",
+    "vue-native-websocket": "^2.0.13",
+    "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.6.10",
-    "vuetify-loader": "^1.2.2"
+    "vuetify": "^1.5.14",
+    "vuetify-loader": "^1.2.2",
+    "vuex": "^3.1.0",
+    "vuex-persist": "^2.0.0"
   },
   "postcss": {
     "plugins": {

@@ -23,12 +23,15 @@ export default {
 
       loadingMessage: null,
       loadingErrorMessage: null,
-      qualities: null
+      qualities: null,
+
+      lockConfig: null
     }
   },
   computed: {
     ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
   },
+
   mounted() {
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
       this.sendMessage({ msgId: experimentMsgId.STARTED })
@@ -39,6 +42,7 @@ export default {
       this.$router.push(`/experiments/${this.experimentName}`)
     }
   },
+
   methods: {
     ...mapActions(['setExperimentProgress', 'setExperimentDone', 'sendMessage']),
 
@@ -58,6 +62,13 @@ export default {
         return console.warn('Could not save progress : experimentName and sceneName must be defined')
       this.setExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName, data: this.$data })
       // console.log('Saved data from local state to store.', this.$data)
+    },
+
+    // Load a config object into the local state
+    async loadConfig(configFn) {
+      const config = (await configFn())(this.sceneName)
+      // console.log('Loaded configuration', config)
+      Object.assign(this.$data, config)
     },
 
     // Finish an experiment, sending full data to the server
