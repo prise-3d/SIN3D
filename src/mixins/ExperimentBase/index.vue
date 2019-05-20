@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
-      this.sendMessage({ msgId: experimentMsgId.STARTED })
+      this.sendMessage({ msgId: experimentMsgId.STARTED, experimentName: this.experimentName, sceneName: this.sceneName })
 
     // Check if the experiment is already finished
     if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {

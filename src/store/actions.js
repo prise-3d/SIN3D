@@ -71,10 +71,7 @@ export default {
       },
       body: JSON.stringify({
         uuid: state.uuid,
-        viewport: {
-          x: window.innerWidth,
-          y: window.innerHeight
-        }
+        viewport: Object.keys(Object.getPrototypeOf(window.screen)).reduce((acc, x) => ((acc[x] = window.screen[x]), acc), {})
       })
     })
   },

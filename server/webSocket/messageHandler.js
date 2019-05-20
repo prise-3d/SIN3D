@@ -21,7 +21,7 @@ const messageHandler = ws => async data => {
   catch (err) {
     throw new Error('Invalid JSON data.')
   }
-  if (!json.uuid)
+  if (!TEST_MODE && !json.uuid)
     throw new Error('"uuid" was not provided.')
 
   await DataController.add(json)

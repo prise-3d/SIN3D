@@ -92,7 +92,7 @@ module.exports = {
     'no-redeclare': 2,
     'no-script-url': 2,
     'no-self-compare': 2,
-    'no-sequences': 2,
+    'no-sequences': 0,
     'no-throw-literal': 2,
     'no-void': 2,
     'no-warning-comments': [0, { terms: ['todo', 'fixme'], location: 'start' }],
