@@ -23,7 +23,7 @@ export const API_ROUTES = {
 export const delay = ms => new Promise(res => setTimeout(res, ms))
 
 export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
-export const buildWsURI = (ssl, host, port, uuid = '') => `${ssl ? 'wss' : 'ws'}://${host}:${port}?uuid=${uuid}`
+export const buildWsURI = (ssl, host, port) => `${ssl ? 'wss' : 'ws'}://${host}:${port}`
 
 export const sortIntArray = intArray => intArray ? intArray.sort((a, b) => a - b) : null
 
@@ -72,3 +72,6 @@ export const buildConfig = (defaultConfig = {}, scenesConfig = {}) =>
 
 // Serialize non-serializable objects (like window.screen)
 export const serialize = obj => Object.keys(Object.getPrototypeOf(obj)).reduce((acc, x) => ((acc[x] = obj[x]), acc), {})
+
+// Get a random int between two values (inclusive)
+export const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
