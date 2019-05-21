@@ -18,7 +18,7 @@ export default {
   getHostWsURI(state, getters) {
     if (!state) return
     if (getters.isHostConfigured)
-      return buildWsURI(state.hostConfig.ssl, state.hostConfig.host, state.hostConfig.port, state.uuid)
+      return buildWsURI(state.hostConfig.ssl, state.hostConfig.host, state.hostConfig.port)
   },
 
   areScenesLoaded(state) {

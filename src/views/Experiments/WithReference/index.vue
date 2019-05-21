@@ -89,7 +89,6 @@
 
 <script>
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
-import { API_ROUTES } from '@/functions'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
 import experimentConfig from './config'
@@ -118,7 +117,11 @@ export default {
 
     // Load scene data from the API
     await Promise.all([
-      this.getReferenceImage(),
+      this.getImage('max')
+        .then(res => {
+          this.referenceImage = this.getHostURI + res.link
+          this.saveProgress()
+        }),
       this.getQualitiesList()
     ])
 
@@ -131,16 +134,6 @@ export default {
     this.saveProgress()
   },
 
-  methods: {
-    // Load the reference image from the API
-    async getReferenceImage() {
-      if (this.referenceImage) return
-
-      const URI = `${this.getHostURI}${API_ROUTES.getImage(this.sceneName, 'max')}`
-      const { data } = await fetch(URI).then(res => res.json())
-      this.referenceImage = this.getHostURI + data.link
-      this.saveProgress()
-    }
-  }
+  methods: {}
 }
 </script>

@@ -34,7 +34,13 @@ export default {
 
   mounted() {
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
-      this.sendMessage({ msgId: experimentMsgId.STARTED, experimentName: this.experimentName, sceneName: this.sceneName })
+      this.sendMessage({
+        msgId: experimentMsgId.STARTED,
+        msg: {
+          experimentName: this.experimentName,
+          sceneName: this.sceneName
+        }
+      })
 
     // Check if the experiment is already finished
     if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {
@@ -91,6 +97,22 @@ export default {
       const { data } = await fetch(URI).then(res => res.json())
       this.qualities = data
       this.saveProgress()
+    },
+
+
+    // Load an image from the API
+    async getImage(quality) {
+      const URI = `${this.getHostURI}${API_ROUTES.getImage(this.sceneName, quality)}`
+      const { data } = await fetch(URI)
+        .then(async res => {
+          res.json = await res.json()
+          return res
+        })
+        .then(res => {
+          if (!res.ok) throw new Error(res.json.message + res.json.data ? `\n${res.json.data}` : '')
+          return res.json
+        })
+      return data
     }
   }
 }
