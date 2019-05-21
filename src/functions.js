@@ -2,6 +2,8 @@ export const API_PREFIX = '/api'
 export const API_ROUTES = {
   ping: () => `${API_PREFIX}/ping`,
 
+  dataCollect: () => `${API_PREFIX}/dataCollect`,
+
   listScenes: () => `${API_PREFIX}/listScenes`,
 
   listSceneQualities: sceneName => `${API_PREFIX}/listSceneQualities?${new URLSearchParams({ sceneName })}`,
@@ -57,3 +59,16 @@ export const shuffleArray = array => {
   }
   return array
 }
+
+/**
+ * Build a configuration file by merging the default config with the asked scene.
+ * The asked scene config will overwrite the default config.
+ * @param {Object} defaultConfig The default configuration object
+ * @param {Object} scenesConfig The scenes specific configuration
+ * @returns {Function} A function that will return the scene configuration
+ */
+export const buildConfig = (defaultConfig = {}, scenesConfig = {}) =>
+  sceneName => Object.assign(defaultConfig, scenesConfig[sceneName])
+
+// Serialize non-serializable objects (like window.screen)
+export const serialize = obj => Object.keys(Object.getPrototypeOf(obj)).reduce((acc, x) => ((acc[x] = obj[x]), acc), {})

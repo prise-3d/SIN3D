@@ -27,14 +27,15 @@
                 max="15"
               />
 
-              <v-btn @click="setConfig" :disabled="!isConfigNew">Confirm</v-btn>
-            </div>
-            <div v-else key="arrow">
-              <v-btn flat round @click="isExpanded = true">
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-btn>
+              <v-btn @click="setExtractConfig" :disabled="!isConfigNew">Confirm</v-btn>
             </div>
           </v-slide-y-transition>
+
+          <div>
+            <v-btn flat round @click="isExpanded = !isExpanded">
+              <v-icon class="rotated180-duration" :class="{ rotated180: isExpanded }" key="arrow-down">keyboard_arrow_down</v-icon>
+            </v-btn>
+          </div>
 
           <v-alert v-if="loadingErrorMessage" :value="true" type="error" v-text="loadingErrorMessage" />
         </v-flex>
@@ -62,7 +63,7 @@ export default {
         x: 4,
         y: 4
       },
-      // Updated when `setConfig` is called
+      // Updated when `setExtractConfig` is called
       extractConfig: {
         x: 4,
         y: 4
@@ -85,11 +86,20 @@ export default {
       this.extractConfig.x = this.experimentConfig.x
       this.extractConfig.y = this.experimentConfig.y
     },
-    setConfig() {
+    setExtractConfig() {
       this.extractConfig.x = this.experimentConfig.x
       this.extractConfig.y = this.experimentConfig.y
-      this.$emit('setConfig', this.experimentConfig)
+      this.$emit('setExtractConfig', this.experimentConfig)
     }
   }
 }
 </script>
+
+<style scoped>
+.rotated180 {
+  transform: rotate(180deg);
+}
+.rotated180-duration {
+  transition: transform .5s ease-in-out !important;
+}
+</style>

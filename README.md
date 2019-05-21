@@ -8,7 +8,7 @@ cd Antoine_Internship
 ```
 
 ## Run as a Docker instance
-### Configure
+### Configure application
 Use the following environment variables to configure the application.
 
 | Option      | Default value | Description | Server | Client |
@@ -34,6 +34,16 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `logger` | Logs : `logs/server.combined.log` Errors : `logs/server.error.log` | Default application logger |
 | `wsLogger` | Logs : `logs/ws.log` Errors : `logs/ws.error.log` | WebSocket logger configuration |
 | `dbLogger` | Logs : `logs/db.log` Errors : `logs/db.error.log` | Database logger configuration |
+
+### Configure experiments
+If you want to use the default experiments configurations, you can skip this part, the Dockerfile does it for you.
+
+You can modify the configuration for each mixins, experiments or scene. To do so, you first need to initialize experiment configurations first.
+```sh
+cp -r experimentConfig.default experimentConfig
+```
+You can modify the configuration for each mixins, experiments or scene by modifying files in the newly created *`./experimentConfig`* directory.
+You configuration will be copied in the Docker instance.
 
 ### Run server + client
 Linux
@@ -109,6 +119,13 @@ yarn run server:lint
 
 
 ### Client
+To use the client, you need to initialize experiment configurations first.
+```sh
+cp -r experimentConfig.default experimentConfig
+```
+You can modify the configuration for each mixins, experiments or scene by modifying files in the newly created *`./experimentConfig`* directory.
+
+
 #### Compile and minify for production
 Files will be built to the `dist/` directory.
 ```sh

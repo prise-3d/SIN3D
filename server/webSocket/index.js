@@ -33,10 +33,7 @@ const createWsServer = httpServer => {
   wss.on('listening', () => wsLogger.info(formatLog('The WebSocket server was started')))
   wss.on('error', err => wsLogger.error(formatError(err)))
 
-  wss.on('connection', (ws, req) => {
-    // Unique identifier passed with the request url
-    ws.uuid = req.url.replace('/?uuid=', '')
-
+  wss.on('connection', ws => {
     wsLogger.info(formatLog('New client connected.'))
 
     ws.on('message', data => messageHandler(ws)(data).catch(err => errorHandler(ws)(err)))

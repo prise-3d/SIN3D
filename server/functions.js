@@ -3,7 +3,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import boom from '@hapi/boom'
-import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList } from '../config'
+import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList, TEST_MODE } from '../config'
 
 /**
  * Call the error handler if a middleware function throw an error
@@ -13,24 +13,30 @@ import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList } from '
  */
 export const asyncMiddleware = fn => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(err => {
-    // Check whether the error is a boom error
-    if (!err.isBoom) {
-      // The error was not recognized, send a 500 HTTP error
-      return next(boom.internal(err))
-    }
-    // It is a boom error, pass it to the error handler
     next(err)
   })
 }
 
 // Middleware to handle middleware errors
 export const errorHandler = (err, req, res, next) => {
+  // Check whether the error is a boom error
+  if (!err.isBoom) {
+    // Check if error is invalid JSON body
+    if (err instanceof SyntaxError && err.status === 400 && err.hasOwnProperty('body'))
+      err = boom.badRequest(err)
+    else {
+      // The error was not recognized, send a 500 HTTP error
+      err = boom.internal(err)
+    }
+  }
+
   const { output: { payload } } = err
 
   // Pass the error to the logging handler
   let errorLogged = new Error(`Error ${payload.statusCode} - ${payload.error} - Message :\n${payload.message}`)
   errorLogged.stack = err.stack
-  logger.error(formatError(errorLogged, err.data))
+
+  if (!TEST_MODE) logger.error(formatError(errorLogged, err.data))
 
   // Send the error to the client
   res.status(payload.statusCode).json({
@@ -51,7 +57,7 @@ export const errorHandler = (err, req, res, next) => {
  * @throws missing parameters
  */
 export const checkRequiredParameters = (requiredParameters, parameters) => {
-  if (!requiredParameters.every(aRequiredParameter => Object.keys(parameters).includes(aRequiredParameter)))
+  if (!requiredParameters.every(aRequiredParameter => parameters.hasOwnProperty(aRequiredParameter)))
     throw boom.badRequest(`Missing parameter(s). Required parameters : ${requiredParameters.join(', ')}.`)
 }
 

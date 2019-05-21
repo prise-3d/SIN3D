@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import router from '../router'
-import { API_ROUTES, buildURI, buildWsURI, delay } from '../functions'
+import { API_ROUTES, buildURI, buildWsURI, delay, serialize } from '../functions'
 
 export default {
   setGdprValidated({ state, commit }) {
@@ -18,7 +18,7 @@ export default {
     commit('resetApp', { gdprConsent, hostConfig, progression })
   },
 
-  async setHostConfig({ state, commit }, { ssl, host, port }) {
+  async setHostConfig({ state, commit, dispatch }, { ssl, host, port }) {
     // Timeout after 1s
     const controller = new AbortController()
     const signal = controller.signal
@@ -39,9 +39,11 @@ export default {
         if (!state.socket.isConnected)
           throw new Error('Could not connect to remote WebSocket server.')
 
+
         // Configuration is valid
         commit('setHostConfig', { ssl, host, port })
         router.push('/experiments')
+        dispatch('collectUserData')
       })
       .catch(err => {
         // Host not reachable or invalid HTTP status code
@@ -61,8 +63,24 @@ export default {
     else throw new Error('Could not connect to WebSocket server. Host is not configured.')
   },
 
-  sendMessage(_, { msgId, msg = undefined }) {
-    Vue.prototype.$socket.send(JSON.stringify({ msgId, msg }))
+  async collectUserData({ state, getters }) {
+    let screen = serialize(window.screen)
+    screen.orientation = serialize(window.screen.orientation)
+
+    return fetch(getters.getHostURI + API_ROUTES.dataCollect(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uuid: state.uuid,
+        screen
+      })
+    })
+  },
+
+  sendMessage({ state }, { msgId, msg = undefined }) {
+    Vue.prototype.$socket.send(JSON.stringify({ uuid: state.uuid, msgId, msg }))
   },
 
   async loadScenesList({ getters: { isHostConfigured, getHostURI }, commit }) {
