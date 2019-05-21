@@ -20,6 +20,6 @@ const router = express.Router()
  * pong
  */
 
-router.get('/ping', (req, res) => res.send('pong'))
+router.get('/', (req, res) => res.send('pong'))
 
 export default router

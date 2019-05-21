@@ -2,6 +2,9 @@
 
 // List of IDs for messages sent using WebSockets
 
+// Message ID for data collection
+export const COLLECT_DATA = 'COLLECT_DATA'
+
 // Message IDs for experiments events
 export const EXPERIMENT = {
   // An experiment was started
@@ -14,4 +17,4 @@ export const EXPERIMENT = {
   VALIDATED: 'EXPERIMENT_VALIDATED'
 }
 
-export default { EXPERIMENT }
+export default { COLLECT_DATA, EXPERIMENT }
