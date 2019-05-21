@@ -34,7 +34,14 @@ export default {
 
   resetApp(state, { gdprConsent, hostConfig, progression }) {
     const defaultStateObj = defaultState()
-    if (gdprConsent) state.gdprConsent = false
+    if (gdprConsent) {
+      state.gdprConsent = false
+      delete state.hostConfig
+      delete state.progression
+      delete state.scenesList
+      return
+    }
+
     if (hostConfig) {
       if (state.socket.isConnected)
         this._vm.$disconnect()
@@ -43,7 +50,7 @@ export default {
     if (progression) {
       // Reset progression and recreate the progression object
       state.progression = defaultStateObj.progression
-      createProgressionObj(state, state.scenesList)
+      if (state.scenesList) createProgressionObj(state, state.scenesList)
     }
   },
 

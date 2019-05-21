@@ -28,6 +28,11 @@ export default {
     ...mapGetters(['getHostURI'])
   },
   methods: {
+    scrollToChoiceButtons() {
+      const ele = document.querySelector('#choice')
+      if (ele) ele.scrollIntoView({ behavior: 'smooth' })
+    },
+
     async getTest(leftQuality, rightQuality) {
       const left = this.qualities[leftQuality]
       const right = this.qualities[rightQuality]
@@ -64,7 +69,7 @@ export default {
         this.rightImage = rightImage
 
         // Experiment end
-        if (this.testCount >= this.maxTestCount) this.finishExperiment()
+        if (this.testCount > this.maxTestCount) return this.finishExperiment()
       }
       catch (err) {
         console.error('Failed to load new test', err)

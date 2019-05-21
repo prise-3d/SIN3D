@@ -35,7 +35,7 @@
             <v-card dark color="primary">
               <v-card-text>Image 2</v-card-text>
 
-              <v-img v-if="rightImage && rightImage.link" :src="rightImage.link">
+              <v-img v-if="rightImage && rightImage.link" :src="rightImage.link" @load="scrollToChoiceButtons">
                 <template v-slot:placeholder>
                   <v-layout fill-height align-center justify-center ma-0>
                     <v-progress-circular indeterminate color="grey lighten-5" />
@@ -47,9 +47,8 @@
 
 
           <!-- Experiment validation button -->
-
           <v-layout justify-center align-content-center>
-            <div>
+            <div id="choice">
               <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
               <v-layout justify-center align-content-center>
                 <v-btn @click="areTheSameActionRandom(false)" color="error" large>Images are NOT the same</v-btn>
