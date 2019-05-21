@@ -2,11 +2,13 @@
 
 import path from 'path'
 import express from 'express'
+import bodyParser from 'body-parser'
 import WebSocket from 'ws'
 import serveStatic from 'serve-static'
 import routes from '../../server/routes'
 import { apiPrefix, imageServedUrl, imagesPath } from '../../config'
 import connectDb from '../../server/database'
+import { errorHandler } from '../../server/functions'
 import { errorHandler as wsErrorHandler } from '../../server/webSocket'
 import wsMessageHandler from '../../server/webSocket/messageHandler'
 
@@ -29,14 +31,10 @@ export const json = obj => 'JSON DATA : ' + (JSON.stringify(obj, null, 2) || obj
  */
 export const getHttpServer = () => {
   const app = express()
+  app.use(bodyParser.json())
   app.use(imageServedUrl, serveStatic(imagesPath))
   app.use(apiPrefix, routes)
-  app.use((err, req, res, next) => {
-    res.status(err.output.payload.statusCode).json({
-      message: err.message || err.output.payload.message,
-      data: err.data || undefined
-    })
-  })
+  app.use(errorHandler)
   return app
 }
 

@@ -4,6 +4,7 @@ import express from 'express'
 import boom from '@hapi/boom'
 import userAgentParser from 'ua-parser-js'
 
+import { TEST_MODE } from '../../config'
 import { COLLECT_DATA } from '../../config.messagesId'
 import DataController from '../database/controllers/Data'
 import { asyncMiddleware, checkRequiredParameters } from '../functions'
@@ -58,7 +59,7 @@ router.post('/', asyncMiddleware(async (req, res) => {
   if (typeof b.uuid !== 'string')
     errorList.push('"uuid" must be a string.')
 
-  if (!Object.isObject(b.screen) || Object.keys(b.screen).length > 30)
+  if (typeof b.screen !== 'object' || Object.keys(b.screen).length > 30)
     errorList.push('"screen" must be a valid object.')
 
   // Check there is no errors with parameters
@@ -78,8 +79,9 @@ router.post('/', asyncMiddleware(async (req, res) => {
     }
   }
 
-  await DataController.add(data)
-  res.send('OK')
+  if (!TEST_MODE) await DataController.add(data)
+
+  res.send({ message: 'OK' })
 }))
 
 export default router

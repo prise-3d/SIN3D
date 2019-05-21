@@ -3,7 +3,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import boom from '@hapi/boom'
-import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList } from '../config'
+import { logger, imagesPath, fileNameConvention, sceneFileNameBlackList, TEST_MODE } from '../config'
 
 /**
  * Call the error handler if a middleware function throw an error
@@ -35,7 +35,8 @@ export const errorHandler = (err, req, res, next) => {
   // Pass the error to the logging handler
   let errorLogged = new Error(`Error ${payload.statusCode} - ${payload.error} - Message :\n${payload.message}`)
   errorLogged.stack = err.stack
-  logger.error(formatError(errorLogged, err.data))
+
+  if (!TEST_MODE) logger.error(formatError(errorLogged, err.data))
 
   // Send the error to the client
   res.status(payload.statusCode).json({
