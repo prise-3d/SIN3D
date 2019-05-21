@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import router from '../router'
-import { API_ROUTES, buildURI, buildWsURI, delay } from '../functions'
+import { API_ROUTES, buildURI, buildWsURI, delay, serialize } from '../functions'
 
 export default {
   setGdprValidated({ state, commit }) {
@@ -64,6 +64,9 @@ export default {
   },
 
   async collectUserData({ state, getters }) {
+    let screen = serialize(window.screen)
+    screen.orientation = serialize(window.screen.orientation)
+
     return fetch(getters.getHostURI + API_ROUTES.dataCollect(), {
       method: 'POST',
       headers: {
@@ -71,7 +74,7 @@ export default {
       },
       body: JSON.stringify({
         uuid: state.uuid,
-        viewport: Object.keys(Object.getPrototypeOf(window.screen)).reduce((acc, x) => ((acc[x] = window.screen[x]), acc), {})
+        screen
       })
     })
   },

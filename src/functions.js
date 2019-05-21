@@ -69,3 +69,6 @@ export const shuffleArray = array => {
  */
 export const buildConfig = (defaultConfig = {}, scenesConfig = {}) =>
   sceneName => Object.assign(defaultConfig, scenesConfig[sceneName])
+
+// Serialize non-serializable objects (like window.screen)
+export const serialize = obj => Object.keys(Object.getPrototypeOf(obj)).reduce((acc, x) => ((acc[x] = obj[x]), acc), {})
