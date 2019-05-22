@@ -10,7 +10,8 @@
             </v-btn>
           </v-layout>
 
-          <h1>Experiment Are the images the same - {{ sceneName }}</h1>
+          <h2>Experiment "{{ $route.meta.fullName }}"</h2>
+          <h3>{{ sceneName }}</h3>
         </v-flex>
         <!-- Loading screen -->
         <loader v-if="loadingMessage" :message="loadingMessage" />
@@ -49,11 +50,17 @@
           <!-- Experiment validation button -->
           <v-layout justify-center align-content-center>
             <div id="choice">
-              <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
-              <v-layout justify-center align-content-center>
-                <v-btn @click="areTheSameActionRandom(false)" color="error" large>Images are NOT the same</v-btn>
-                <v-btn @click="areTheSameActionRandom(true)" color="success" large>Images are the same</v-btn>
-              </v-layout>
+              <v-container grid-list-md text-xs-center fluid>
+                <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
+                <v-layout row wrap>
+                  <v-flex sm6 xs12>
+                    <v-btn @click="areTheSameAction(false, getRandomTest)" color="error" large>Images are NOT the same</v-btn>
+                  </v-flex>
+                  <v-flex sm6 xs12>
+                    <v-btn @click="areTheSameAction(true, getRandomTest)" color="success" large>Images are the same</v-btn>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </div>
           </v-layout>
           <!--/ Experiment validation button -->
@@ -70,7 +77,7 @@ import Loader from '@/components/Loader.vue'
 import experimentConfig from './config'
 
 export default {
-  name: 'ExperimentAreTheSame',
+  name: 'ExperimentAreSameImagesRandom',
   components: {
     Loader
   },
@@ -78,7 +85,7 @@ export default {
 
   data() {
     return {
-      experimentName: 'ExperimentAreSameImages'
+      experimentName: 'ExperimentAreSameImagesRandom'
     }
   },
 

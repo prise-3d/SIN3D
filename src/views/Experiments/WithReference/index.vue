@@ -10,7 +10,9 @@
             </v-btn>
           </v-layout>
 
-          <h1>Experiment with reference - {{ sceneName }}</h1>
+          <h2>Experiment "{{ $route.meta.fullName }}"</h2>
+          <h3>{{ sceneName }}</h3>
+
           <!-- Extract configuration -->
           <extract-configuration v-if="lockConfig === false" @setExtractConfig="setExtractConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
           <!--/ Extract configuration -->

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import './style.css'
 import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
@@ -33,10 +32,9 @@ export default {
       if (ele) ele.scrollIntoView({ behavior: 'smooth' })
     },
 
+    // Get images links for a test
     async getTest(leftQuality, rightQuality) {
-      const left = this.qualities[leftQuality]
-      const right = this.qualities[rightQuality]
-      const res = await Promise.all([this.getImage(left), this.getImage(right)])
+      const res = await Promise.all([this.getImage(leftQuality), this.getImage(rightQuality)])
       const [leftImage, rightImage] = res.map(x => {
         x.link = `${this.getHostURI}${x.link}`
         return x
@@ -44,12 +42,31 @@ export default {
       return { leftImage, rightImage }
     },
 
+    // Get a test with random qualities
     getRandomTest() {
-      return this.getTest(rand(0, this.qualities.length - 1), rand(0, this.qualities.length - 1))
+      return this.getTest(
+        this.qualities[rand(0, this.qualities.length - 1)],
+        this.qualities[rand(0, this.qualities.length - 1)]
+      )
     },
 
-    // An action was triggered, load extracts and save progression
-    async areTheSameActionRandom(areTheSame) {
+    // Get a test with random qualities
+    getReferenceTest() {
+      // Randomly choose which is the reference image (0 = left, 1 = right)
+      const isReferenceLeft = rand(0, 1) === 0
+      // Randomly choose a quality for the other image
+      const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
+
+      const res = [this.qualities[this.qualities.length - 1], randomQuality]
+      return this.getTest(...(isReferenceLeft ? res : res.reverse()))
+    },
+
+    /** An action was triggered, load a new test and save progression
+     * @param {Boolean} areTheSame Are the images the same
+     * @param {Function} getTestFn Function to be called to get the next tests
+     * @returns {void}
+     */
+    async areTheSameAction(areTheSame, getTestFn) {
       this.loadingMessage = 'Loading new test...'
       this.loadingErrorMessage = null
       try {
@@ -64,7 +81,7 @@ export default {
         }
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
 
-        const { leftImage, rightImage } = await this.getRandomTest()
+        const { leftImage, rightImage } = await getTestFn()
         this.leftImage = leftImage
         this.rightImage = rightImage
 

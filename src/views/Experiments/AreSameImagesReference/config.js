@@ -2,7 +2,7 @@ import deepmerge from 'deepmerge'
 import { buildConfig } from '@/functions'
 
 const getMixinConfig = () => import('@/mixins/ExperimentBaseAreSameImages/config')
-const getGlobalConfig = () => import('@/../experimentConfig/Experiments/AreSameImages')
+const getGlobalConfig = () => import('@/../experimentConfig/Experiments/AreSameImagesReference')
 
 // This will apply to all the scenes
 export const defaultConfig = async () => {
