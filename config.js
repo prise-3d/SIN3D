@@ -35,5 +35,8 @@ export const extractsDirName = 'extracts'
 // Files to ignore in scenes
 export const sceneFileNameBlackList = ['config', 'seuilExpe', extractsDirName]
 
+// Cron time for extracts deletion (every day at 03:00 AM)
+export const deleteExtractsCronTime = '0 3 * * *'
+
 // Logger configurations (Default application, WebSocket, Database)
 export { logger, wsLogger, dbLogger }

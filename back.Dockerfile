@@ -14,9 +14,9 @@ RUN yarn install && yarn doc
 # Build front if SERVE_CLIENT=true
 CMD if [ "$SERVE_CLIENT" == "true" ] ; \
   then \
-    ([ -d ./experimentConfig ] && \
+    ([ -d ./experimentConfig.js ] && \
       echo "Experiment configuration found" \
-      || echo "Experiment configuration not found, copying default" && cp -r experimentConfig.default experimentConfig) && \
+      || echo "Experiment configuration not found, copying default" && cp -r experimentConfig.default.js experimentConfig.js) && \
     NODE_ENV=test yarn test && \
     yarn run app:build && \
     yarn run server:start ; \

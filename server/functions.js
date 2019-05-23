@@ -182,11 +182,11 @@ export const getSceneFilesData = async sceneName => {
  * @param {('info'|'message'|'error'|any|undefined)} event the type of event
  * @returns {string} the log object stringified
  */
-export const formatLog = (data, event = undefined) => (({
+export const formatLog = (data, event = undefined) => ({
   event,
   log: data,
   date: new Date()
-}))
+})
 
 /**
  * Format an error object
