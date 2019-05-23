@@ -58,7 +58,8 @@ export default {
       const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
 
       const res = [this.qualities[this.qualities.length - 1], randomQuality]
-      return this.getTest(...(isReferenceLeft ? res : res.reverse()))
+      const table = isReferenceLeft ? res : res.reverse()
+      return this.getTest(table[0], table[1])
     },
 
     /** An action was triggered, load a new test and save progression

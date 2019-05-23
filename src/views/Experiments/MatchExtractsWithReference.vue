@@ -93,10 +93,9 @@
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
-import experimentConfig from './config'
 
 export default {
-  name: 'ExperimentWithReference',
+  name: 'MatchExtractsWithReference',
   components: {
     Loader,
     ExtractConfiguration
@@ -105,14 +104,14 @@ export default {
 
   data() {
     return {
-      experimentName: 'ExperimentWithReference',
+      experimentName: 'MatchExtractsWithReference',
       referenceImage: null
     }
   },
 
   async mounted() {
     // Load config for this scene to local state
-    await this.loadConfig(experimentConfig)
+    this.loadConfig()
 
     // Load progress from store into local state
     this.loadProgress()

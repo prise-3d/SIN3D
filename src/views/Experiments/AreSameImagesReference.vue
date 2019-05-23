@@ -54,10 +54,10 @@
                 <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
                 <v-layout row wrap>
                   <v-flex sm6 xs12>
-                    <v-btn @click="areTheSameAction(false, getRandomTest)" color="error" large>Images are NOT the same</v-btn>
+                    <v-btn @click="areTheSameAction(false, getReferenceTest)" color="error" large>Images are NOT the same</v-btn>
                   </v-flex>
                   <v-flex sm6 xs12>
-                    <v-btn @click="areTheSameAction(true, getRandomTest)" color="success" large>Images are the same</v-btn>
+                    <v-btn @click="areTheSameAction(true, getReferenceTest)" color="success" large>Images are the same</v-btn>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -72,26 +72,25 @@
 </template>
 
 <script>
-import ExperimentBaseAreTheSame from '@/mixins/ExperimentBaseAreSameImages'
+import ExperimentBaseAreSameImages from '@/mixins/ExperimentBaseAreSameImages'
 import Loader from '@/components/Loader.vue'
-import experimentConfig from './config'
 
 export default {
-  name: 'ExperimentAreSameImagesRandom',
+  name: 'AreSameImagesReference',
   components: {
     Loader
   },
-  mixins: [ExperimentBaseAreTheSame],
+  mixins: [ExperimentBaseAreSameImages],
 
   data() {
     return {
-      experimentName: 'ExperimentAreSameImagesRandom'
+      experimentName: 'AreSameImagesReference'
     }
   },
 
   async mounted() {
     // Load config for this scene to local state
-    await this.loadConfig(experimentConfig)
+    this.loadConfig()
 
     // Load progress from store into local state
     this.loadProgress()
@@ -101,7 +100,7 @@ export default {
 
     // Load a test if not already one loaded
     if (!this.leftImage || !this.leftImage.link || !this.rightImage || !this.rightImage.link) {
-      const { leftImage, rightImage } = await this.getRandomTest()
+      const { leftImage, rightImage } = await this.getReferenceTest()
       this.leftImage = leftImage
       this.rightImage = rightImage
     }

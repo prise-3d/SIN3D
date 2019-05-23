@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import './style.css'
 import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
@@ -148,4 +147,13 @@ export default {
   z-index: 1;
   outline: 2px #f4f4f4 solid;
 }
+
+.img-extract-loader {
+  height: 100%;
+  width: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 </style>

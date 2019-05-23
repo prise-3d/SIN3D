@@ -1,16 +1,16 @@
 export default [
   {
-    path: '/experiments/ExperimentWithReference/:sceneName',
-    name: 'ExperimentWithReference',
-    component: () => import('@/views/Experiments/WithReference'),
+    path: '/experiments/MatchExtractsWithReference/:sceneName',
+    name: 'MatchExtractsWithReference',
+    component: () => import('@/views/Experiments/MatchExtractsWithReference'),
     props: true,
     meta: {
       fullName: 'Match extracts qualities to reference image'
     }
   },
   {
-    path: '/experiments/ExperimentAreSameImagesRandom/:sceneName',
-    name: 'ExperimentAreSameImagesRandom',
+    path: '/experiments/AreSameImagesRandom/:sceneName',
+    name: 'AreSameImagesRandom',
     component: () => import('@/views/Experiments/AreSameImagesRandom'),
     props: true,
     meta: {
@@ -18,8 +18,8 @@ export default [
     }
   },
   {
-    path: '/experiments/ExperimentAreSameImagesReference/:sceneName',
-    name: 'ExperimentAreSameImagesReference',
+    path: '/experiments/AreSameImagesReference/:sceneName',
+    name: 'AreSameImagesReference',
     component: () => import('@/views/Experiments/AreSameImagesReference'),
     props: true,
     meta: {

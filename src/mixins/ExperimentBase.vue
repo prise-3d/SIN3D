@@ -7,6 +7,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { API_ROUTES } from '@/functions'
+import { getExperimentConfig } from '@/config.utils'
 import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 
 export default {
@@ -71,8 +72,8 @@ export default {
     },
 
     // Load a config object into the local state
-    async loadConfig(configFn) {
-      const config = (await configFn())(this.sceneName)
+    loadConfig() {
+      const config = getExperimentConfig(this.experimentName, this.sceneName)
       // console.log('Loaded configuration', config)
       Object.assign(this.$data, config)
     },
