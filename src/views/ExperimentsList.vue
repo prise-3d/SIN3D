@@ -60,7 +60,7 @@ export default {
   mounted() {
     this.items = Experiments.map(expe => {
       const res = {
-        name: expe.fullName,
+        name: expe.meta.fullName,
         link: `/experiments/${expe.name}`
       }
       // Check cache has an entry for each scenes in this experiment

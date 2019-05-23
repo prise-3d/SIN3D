@@ -7,7 +7,7 @@
       </v-btn>
     </v-layout>
 
-    Select a scene for the experiment "{{ experimentName }}"
+    Select a scene for the experiment "{{ experimentFullName }}"
 
     <v-card>
       <v-container
@@ -63,6 +63,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
 
 export default {
@@ -75,7 +76,8 @@ export default {
   },
   data() {
     return {
-      scenes: []
+      scenes: [],
+      experimentFullName: null
     }
   },
   computed: {
@@ -83,6 +85,10 @@ export default {
     ...mapGetters(['getHostURI'])
   },
   async mounted() {
+    // Find the selected experiment full name
+    this.experimentFullName = Experiments.find(x => x.name === this.experimentName).meta.fullName
+
+    // Order each scene by progression group, random sort in each group
     let todo = []
     let working = []
     let done = []

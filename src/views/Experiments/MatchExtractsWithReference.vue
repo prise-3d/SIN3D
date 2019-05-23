@@ -10,7 +10,9 @@
             </v-btn>
           </v-layout>
 
-          <h1>Experiment with reference - {{ sceneName }}</h1>
+          <h2>Experiment "{{ $route.meta.fullName }}"</h2>
+          <h3>{{ sceneName }}</h3>
+
           <!-- Extract configuration -->
           <extract-configuration v-if="lockConfig === false" @setExtractConfig="setExtractConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
           <!--/ Extract configuration -->
@@ -91,10 +93,9 @@
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import Loader from '@/components/Loader.vue'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
-import experimentConfig from './config'
 
 export default {
-  name: 'ExperimentWithReference',
+  name: 'MatchExtractsWithReference',
   components: {
     Loader,
     ExtractConfiguration
@@ -103,14 +104,14 @@ export default {
 
   data() {
     return {
-      experimentName: 'ExperimentWithReference',
+      experimentName: 'MatchExtractsWithReference',
       referenceImage: null
     }
   },
 
   async mounted() {
     // Load config for this scene to local state
-    await this.loadConfig(experimentConfig)
+    this.loadConfig()
 
     // Load progress from store into local state
     this.loadProgress()
