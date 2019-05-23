@@ -51,7 +51,7 @@ else app.get('*', (req, res) => res.status(404).send('Client is not served.'))
 // Error handler (Middleware called when throwing in another middleware)
 app.use(errorHandler)
 
-const setup = async () => {
+export default async () => {
   // Connect to the MongoDB database
   await connectDb()
 
@@ -61,5 +61,3 @@ const setup = async () => {
   // Start the WebSocket server on top of the started HTTP server
   startWebSocketServer(server)
 }
-
-setup()

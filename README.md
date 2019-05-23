@@ -31,6 +31,7 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `fileNameConvention` | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |
 | `extractsDirName` | `extracts` | Name of the directory containing extracts |
 | `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
+| `deleteExtractsCronTime` | `0 3 * * *` (every day at 03:00 AM) | Cron time for extracts deletion |
 | `logger` | Logs : `logs/server.combined.log` Errors : `logs/server.error.log` | Default application logger |
 | `wsLogger` | Logs : `logs/ws.log` Errors : `logs/ws.error.log` | WebSocket logger configuration |
 | `dbLogger` | Logs : `logs/db.log` Errors : `logs/db.error.log` | Database logger configuration |
@@ -110,6 +111,10 @@ SET NODE_ENV=production
 #### Run the server
 ```sh
 yarn run server:start
+```
+If you specifically want to not start the extracts remover service (extracts are automatically deleted everyday), use the following.
+```sh
+server:start:no-delete-extracts
 ```
 
 #### Automatically fix the API code syntax with ESLint

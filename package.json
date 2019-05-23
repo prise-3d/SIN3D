@@ -3,7 +3,8 @@
   "version": "0.2.2",
   "private": true,
   "scripts": {
-    "server:start": "node -r esm server/index.js",
+    "server:start": "node -r esm index.js",
+    "server:start:no-delete-extracts": "node -r esm index.js --no-delete",
     "server:lint": "eslint server/ --fix",
     "app:dev": "vue-cli-service serve",
     "app:build": "vue-cli-service build",
@@ -17,6 +18,7 @@
     "compression": "^1.7.4",
     "core-js": "^2.6.5",
     "cors": "^2.8.5",
+    "cron": "^1.7.1",
     "esm": "^3.2.22",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
