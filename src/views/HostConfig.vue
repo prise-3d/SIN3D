@@ -79,6 +79,15 @@ export default {
     }
   },
 
+  mounted() {
+    if (process.env.NODE_ENV === 'rigwild')
+      this.config = {
+        ssl: false,
+        host: 'localhost',
+        port: '5000'
+      }
+  },
+
   methods: {
     ...mapActions(['setHostConfig']),
     reset() {

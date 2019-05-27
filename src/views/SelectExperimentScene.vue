@@ -65,6 +65,7 @@
 import { mapState, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
+import { getExperimentSceneList } from '@/config.utils'
 
 export default {
   name: 'SelectExperimentScene',
@@ -81,10 +82,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['scenesList', 'progression']),
+    ...mapState(['progression']),
     ...mapGetters(['getHostURI'])
   },
   async mounted() {
+    const scenesList = getExperimentSceneList(this.experimentName)
+
     // Find the selected experiment full name
     this.experimentFullName = Experiments.find(x => x.name === this.experimentName).meta.fullName
 
@@ -93,7 +96,7 @@ export default {
     let working = []
     let done = []
 
-    for (const aScene of this.scenesList) {
+    for (const aScene of scenesList) {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
 

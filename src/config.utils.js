@@ -1,4 +1,5 @@
 import deepmerge from 'deepmerge'
+import store from '@/store'
 import { experiments } from '@/../experimentConfig'
 
 // Merge a default config with a specific scene config
@@ -27,14 +28,29 @@ export const getExperimentConfig = (experimentName, sceneName) => {
   return deepmerge(mixinConfig, globalConfig)
 }
 
-// /**
-//  * Read config to get the list of available scenes for a given experiment
-//  *
-//  * @param {Object} experimentName The selected experiment
-//  * @param {String[]} scenesList List of scenes
-//  * @returns {String[]} The list of available scenes for this experiment
-//  */
-// export const getExperimentSceneList = (experimentName, scenesList) => {
-//   // TODO: scene blacklist, scene array, all
-//   return []
-// }
+/**
+ * Read config to get the list of available scenes for a given experiment.
+ * If no whitelist is supplied, it will take all the available scenes.
+ * If a blacklist is supplied, it will remove its scenes from the list of scenes.
+ *
+ * @param {Object} experimentName The selected experiment
+ * @returns {String[]} The list of available scenes for this experiment
+ */
+export const getExperimentSceneList = experimentName => {
+  if (!experiments[experimentName])
+    throw new Error(`Could not find the experiment "${experimentName}" in the config file.`)
+
+  let configuredScenesList = []
+
+  const confObj = experiments[experimentName].availableScenes
+  const scenesList = store.state.scenesList
+
+  // Apply whitelist
+  if (confObj.whitelist) configuredScenesList = scenesList.filter(x => confObj.whitelist.includes(x))
+  else configuredScenesList = scenesList
+
+  // Apply blacklist
+  if (confObj.blacklist) configuredScenesList = configuredScenesList.filter(x => !confObj.blacklist.includes(x))
+
+  return configuredScenesList
+}

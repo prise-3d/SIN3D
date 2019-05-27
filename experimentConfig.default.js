@@ -46,16 +46,33 @@ export const experiments = {
   MatchExtractsWithReference: {
     mixin: mixins.ExperimentBaseExtracts,
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+      // No whitelist = Select all scenes
+      // Whitelist = Only select some scenes
+      // Blacklist = remove scenes
+      // whitelist: ['Appart1opt02', 'contemporary', 'bathroom', 'SdbDroite'],
+      // blacklist: ['Appart1opt02']
+    }
   },
   AreSameImagesRandom: {
     mixin: mixins.ExperimentBaseAreSameImages,
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
   },
   AreSameImagesReference: {
     mixin: mixins.ExperimentBaseAreSameImages,
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
   }
 }
