@@ -123,7 +123,7 @@ export default {
   },
 
   mounted() {
-    if (process.env.NODE_ENV === 'rigwild')
+    if (process.env.NODE_ENV === 'development')
       this.config = {
         ssl: false,
         host: 'localhost',

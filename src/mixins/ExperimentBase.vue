@@ -86,7 +86,7 @@ export default {
       obj.loadingErrorMessage = undefined
       this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
       this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
-      this.$router.push(`/experiments/${this.experimentName}`)
+      this.$router.push(`/experiments/${this.experimentName}/${this.sceneName}/validated`)
     },
 
 
