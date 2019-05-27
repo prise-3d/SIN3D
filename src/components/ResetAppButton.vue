@@ -2,7 +2,7 @@
   <div class="text-xs-center">
     <v-dialog
       v-model="showDialog"
-      width="600"
+      width="800"
       :fullscreen="$vuetify.breakpoint.smAndDown"
     >
       <template v-slot:activator="{ on }">
@@ -23,7 +23,7 @@
         <v-card-actions>
           <v-btn color="secondary" flat @click="showDialog = false">Cancel</v-btn>
           <v-spacer />
-          <v-flex xs6>
+          <v-flex xs8>
             <v-select
               v-model="selectedItems"
               :items="items"
@@ -74,7 +74,7 @@ export default {
       selectedItems: [],
       items: [
         { text: 'GDPR consent', value: 'gdprConsent' },
-        { text: 'Host configuration', value: 'hostConfig' },
+        { text: 'Host configuration and User/Experiment ID', value: 'hostConfig' },
         { text: 'Progression', value: 'progression' }
       ]
     }

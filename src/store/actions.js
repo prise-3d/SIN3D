@@ -51,6 +51,10 @@ export default {
       })
   },
 
+  setUserExperimentId({ commit }, { userId, experimentId }) {
+    commit('setUserExperimentId', { userId, experimentId })
+  },
+
   async connectToWs({ state, getters }) {
     if (state.socket.isConnected) return /*eslint-disable-line */
     else if (getters.isHostConfigured) {
@@ -80,7 +84,13 @@ export default {
   },
 
   sendMessage({ state }, { msgId, msg = undefined }) {
-    Vue.prototype.$socket.send(JSON.stringify({ uuid: state.uuid, msgId, msg }))
+    Vue.prototype.$socket.send(JSON.stringify({
+      uuid: state.uuid,
+      userId: state.userId,
+      experimentId: state.experimentId,
+      msgId,
+      msg
+    }))
   },
 
   async loadScenesList({ getters: { isHostConfigured, getHostURI }, commit }) {
