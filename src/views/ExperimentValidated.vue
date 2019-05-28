@@ -20,7 +20,7 @@
           Go back to scene selection
         </v-btn>
 
-        <v-btn flat exact :to="`/experiments/${experimentName}/${getRandomScene()}`">
+        <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene()}`">
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
         </v-btn>
@@ -55,7 +55,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['progression'])
+    ...mapState(['progression']),
+
+    hasScenesLeft() {
+      return this.availableScenes.length > 0
+    },
+    getRandomScene() {
+      return this.availableScenes[rand(0, this.availableScenes.length - 1)]
+    }
   },
   mounted() {
     const scenesList = getExperimentSceneList(this.experimentName)
@@ -69,12 +76,6 @@ export default {
         scenesList.includes(aScene) &&
         this.progression[this.experimentName] &&
         !this.progression[this.experimentName][aScene].done)
-  },
-
-  methods: {
-    getRandomScene() {
-      return this.availableScenes[rand(0, this.availableScenes.length - 1)]
-    }
   }
 }
 </script>
