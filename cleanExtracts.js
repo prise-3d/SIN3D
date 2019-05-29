@@ -61,4 +61,4 @@ if (argv.includes('--execute')) {
   setup(process.env.IMAGES_PATH, false, true)
 }
 
-module.exports = setup
+module.exports = { setup, extractsRemoverServiceLogger: fileLogger }

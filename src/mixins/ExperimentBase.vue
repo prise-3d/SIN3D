@@ -24,9 +24,7 @@ export default {
 
       loadingMessage: null,
       loadingErrorMessage: null,
-      qualities: null,
-
-      lockConfig: null
+      qualities: null
     }
   },
   computed: {

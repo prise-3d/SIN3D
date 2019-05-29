@@ -1,13 +1,7 @@
 export const mixins = {
   ExperimentBase: {
-    defaultConfig: {
-      lockConfig: true
-    },
-    scenesConfig: {
-      // bathroom: {
-      //   lockConfig: true
-      // }
-    }
+    defaultConfig: {},
+    scenesConfig: {}
   },
 
   ExperimentBaseAreSameImages: {
@@ -23,7 +17,8 @@ export const mixins = {
 
   ExperimentBaseExtracts: {
     defaultConfig: {
-      showHoverBorder: false,
+      lockConfig: false,
+      showHoverBorder: true,
       extractConfig: {
         x: 4,
         y: 4
@@ -31,6 +26,7 @@ export const mixins = {
     },
     scenesConfig: {
       // bathroom: {
+      //   lockConfig: false,
       //   showHoverBorder: false,
       //   extractConfig: {
       //     x: 4,
@@ -44,7 +40,7 @@ export const mixins = {
 
 export const experiments = {
   MatchExtractsWithReference: {
-    mixin: mixins.ExperimentBaseExtracts,
+    mixins: [mixins.ExperimentBaseExtracts],
     defaultConfig: {},
     scenesConfig: {},
     availableScenes: {
@@ -58,7 +54,7 @@ export const experiments = {
     }
   },
   AreSameImagesRandom: {
-    mixin: mixins.ExperimentBaseAreSameImages,
+    mixins: [mixins.ExperimentBaseAreSameImages],
     defaultConfig: {},
     scenesConfig: {},
     availableScenes: {
@@ -67,7 +63,16 @@ export const experiments = {
     }
   },
   AreSameImagesReference: {
-    mixin: mixins.ExperimentBaseAreSameImages,
+    mixins: [mixins.ExperimentBaseAreSameImages],
+    defaultConfig: {},
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
+  },
+  AreSameImagesReferenceOneExtract: {
+    mixins: [mixins.ExperimentBaseAreSameImages, mixins.ExperimentBaseExtracts],
     defaultConfig: {},
     scenesConfig: {},
     availableScenes: {
