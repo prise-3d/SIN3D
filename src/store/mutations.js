@@ -45,8 +45,6 @@ export default {
     }
 
     if (hostConfig) {
-      if (state.socket.isConnected)
-        this._vm.$disconnect()
       state.hostConfig = defaultStateObj.hostConfig
       state.userId = defaultStateObj.userId
       state.experimentId = defaultStateObj.experimentId

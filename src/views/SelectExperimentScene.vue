@@ -7,7 +7,8 @@
       </v-btn>
     </v-layout>
 
-    Select a scene for the experiment "{{ experimentFullName }}"
+    <h4>Select a scene for the experiment "{{ experimentFullName }}"</h4>
+    <span>Completion: {{ numberOfValidatedScenes }}/{{ numberOfScenes }} - {{ completionPercent }}%</span>
 
     <v-card>
       <v-container
@@ -83,7 +84,17 @@ export default {
   },
   computed: {
     ...mapState(['progression']),
-    ...mapGetters(['getHostURI'])
+    ...mapGetters(['getHostURI']),
+
+    numberOfScenes() {
+      return this.scenes.length
+    },
+    numberOfValidatedScenes() {
+      return this.scenes.filter(x => x.progression === 'done').length
+    },
+    completionPercent() {
+      return Math.round(this.numberOfValidatedScenes / this.numberOfScenes * 100)
+    }
   },
   async mounted() {
     const scenesList = getExperimentSceneList(this.experimentName)

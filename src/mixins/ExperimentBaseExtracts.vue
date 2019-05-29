@@ -24,7 +24,8 @@ export default {
       extracts: [],
       extractsInfos: null,
 
-      showHoverBorder: null
+      showHoverBorder: null,
+      lockConfig: null
     }
   },
   computed: {
@@ -46,6 +47,19 @@ export default {
       return data
     },
 
+    // Convert a simple API extracts object to get more informations
+    getExtractFullObject(extractsApiObj) {
+      return extractsApiObj.extracts.map((url, i) => ({
+        link: this.getHostURI + url,
+        quality: extractsApiObj.info.image.quality,
+        zone: i + 1,
+        index: i,
+        nextQuality: findNearestUpper(extractsApiObj.info.image.quality, this.qualities),
+        precQuality: findNearestLower(extractsApiObj.info.image.quality, this.qualities),
+        loading: false
+      }))
+    },
+
     // Config was updated, load extracts and save progression
     async setExtractConfig(config, configuratorRef) {
       if (!config) return
@@ -55,18 +69,10 @@ export default {
       try {
         this.extractConfig.x = config.x
         this.extractConfig.y = config.y
-        const data = await this.getExtracts()
-        const hostURI = this.getHostURI
+        this.extractConfig.quality = config.quality
+        const data = await this.getExtracts(config.quality || undefined)
         this.extractsInfos = data.info
-        this.extracts = data.extracts.map((url, i) => ({
-          link: hostURI + url,
-          quality: data.info.image.quality,
-          zone: i + 1,
-          index: i,
-          nextQuality: findNearestUpper(data.info.image.quality, this.qualities),
-          precQuality: findNearestLower(data.info.image.quality, this.qualities),
-          loading: false
-        }))
+        this.extracts = this.getExtractFullObject(data)
 
         // If there is a configurator, retract it
         if (configuratorRef) configuratorRef.setVisibility(false)
