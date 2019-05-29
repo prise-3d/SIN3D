@@ -25,5 +25,14 @@ export default [
     meta: {
       fullName: 'Are images the same ? (One is reference image, the other is random quality)'
     }
+  },
+  {
+    path: '/experiments/AreSameImagesReferenceOneExtract/:sceneName',
+    name: 'AreSameImagesReferenceOneExtract',
+    component: () => import('@/views/Experiments/AreSameImagesReferenceOneExtract'),
+    props: true,
+    meta: {
+      fullName: 'Are images the same ? (Both are reference images but one contains a random quality extract)'
+    }
   }
 ]

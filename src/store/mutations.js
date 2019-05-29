@@ -36,6 +36,8 @@ export default {
     const defaultStateObj = defaultState()
     if (gdprConsent) {
       state.gdprConsent = false
+      delete state.userId
+      delete state.experimentId
       delete state.hostConfig
       delete state.progression
       delete state.scenesList
@@ -43,9 +45,9 @@ export default {
     }
 
     if (hostConfig) {
-      if (state.socket.isConnected)
-        this._vm.$disconnect()
       state.hostConfig = defaultStateObj.hostConfig
+      state.userId = defaultStateObj.userId
+      state.experimentId = defaultStateObj.experimentId
     }
     if (progression) {
       // Reset progression and recreate the progression object
@@ -56,6 +58,11 @@ export default {
 
   setHostConfig(state, newConfig) {
     state.hostConfig = newConfig
+  },
+
+  setUserExperimentId(state, { userId, experimentId }) {
+    state.userId = userId
+    state.experimentId = experimentId
   },
 
   setListScenes(state, scenes) {

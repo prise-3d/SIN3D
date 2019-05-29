@@ -13,6 +13,8 @@ const vuexLocal = new VuexPersistence({
   key: 'webexpe-state',
   reducer: state => ({
     uuid: state.uuid,
+    userId: state.userId,
+    experimentId: state.experimentId,
     gdprConsent: state.gdprConsent,
     hostConfig: state.hostConfig,
     scenesList: state.scenesList,

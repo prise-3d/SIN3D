@@ -1,13 +1,7 @@
 export const mixins = {
   ExperimentBase: {
-    defaultConfig: {
-      lockConfig: true
-    },
-    scenesConfig: {
-      // bathroom: {
-      //   lockConfig: true
-      // }
-    }
+    defaultConfig: {},
+    scenesConfig: {}
   },
 
   ExperimentBaseAreSameImages: {
@@ -23,7 +17,8 @@ export const mixins = {
 
   ExperimentBaseExtracts: {
     defaultConfig: {
-      showHoverBorder: false,
+      lockConfig: false,
+      showHoverBorder: true,
       extractConfig: {
         x: 4,
         y: 4
@@ -31,6 +26,7 @@ export const mixins = {
     },
     scenesConfig: {
       // bathroom: {
+      //   lockConfig: false,
       //   showHoverBorder: false,
       //   extractConfig: {
       //     x: 4,
@@ -44,18 +40,44 @@ export const mixins = {
 
 export const experiments = {
   MatchExtractsWithReference: {
-    mixin: mixins.ExperimentBaseExtracts,
+    mixins: [mixins.ExperimentBaseExtracts],
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+      // No whitelist = Select all scenes
+      // Whitelist = Only select some scenes
+      // Blacklist = remove scenes
+      // whitelist: ['Appart1opt02', 'contemporary', 'bathroom', 'SdbDroite'],
+      // blacklist: ['Appart1opt02']
+    }
   },
   AreSameImagesRandom: {
-    mixin: mixins.ExperimentBaseAreSameImages,
+    mixins: [mixins.ExperimentBaseAreSameImages],
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
   },
   AreSameImagesReference: {
-    mixin: mixins.ExperimentBaseAreSameImages,
+    mixins: [mixins.ExperimentBaseAreSameImages],
     defaultConfig: {},
-    scenesConfig: {}
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
+  },
+  AreSameImagesReferenceOneExtract: {
+    mixins: [mixins.ExperimentBaseAreSameImages, mixins.ExperimentBaseExtracts],
+    defaultConfig: {},
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
   }
 }

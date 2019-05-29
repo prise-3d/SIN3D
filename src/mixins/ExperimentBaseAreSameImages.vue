@@ -19,8 +19,8 @@ export default {
       maxTestCount: null,
       testCount: 1,
 
-      leftImage: { link: null, quality: null },
-      rightImage: { link: null, quality: null }
+      image1: null,
+      image2: null
     }
   },
   computed: {
@@ -35,11 +35,11 @@ export default {
     // Get images links for a test
     async getTest(leftQuality, rightQuality) {
       const res = await Promise.all([this.getImage(leftQuality), this.getImage(rightQuality)])
-      const [leftImage, rightImage] = res.map(x => {
+      const [image1, image2] = res.map(x => {
         x.link = `${this.getHostURI}${x.link}`
         return x
       })
-      return { leftImage, rightImage }
+      return { image1, image2 }
     },
 
     // Get a test with random qualities
@@ -58,6 +58,7 @@ export default {
       const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
 
       const res = [this.qualities[this.qualities.length - 1], randomQuality]
+      this.referenceImagePosition = isReferenceLeft ? 'left' : 'right'
       const table = isReferenceLeft ? res : res.reverse()
       return this.getTest(table[0], table[1])
     },
@@ -65,26 +66,28 @@ export default {
     /** An action was triggered, load a new test and save progression
      * @param {Boolean} areTheSame Are the images the same
      * @param {Function} getTestFn Function to be called to get the next tests
+     * @param {Function} additionalData Object to concat to log
      * @returns {void}
      */
-    async areTheSameAction(areTheSame, getTestFn) {
+    async areTheSameAction(areTheSame, getTestFn, additionalData) {
       this.loadingMessage = 'Loading new test...'
       this.loadingErrorMessage = null
       try {
         this.testCount++
 
-        const obj = {
-          leftImage: this.leftImage,
-          rightImage: this.rightImage,
+        const obj = Object.assign({
+          image1: this.image1,
+          image2: this.image2,
           areTheSame,
           experimentName: this.experimentName,
-          sceneName: this.sceneName
-        }
+          sceneName: this.sceneName,
+          referenceImagePosition: this.referenceImagePosition || undefined
+        }, additionalData || {})
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
 
-        const { leftImage, rightImage } = await getTestFn()
-        this.leftImage = leftImage
-        this.rightImage = rightImage
+        const { image1, image2 } = await getTestFn()
+        this.image1 = image1
+        this.image2 = image2
 
         // Experiment end
         if (this.testCount > this.maxTestCount) return this.finishExperiment()
@@ -108,7 +111,7 @@ export default {
       }
       this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
       this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
-      this.$router.push(`/experiments/${this.experimentName}`)
+      this.$router.push(`/experiments/${this.experimentName}/${this.sceneName}/validated`)
     }
   }
 }

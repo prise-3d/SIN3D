@@ -22,8 +22,10 @@ export default {
         y: null
       },
       extracts: [],
+      extractsInfos: null,
 
-      showHoverBorder: null
+      showHoverBorder: null,
+      lockConfig: null
     }
   },
   computed: {
@@ -45,6 +47,19 @@ export default {
       return data
     },
 
+    // Convert a simple API extracts object to get more informations
+    getExtractFullObject(extractsApiObj) {
+      return extractsApiObj.extracts.map((url, i) => ({
+        link: this.getHostURI + url,
+        quality: extractsApiObj.info.image.quality,
+        zone: i + 1,
+        index: i,
+        nextQuality: findNearestUpper(extractsApiObj.info.image.quality, this.qualities),
+        precQuality: findNearestLower(extractsApiObj.info.image.quality, this.qualities),
+        loading: false
+      }))
+    },
+
     // Config was updated, load extracts and save progression
     async setExtractConfig(config, configuratorRef) {
       if (!config) return
@@ -54,17 +69,10 @@ export default {
       try {
         this.extractConfig.x = config.x
         this.extractConfig.y = config.y
-        const data = await this.getExtracts()
-        const hostURI = this.getHostURI
-        this.extracts = data.extracts.map((url, i) => ({
-          link: hostURI + url,
-          quality: data.info.image.quality,
-          zone: i + 1,
-          index: i,
-          nextQuality: findNearestUpper(data.info.image.quality, this.qualities),
-          precQuality: findNearestLower(data.info.image.quality, this.qualities),
-          loading: false
-        }))
+        this.extractConfig.quality = config.quality
+        const data = await this.getExtracts(config.quality || undefined)
+        this.extractsInfos = data.info
+        this.extracts = this.getExtractFullObject(data)
 
         // If there is a configurator, retract it
         if (configuratorRef) configuratorRef.setVisibility(false)
@@ -81,12 +89,14 @@ export default {
 
     // An action was triggered, load extracts and save progression
     async extractAction(event, extractObj) {
-      console.log(event, extractObj)
       const { index, nextQuality, precQuality, quality } = extractObj
 
-      let newQuality
-      if (event.button === 0) newQuality = precQuality // Left click
-      if (event.button === 2) newQuality = nextQuality // Right click
+      let action, newQuality
+      if (event.button === 0) action = 'needLess' // Left click
+      if (event.button === 2) action = 'needMore' // Right click
+
+      if (action === 'needLess') newQuality = precQuality
+      if (action === 'needMore') newQuality = nextQuality
 
       // Do not load a new extract if same quality
       if (newQuality === quality) return
@@ -94,6 +104,9 @@ export default {
       // Set loading state
       this.extracts[index].loading = true
       try {
+        const collectedData = this.getClickDataObject(event, extractObj, action)
+        this.sendMessage({ msgId: experimentMsgId.DATA, msg: collectedData })
+
         // Loading new extract
         const data = await this.getExtracts(newQuality)
         this.extracts[index].link = this.getHostURI + data.extracts[index]
@@ -101,9 +114,6 @@ export default {
         this.extracts[index].nextQuality = findNearestUpper(data.info.image.quality, this.qualities)
         this.extracts[index].precQuality = findNearestLower(data.info.image.quality, this.qualities)
         this.extracts[index].loading = false
-
-        // Sending event to WebSocket server
-      // this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
       }
       catch (err) {
         // TODO: toast message if fail
@@ -113,6 +123,71 @@ export default {
         this.extracts[index].loading = false
         this.saveProgress()
       }
+    },
+
+    getClickDataObject(event, extractObj, action) {
+      const { index } = extractObj
+
+      const clientSideData = {
+        extractSize: {
+          width: event.target.clientWidth,
+          height: event.target.clientHeight
+        },
+        imageSize: {
+          width: event.target.clientWidth * this.extractConfig.x,
+          height: event.target.clientHeight * this.extractConfig.y
+        },
+        clickPosition: {
+          extract: {
+            x: event.offsetX,
+            y: event.offsetY
+          },
+          image: {
+            x: event.offsetX + (this.extracts[index].index % this.extractConfig.x) * event.target.clientWidth,
+            y: event.offsetY + (Math.floor(this.extracts[index].index / this.extractConfig.x)) * event.target.clientHeight
+          }
+        }
+      }
+
+      const calculatedRealData = {}
+      calculatedRealData.extractSize = {
+        width: this.extractsInfos.extractsSize.width,
+        height: this.extractsInfos.extractsSize.height
+      }
+      calculatedRealData.imageSize = {
+        width: this.extractsInfos.image.metadata.width,
+        height: this.extractsInfos.image.metadata.height
+      }
+      calculatedRealData.clickPosition = {
+        extract: {
+          x: Math.floor((calculatedRealData.imageSize.width * clientSideData.clickPosition.extract.x) / clientSideData.imageSize.width),
+          y: Math.floor((calculatedRealData.imageSize.height * clientSideData.clickPosition.extract.y) / clientSideData.imageSize.height)
+        },
+        image: {
+          x: Math.floor((calculatedRealData.imageSize.width * clientSideData.clickPosition.image.x) / clientSideData.imageSize.width),
+          y: Math.floor((calculatedRealData.imageSize.height * clientSideData.clickPosition.image.y) / clientSideData.imageSize.height)
+        }
+      }
+
+      // Sending event to WebSocket server
+      const loggedObj = {
+        experimentName: this.experimentName,
+        sceneName: this.sceneName,
+        extractConfig: this.extractConfig,
+        clickedExtract: {
+          link: this.extracts[index].link,
+          quality: this.extracts[index].quality,
+          nextQuality: this.extracts[index].nextQuality,
+          precQuality: this.extracts[index].precQuality,
+          zone: this.extracts[index].zone,
+          index: this.extracts[index].index
+        },
+        action,
+        clientSideData,
+        calculatedRealData
+      }
+
+      return loggedObj
     },
 
     // Finish an experiment, sending full data to the server
@@ -135,7 +210,7 @@ export default {
       }
       this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
       this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
-      this.$router.push(`/experiments/${this.experimentName}`)
+      this.$router.push(`/experiments/${this.experimentName}/${this.sceneName}/validated`)
     }
   }
 }

@@ -39,6 +39,7 @@
 <script>
 import { mapState } from 'vuex'
 import Experiments from '@/router/experiments'
+import { getExperimentSceneList } from '@/config.utils'
 
 export default {
   name: 'ExperimentsList',
@@ -55,20 +56,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['scenesList', 'progression'])
+    ...mapState(['progression'])
   },
   mounted() {
     this.items = Experiments.map(expe => {
+      const scenesList = getExperimentSceneList(expe.name)
       const res = {
         name: expe.meta.fullName,
         link: `/experiments/${expe.name}`
       }
       // Check cache has an entry for each scenes in this experiment
-      if (this.progression[expe.name] && Object.keys(this.progression[expe.name]).every(y => this.scenesList.includes(y))) {
+      if (this.progression && this.progression[expe.name]) {
         // Set experiment completion percentage
         const numberOfDoneScenes = Object.keys(this.progression[expe.name]).filter(y => this.progression[expe.name][y].done).length
-        const percentage = Math.round(numberOfDoneScenes / this.scenesList.length * 100)
-        res.completion = `${percentage}%`
+        const percentage = Math.round(numberOfDoneScenes / scenesList.length * 100)
+        res.completion = `${numberOfDoneScenes}/${scenesList.length} - ${percentage}%`
       }
       else res.completion = '0%'
 

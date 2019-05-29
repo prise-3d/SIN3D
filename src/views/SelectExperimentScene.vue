@@ -7,7 +7,8 @@
       </v-btn>
     </v-layout>
 
-    Select a scene for the experiment "{{ experimentFullName }}"
+    <h4>Select a scene for the experiment "{{ experimentFullName }}"</h4>
+    <span>Completion: {{ numberOfValidatedScenes }}/{{ numberOfScenes }} - {{ completionPercent }}%</span>
 
     <v-card>
       <v-container
@@ -65,6 +66,7 @@
 import { mapState, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
+import { getExperimentSceneList } from '@/config.utils'
 
 export default {
   name: 'SelectExperimentScene',
@@ -81,10 +83,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(['scenesList', 'progression']),
-    ...mapGetters(['getHostURI'])
+    ...mapState(['progression']),
+    ...mapGetters(['getHostURI']),
+
+    numberOfScenes() {
+      return this.scenes.length
+    },
+    numberOfValidatedScenes() {
+      return this.scenes.filter(x => x.progression === 'done').length
+    },
+    completionPercent() {
+      return Math.round(this.numberOfValidatedScenes / this.numberOfScenes * 100)
+    }
   },
   async mounted() {
+    const scenesList = getExperimentSceneList(this.experimentName)
+
     // Find the selected experiment full name
     this.experimentFullName = Experiments.find(x => x.name === this.experimentName).meta.fullName
 
@@ -93,7 +107,7 @@ export default {
     let working = []
     let done = []
 
-    for (const aScene of this.scenesList) {
+    for (const aScene of scenesList) {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
 

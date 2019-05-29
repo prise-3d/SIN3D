@@ -129,7 +129,7 @@ export default {
     // Load the cached configuration in the configurator component
     if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
-    // Load extracts of none were cached
+    // Load extracts if none were cached
     if (this.extracts.length === 0) await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
     this.saveProgress()
