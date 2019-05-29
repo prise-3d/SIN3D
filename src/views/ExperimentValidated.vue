@@ -20,7 +20,7 @@
           Go back to scene selection
         </v-btn>
 
-        <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene()}`">
+        <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene}`">
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
         </v-btn>

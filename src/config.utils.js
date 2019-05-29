@@ -6,6 +6,9 @@ import { experiments } from '@/../experimentConfig'
 const buildConfig = ({ defaultConfig = {}, scenesConfig = {} }, sceneName) =>
   deepmerge(defaultConfig, scenesConfig[sceneName] || {})
 
+const buildMultiConfig = (confArr, sceneName) =>
+  deepmerge.all(confArr.map(aConfig => buildConfig(aConfig, sceneName)))
+
 /**
 * Build a configuration file by merging the default config with the asked scene.
 * The asked scene config will overwrite the default config.
@@ -21,7 +24,7 @@ export const getExperimentConfig = (experimentName, sceneName) => {
     throw new Error(`Could not find the experiment "${experimentName}" in the config file.`)
 
   // Build parent mixin config
-  const mixinConfig = buildConfig(experiments[experimentName].mixin, sceneName)
+  const mixinConfig = buildMultiConfig(experiments[experimentName].mixins, sceneName)
   // Build global config
   const globalConfig = buildConfig(experiments[experimentName], sceneName)
   // Merge configs

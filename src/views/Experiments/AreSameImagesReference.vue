@@ -23,7 +23,7 @@
             <v-card dark color="primary">
               <v-card-text class="px-0">Image 1</v-card-text>
 
-              <v-img v-if="leftImage && leftImage.link" :src="leftImage.link">
+              <v-img v-if="image1 && image1.link" :src="image1.link">
                 <template v-slot:placeholder>
                   <v-layout fill-height align-center justify-center ma-0>
                     <v-progress-circular indeterminate color="grey lighten-5" />
@@ -36,7 +36,7 @@
             <v-card dark color="primary">
               <v-card-text>Image 2</v-card-text>
 
-              <v-img v-if="rightImage && rightImage.link" :src="rightImage.link" @load="scrollToChoiceButtons">
+              <v-img v-if="image2 && image2.link" :src="image2.link" @load="scrollToChoiceButtons">
                 <template v-slot:placeholder>
                   <v-layout fill-height align-center justify-center ma-0>
                     <v-progress-circular indeterminate color="grey lighten-5" />
@@ -84,7 +84,8 @@ export default {
 
   data() {
     return {
-      experimentName: 'AreSameImagesReference'
+      experimentName: 'AreSameImagesReference',
+      referenceImagePosition: null
     }
   },
 
@@ -99,10 +100,10 @@ export default {
     await this.getQualitiesList()
 
     // Load a test if not already one loaded
-    if (!this.leftImage || !this.leftImage.link || !this.rightImage || !this.rightImage.link) {
-      const { leftImage, rightImage } = await this.getReferenceTest()
-      this.leftImage = leftImage
-      this.rightImage = rightImage
+    if (!this.image1 || !this.image1.link || !this.image2 || !this.image2.link) {
+      const { image1, image2 } = await this.getReferenceTest()
+      this.image1 = image1
+      this.image2 = image2
     }
 
     this.saveProgress()

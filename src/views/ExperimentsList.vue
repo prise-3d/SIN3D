@@ -66,7 +66,7 @@ export default {
         link: `/experiments/${expe.name}`
       }
       // Check cache has an entry for each scenes in this experiment
-      if (this.progression[expe.name]) {
+      if (this.progression && this.progression[expe.name]) {
         // Set experiment completion percentage
         const numberOfDoneScenes = Object.keys(this.progression[expe.name]).filter(y => this.progression[expe.name][y].done).length
         const percentage = Math.round(numberOfDoneScenes / scenesList.length * 100)

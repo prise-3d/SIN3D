@@ -14,7 +14,9 @@ export default {
     if (!state.uuid) commit('setAppUniqueId')
   },
 
-  resetApp({ commit }, { gdprConsent = false, hostConfig = false, progression = false }) {
+  resetApp({ commit, state }, { gdprConsent = false, hostConfig = false, progression = false }) {
+    if (hostConfig && state.socket.isConnected)
+      this._vm.$disconnect()
     commit('resetApp', { gdprConsent, hostConfig, progression })
   },
 
