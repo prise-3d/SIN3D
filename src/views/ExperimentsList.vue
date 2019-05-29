@@ -70,7 +70,7 @@ export default {
         // Set experiment completion percentage
         const numberOfDoneScenes = Object.keys(this.progression[expe.name]).filter(y => this.progression[expe.name][y].done).length
         const percentage = Math.round(numberOfDoneScenes / scenesList.length * 100)
-        res.completion = `${percentage}%`
+        res.completion = `${numberOfDoneScenes}/${scenesList.length} - ${percentage}%`
       }
       else res.completion = '0%'
 
