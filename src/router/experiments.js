@@ -34,5 +34,14 @@ export default [
     meta: {
       fullName: 'Are images the same ? (Both are reference images but one contains a random quality extract)'
     }
+  },
+  {
+    path: '/experiments/PercentQualityRandom/:sceneName',
+    name: 'PercentQualityRandom',
+    component: () => import('@/views/Experiments/PercentQualityRandom'),
+    props: true,
+    meta: {
+      fullName: 'Choose a score for quality'
+    }
   }
 ]

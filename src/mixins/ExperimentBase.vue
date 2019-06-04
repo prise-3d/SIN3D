@@ -76,6 +76,10 @@ export default {
       Object.assign(this.$data, config)
     },
 
+    setExperimentFinished(done = true) {
+      this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done })
+    },
+
     // Finish an experiment, sending full data to the server
     // Don't forget to surcharge this function when using this mixin to add more data
     finishExperiment() {
@@ -83,7 +87,7 @@ export default {
       obj.loadingMessage = undefined
       obj.loadingErrorMessage = undefined
       this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
-      this.setExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName, done: true })
+      this.setExperimentFinished()
       this.$router.push(`/experiments/${this.experimentName}/${this.sceneName}/validated`)
     },
 
@@ -95,7 +99,6 @@ export default {
       const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(this.sceneName)}`
       const { data } = await fetch(URI).then(res => res.json())
       this.qualities = data
-      this.saveProgress()
     },
 
 
