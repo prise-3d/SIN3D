@@ -12,28 +12,28 @@
     <template v-slot:content>
       <!-- ## Actual experiment template ## -->
 
-        <!-- Image -->
-        <v-flex xs6>
-            <v-card dark color="primary">
-            <v-card-text class="px-0">Image 1</v-card-text>
+      <!-- Image -->
+      <v-flex xs6>
+        <v-card dark color="primary">
+          <v-card-text class="px-0">Image 1</v-card-text>
 
-            <v-img v-if="image1 && image1.link" :src="image1.link">
-                <template v-slot:placeholder>
-                <v-layout fill-height align-center justify-center ma-0>
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                </v-layout>
-                </template>
-            </v-img>
-            </v-card>
-        </v-flex>
+          <v-img v-if="image1 && image1.link" :src="image1.link">
+            <template v-slot:placeholder>
+              <v-layout fill-height align-center justify-center ma-0>
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-layout>
+            </template>
+          </v-img>
+        </v-card>
+      </v-flex>
 
-        <!-- Quality Slider -->
-        <v-flex xs12>
-        <v-subheader class="pl-0">select quality</v-subheader>
+      <!-- Quality Slider -->
+      <v-flex xs12>
+        <v-subheader class="pl-0">Mark from 0 to 100 how high you think the quality is</v-subheader>
         <v-slider
           v-model="selectedQuality"
           thumb-label
-        ></v-slider>
+        />
       </v-flex>
 
 
@@ -51,7 +51,6 @@
         </div>
       </v-layout>
       <!--/ Experiment validation button -->
-
     </template>
   </ExperimentBlock>
 </template>
@@ -60,7 +59,7 @@
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBase from '@/mixins/ExperimentBase.vue'
 import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
-import {rand} from '@/functions'
+import { rand } from '@/functions'
 
 export default {
   name: 'PercentQualityRandom', // experiment filename
@@ -88,12 +87,10 @@ export default {
     this.loadingMessage = 'Loading experiment data...'
     this.loadingErrorMessage = null
     try {
-        // Load scene qualities list
-        await this.getQualitiesList()
+      // Load scene qualities list
+      await this.getQualitiesList()
 
-        if (!this.image1){
-            await this.getTest()
-        }        
+      if (!this.image1) await this.getTest()
     }
     catch (err) {
       console.error(err)
@@ -111,46 +108,43 @@ export default {
 
   // List of experiment-specific methods
   methods: {
-
-
-      // load image 
-      async getTest(){
-        let randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
-        let image = await this.getImage(randomQuality)      
-        image.link = this.getHostURI+image.link
-        this.image1 = image
-        this.selectedQuality = 50
-      },
-
-
-      async nextRandomImage() {
-        this.loadingMessage = 'Loading new test...'
-        this.loadingErrorMessage = null
-        try {
-            this.testCount++
-
-            const experimentalData = {
-                image1: this.image1,
-                selectedQuality: this.selectedQuality,
-                experimentName: this.experimentName,
-                sceneName: this.sceneName            
-            }
-            this.sendMessage({ msgId: experimentMsgId.DATA, msg: experimentalData })
-
-            await this.getTest()
-
-            // Experiment end
-            if (this.testCount > this.maxTestCount) return this.finishExperiment()
-        }
-        catch (err) {
-            console.error('Failed to load new test', err)
-            this.loadingErrorMessage = 'Failed to load new test. ' + err.message
-        }
-        finally {
-            this.loadingMessage = null
-            this.saveProgress()
-        }
+    // load image
+    async getTest() {
+      let randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
+      let image = await this.getImage(randomQuality)
+      image.link = this.getHostURI + image.link
+      this.image1 = image
+      this.selectedQuality = 50
     },
+
+    async nextRandomImage() {
+      this.loadingMessage = 'Loading new test...'
+      this.loadingErrorMessage = null
+      try {
+        this.testCount++
+
+        const experimentalData = {
+          image1: this.image1,
+          selectedQuality: this.selectedQuality,
+          experimentName: this.experimentName,
+          sceneName: this.sceneName
+        }
+        this.sendMessage({ msgId: experimentMsgId.DATA, msg: experimentalData })
+
+        await this.getTest()
+
+        // Experiment end
+        if (this.testCount > this.maxTestCount) return this.finishExperiment()
+      }
+      catch (err) {
+        console.error('Failed to load new test', err)
+        this.loadingErrorMessage = 'Failed to load new test. ' + err.message
+      }
+      finally {
+        this.loadingMessage = null
+        this.saveProgress()
+      }
+    }
   }
 }
 </script>
