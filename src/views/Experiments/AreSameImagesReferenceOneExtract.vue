@@ -1,92 +1,77 @@
 <template>
-  <div>
-    <v-container grid-list-md text-xs-center fluid>
-      <v-layout row wrap>
-        <v-flex xs12>
-          <v-layout justify-start>
-            <v-btn flat exact :to="`/experiments/${experimentName}`">
-              <v-icon left>arrow_back</v-icon>
-              Back to scene selection
-            </v-btn>
-          </v-layout>
+  <ExperimentBlock
+    :experiment-name="experimentName"
+    :scene-name="sceneName"
+    :loading-message="loadingMessage"
+    :loading-error-message="loadingErrorMessage"
+  >
+    <template v-slot:header></template>
+    <template v-if="image1 && image2" v-slot:content>
+      <v-flex xs12 sm6>
+        <v-card dark color="primary">
+          <v-card-text class="px-0">Image 1</v-card-text>
 
-          <h2>Experiment "{{ $route.meta.fullName }}"</h2>
-          <h3>{{ sceneName }}</h3>
-        </v-flex>
-        <!-- Loading screen -->
-        <loader v-if="loadingMessage" :message="loadingMessage" />
-        <!--/ Loading screen -->
-
-        <!-- Experiment -->
-        <template v-else-if="!loadingErrorMessage && image1 && image2">
-          <v-flex xs12 sm6>
-            <v-card dark color="primary">
-              <v-card-text class="px-0">Image 1</v-card-text>
-
-              <v-container v-if="imageOneExtractPosition === 'left'" class="pa-1">
-                <ExtractsToImage :extracts="image1" :extract-config="extractConfig" />
-              </v-container>
-              <v-img v-else :src="image2.link" @load="scrollToChoiceButtons">
-                <template v-slot:placeholder>
-                  <v-layout fill-height align-center justify-center ma-0>
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                  </v-layout>
-                </template>
-              </v-img>
-            </v-card>
-          </v-flex>
-          <v-flex xs12 sm6>
-            <v-card dark color="primary">
-              <v-card-text>Image 2</v-card-text>
-              <v-container v-if="imageOneExtractPosition === 'right'" class="pa-1">
-                <ExtractsToImage :extracts="image1" :extract-config="extractConfig" />
-              </v-container>
-              <v-img v-else :src="image2.link" @load="scrollToChoiceButtons">
-                <template v-slot:placeholder>
-                  <v-layout fill-height align-center justify-center ma-0>
-                    <v-progress-circular indeterminate color="grey lighten-5" />
-                  </v-layout>
-                </template>
-              </v-img>
-            </v-card>
-          </v-flex>
+          <v-container v-if="imageOneExtractPosition === 'left'" class="pa-1">
+            <ExtractsToImage :extracts="image1" :extract-config="extractConfig" />
+          </v-container>
+          <v-img v-else :src="image2.link" @load="scrollToChoiceButtons">
+            <template v-slot:placeholder>
+              <v-layout fill-height align-center justify-center ma-0>
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-layout>
+            </template>
+          </v-img>
+        </v-card>
+      </v-flex>
+      <v-flex xs12 sm6>
+        <v-card dark color="primary">
+          <v-card-text>Image 2</v-card-text>
+          <v-container v-if="imageOneExtractPosition === 'right'" class="pa-1">
+            <ExtractsToImage :extracts="image1" :extract-config="extractConfig" />
+          </v-container>
+          <v-img v-else :src="image2.link" @load="scrollToChoiceButtons">
+            <template v-slot:placeholder>
+              <v-layout fill-height align-center justify-center ma-0>
+                <v-progress-circular indeterminate color="grey lighten-5" />
+              </v-layout>
+            </template>
+          </v-img>
+        </v-card>
+      </v-flex>
 
 
-          <!-- Experiment validation button -->
-          <v-layout justify-center align-content-center>
-            <div id="choice">
-              <v-container grid-list-md text-xs-center fluid>
-                <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
-                <v-layout row wrap>
-                  <v-flex sm6 xs12>
-                    <v-btn @click="areTheSameActionLocal(false)" color="error" large>Images are NOT the same</v-btn>
-                  </v-flex>
-                  <v-flex sm6 xs12>
-                    <v-btn @click="areTheSameActionLocal(true)" color="success" large>Images are the same</v-btn>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </div>
-          </v-layout>
-          <!--/ Experiment validation button -->
-        </template>
-        <!--/ Experiment -->
+      <!-- Experiment validation button -->
+      <v-layout justify-center align-content-center>
+        <div id="choice">
+          <v-container grid-list-md text-xs-center fluid>
+            <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
+            <v-layout row wrap>
+              <v-flex sm6 xs12>
+                <v-btn @click="areTheSameActionLocal(false)" color="error" large>Images are NOT the same</v-btn>
+              </v-flex>
+              <v-flex sm6 xs12>
+                <v-btn @click="areTheSameActionLocal(true)" color="success" large>Images are the same</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </div>
       </v-layout>
-    </v-container>
-  </div>
+      <!--/ Experiment validation button -->
+    </template>
+  </ExperimentBlock>
 </template>
 
 <script>
+import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import ExperimentBaseAreSameImages from '@/mixins/ExperimentBaseAreSameImages'
-import Loader from '@/components/Loader'
 import ExtractsToImage from '@/components/ExperimentsComponents/ExtractsToImage'
 import { rand } from '@/functions'
 
 export default {
   name: 'AreSameImagesReferenceOneExtract',
   components: {
-    Loader,
+    ExperimentBlock,
     ExtractsToImage
   },
   mixins: [
