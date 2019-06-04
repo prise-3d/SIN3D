@@ -79,5 +79,14 @@ export const experiments = {
       whitelist: null,
       blacklist: null
     }
+  },
+  PercentQualityRandom: {
+    mixins: [mixins.ExperimentBase],
+    defaultConfig: {},
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: ['Appart1opt02', 'EchecsBas'],
+      blacklist: null
+    }
   }
 }
