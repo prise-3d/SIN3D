@@ -149,7 +149,9 @@ export default {
         imageOneExtractPosition: this.imageOneExtractPosition,
         randomZoneIndex: this.randomZoneIndex,
         randomZone: this.randomZoneIndex + 1,
-        randomZoneQuality: this.randomZoneQuality
+        randomZoneQuality: this.randomZoneQuality,
+        stepCounter: this.testCount,
+        maxStepCount: this.maxTestCount,
       }
       this.areTheSameAction(areTheSame, this.getReferenceOneExtractTest, additionalData)
     }

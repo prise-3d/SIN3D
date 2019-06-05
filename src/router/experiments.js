@@ -43,5 +43,14 @@ export default [
     meta: {
       fullName: 'Choose a score for quality'
     }
+  },
+  {
+    path: '/experiments/IsImageCorrect/:sceneName',
+    name: 'IsImageCorrect',
+    component: () => import('@/views/Experiments/IsImageCorrect'),
+    props: true,
+    meta: {
+      fullName: 'Check if image is correct'
+    }
   }
 ]

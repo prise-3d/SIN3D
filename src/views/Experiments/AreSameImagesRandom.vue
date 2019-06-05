@@ -42,10 +42,10 @@
             <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
             <v-layout row wrap>
               <v-flex sm6 xs12>
-                <v-btn @click="areTheSameAction(false, getRandomTest)" color="error" large>Images are NOT the same</v-btn>
+                <v-btn @click="nextAction(false)" color="error" large>Images are NOT the same</v-btn>
               </v-flex>
               <v-flex sm6 xs12>
-                <v-btn @click="areTheSameAction(true, getRandomTest)" color="success" large>Images are the same</v-btn>
+                <v-btn @click="nextAction(true)" color="success" large>Images are the same</v-btn>
               </v-flex>
             </v-layout>
           </v-container>
@@ -93,6 +93,16 @@ export default {
     this.saveProgress()
   },
 
-  methods: {}
+  methods: {
+    // generate next action and save data
+    async nextAction(same){
+      let additionalData = {
+          stepCounter: this.testCount,
+          maxStepCount: this.maxTestCount
+      }
+
+      this.areTheSameAction(same, this.getReferenceTest, additionalData)
+    }
+  }
 }
 </script>
