@@ -95,14 +95,17 @@ export default {
     this.APP_LOADER()
   },
   methods: {
-    ...mapActions(['loadScenesList', 'connectToWs']),
+    ...mapActions(['loadScenesList']),
 
     // Main app function that redirect the user where he needs to be at
     async APP_LOADER() {
       if (this.isGdprValidated && this.isHostConfigured) {
-        await this.loadWebSocket()
         if (!this.areScenesLoaded) await this.loadScenes()
       }
+    },
+
+    loadScenes() {
+      return this.load(this.loadScenesList, 'Loading scenes list...')
     },
 
     async load(fn, loadingMessage) {
@@ -118,14 +121,8 @@ export default {
       finally {
         this.loadingMessage = null
       }
-    },
-
-    loadScenes() {
-      return this.load(this.loadScenesList, 'Loading scenes list...')
-    },
-    loadWebSocket() {
-      return this.load(this.connectToWs, 'Connecting to WebSocket server...')
     }
+
   }
 }
 </script>

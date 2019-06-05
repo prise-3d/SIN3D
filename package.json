@@ -47,7 +47,6 @@
     "supertest": "^4.0.2",
     "vue": "^2.6.10",
     "vue-cli-plugin-vuetify": "^0.5.0",
-    "vue-native-websocket": "^2.0.13",
     "vue-router": "^3.0.6",
     "vue-template-compiler": "^2.6.10",
     "vuetify": "^1.5.14",

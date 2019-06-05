@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import defaultState from '@/store/state'
 import Experiments from '@/router/experiments'
 
@@ -77,34 +76,5 @@ export default {
   setExperimentDone(state, { experimentName, sceneName, done }) {
     checkProgression(state, experimentName, sceneName)
     state.progression[experimentName][sceneName].done = done
-  },
-
-  SOCKET_ONOPEN(state, event) {
-    if (event === null) return
-
-    console.info('Connected to WebSocket server')
-    Vue.prototype.$socket = event.currentTarget
-    state.socket.isConnected = true
-  },
-  SOCKET_ONCLOSE(state, _event) {
-    console.info('Disconnected from WebSocket server')
-    state.hostConfig = defaultState().hostConfig
-    state.socket.isConnected = false
-  },
-  SOCKET_ONERROR(state, event) {
-    console.error('WebSocket connection error', state, event)
-  },
-  // default handler called for all methods
-  SOCKET_ONMESSAGE(state, { data: rawMessage }) {
-    const message = JSON.parse(rawMessage)
-    state.socket.message = message
-  },
-  // mutations for reconnect methods
-  SOCKET_RECONNECT(state, count) {
-    console.info('Reconnect to WebSocket server', state, count)
-  },
-  SOCKET_RECONNECT_ERROR(state) {
-    console.error('Could not reconnect to WebSocket server')
-    state.socket.reconnectError = true
   }
 }

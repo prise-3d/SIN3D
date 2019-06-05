@@ -1,4 +1,4 @@
-import { buildURI, buildWsURI } from '../functions'
+import { buildURI } from '../functions'
 
 export default {
   isGdprValidated(state) {
@@ -13,12 +13,6 @@ export default {
     if (!state) return
     if (getters.isHostConfigured)
       return buildURI(state.hostConfig.ssl, state.hostConfig.host, state.hostConfig.port)
-  },
-
-  getHostWsURI(state, getters) {
-    if (!state) return
-    if (getters.isHostConfigured)
-      return buildWsURI(state.hostConfig.ssl, state.hostConfig.host, state.hostConfig.port)
   },
 
   areScenesLoaded(state) {

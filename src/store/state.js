@@ -10,10 +10,5 @@ export default () => JSON.parse(JSON.stringify({
     port: null
   },
   scenesList: null,
-  progression: {},
-  socket: {
-    isConnected: false,
-    message: '',
-    reconnectError: false
-  }
+  progression: {}
 }))

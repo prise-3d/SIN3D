@@ -1,10 +1,11 @@
 export const API_PREFIX = '/api'
 export const API_ROUTES = {
-  ping: () => `${API_PREFIX}/ping`,
+  ping: `${API_PREFIX}/ping`,
 
-  dataCollect: () => `${API_PREFIX}/dataCollect`,
+  dataCollect: `${API_PREFIX}/dataCollect`,
+  experimentCollect: `${API_PREFIX}/experimentCollect`,
 
-  listScenes: () => `${API_PREFIX}/listScenes`,
+  listScenes: `${API_PREFIX}/listScenes`,
 
   listSceneQualities: sceneName => `${API_PREFIX}/listSceneQualities?${new URLSearchParams({ sceneName })}`,
 
@@ -23,7 +24,6 @@ export const API_ROUTES = {
 export const delay = ms => new Promise(res => setTimeout(res, ms))
 
 export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
-export const buildWsURI = (ssl, host, port) => `${ssl ? 'wss' : 'ws'}://${host}:${port}`
 
 export const sortIntArray = intArray => intArray ? intArray.sort((a, b) => a - b) : null
 
