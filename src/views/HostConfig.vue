@@ -123,12 +123,12 @@ export default {
   },
 
   mounted() {
-    if (process.env.NODE_ENV === 'development')
-      this.config = {
-        ssl: false,
-        host: 'localhost',
-        port: '5000'
-      }
+    // if (process.env.NODE_ENV === 'development')
+    //   this.config = {
+    //     ssl: false,
+    //     host: 'localhost',
+    //     port: '5000'
+    //   }
   },
 
   methods: {

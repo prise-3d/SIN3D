@@ -24,7 +24,8 @@
         <template v-slot:items="props">
           <td>{{ props.item.name }}</td>
           <td class="text-xs-center">{{ props.item.completion }}</td>
-          <td class="text-xs-center"><v-btn small dark :to="props.item.link">Start experiment</v-btn></td>
+          <td class="text-xs-center"><v-btn small dark :to="props.item.link">Start</v-btn></td>
+          <td class="text-xs-center"><v-btn small dark :to="props.item.linkRandom">Start with random scene</v-btn></td>
         </template>
         <template v-slot:no-results>
           <v-alert :value="true" color="error" icon="warning">
@@ -40,6 +41,7 @@
 import { mapState } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
+import { rand } from '@/functions'
 
 export default {
   name: 'ExperimentsList',
@@ -50,7 +52,8 @@ export default {
       headers: [
         { text: 'Experiment name', value: 'name' },
         { text: 'Completion', value: 'completion', align: 'center' },
-        { text: 'Start', value: 'name', sortable: false, align: 'center' }
+        { text: 'Start', value: 'start', sortable: false, align: 'center' },
+        { text: 'Start random scene', value: 'startRandom', sortable: false, align: 'center' }
       ],
       items: null
     }
@@ -71,6 +74,12 @@ export default {
         const numberOfDoneScenes = Object.keys(this.progression[expe.name]).filter(y => this.progression[expe.name][y].done).length
         const percentage = Math.round(numberOfDoneScenes / scenesList.length * 100)
         res.completion = `${numberOfDoneScenes}/${scenesList.length} - ${percentage}%`
+
+        // Get scenes that are NOT done
+        const unDoneScenes = Object.keys(this.progression[expe.name]).filter(y => scenesList.includes(y) && !this.progression[expe.name][y].done)
+        // Select a random scenes
+        const randomScene = unDoneScenes[rand(0, unDoneScenes.length - 1)]
+        res.linkRandom = `/experiments/${expe.name}/${randomScene}`
       }
       else res.completion = '0%'
 
