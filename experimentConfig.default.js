@@ -90,7 +90,7 @@ export const experiments = {
     }
   },
   IsImageCorrect: {
-    mixins: [mixins.ExperimentBase],
+    mixins: [mixins.ExperimentBase, mixins.ExperimentBaseExtracts],
     defaultConfig: {
       lockConfig: false,
       showHoverBorder: false,
@@ -102,6 +102,22 @@ export const experiments = {
     scenesConfig: {},
     availableScenes: {
       whitelist: ['Appart1opt02', 'EchecsBas'],
+      blacklist: null
+    }
+  },
+  IsImageCorrectOneExtract: {
+    mixins: [mixins.ExperimentBase, mixins.ExperimentBaseExtracts],
+    defaultConfig: {
+      lockConfig: false,
+      showHoverBorder: false,
+      extractConfig: {
+        x: 4,
+        y: 4
+      }
+    },
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
       blacklist: null
     }
   }

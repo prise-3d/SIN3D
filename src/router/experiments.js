@@ -50,7 +50,16 @@ export default [
     component: () => import('@/views/Experiments/IsImageCorrect'),
     props: true,
     meta: {
-      fullName: 'Check if image is correct'
+      fullName: 'Check if reconstructed image is correct'
+    }
+  },
+  {
+    path: '/experiments/IsImageCorrectOneExtract/:sceneName',
+    name: 'IsImageCorrectOneExtract',
+    component: () => import('@/views/Experiments/IsImageCorrectOneExtract'),
+    props: true,
+    meta: {
+      fullName: 'Check if reconstructed image with one different extract is correct'
     }
   }
 ]
