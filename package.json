@@ -10,7 +10,7 @@
     "app:build": "vue-cli-service build",
     "app:lint": "vue-cli-service lint",
     "doc": "apidoc -i server/routes -o doc",
-    "test": "node test/api/_test_setup_start.js && ava --verbose && node test/api/_test_setup_stop.js"
+    "test": "node test/utils/_test_setup_start.js && ava --verbose && node test/utils/_test_setup_stop.js"
   },
   "dependencies": {
     "@hapi/boom": "^7.4.2",
@@ -27,8 +27,7 @@
     "serve-static": "^1.13.2",
     "sharp": "^0.22.1",
     "ua-parser-js": "^0.7.19",
-    "winston": "^3.2.1",
-    "ws": "^7.0.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

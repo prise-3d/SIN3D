@@ -2,8 +2,8 @@
 
 import test from 'ava'
 import request from 'supertest'
-import { apiPrefix } from '../../config'
-import { json, getHttpServer } from './_test_functions'
+import { apiPrefix } from '../../../config'
+import { json, getHttpServer } from '../../utils/_test_functions'
 
 // ROUTE /ping
 
