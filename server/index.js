@@ -11,7 +11,6 @@ import bodyParser from 'body-parser'
 import routes from './routes'
 import { errorHandler, formatLog } from './functions'
 import { apiPrefix, imageServedUrl, serverPort, serveClient, imagesPath, logger } from '../config'
-import startWebSocketServer from './webSocket'
 import connectDb from './database'
 const morgan = require('morgan')
 
@@ -56,8 +55,5 @@ export default async () => {
   await connectDb()
 
   // Start the server on the configured port
-  const server = app.listen(serverPort, () => logger.info(formatLog(`The server was started on http://localhost:${serverPort}`)))
-
-  // Start the WebSocket server on top of the started HTTP server
-  startWebSocketServer(server)
+  app.listen(serverPort, () => logger.info(formatLog(`The server was started on http://localhost:${serverPort}`)))
 }
