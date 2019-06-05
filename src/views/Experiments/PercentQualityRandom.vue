@@ -13,7 +13,7 @@
       <!-- ## Actual experiment template ## -->
 
       <!-- Image -->
-      <v-flex xs6>
+      <v-flex xs12 sm6 offset-sm3>
         <v-card dark color="primary">
           <v-card-text class="px-0">Image 1</v-card-text>
 
@@ -26,6 +26,7 @@
           </v-img>
         </v-card>
       </v-flex>
+      <!--/ Image -->
 
       <!-- Quality Slider -->
       <v-flex xs12>
@@ -35,6 +36,7 @@
           thumb-label
         />
       </v-flex>
+      <!--/ Quality Slider -->
 
 
       <!-- Experiment validation button -->
@@ -44,7 +46,7 @@
             <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
             <v-layout row wrap>
               <v-flex sm12 xs12>
-                <v-btn @click="nextRandomImage()" color="primary" large>Validate quality</v-btn>
+                <v-btn @click="nextRandomImage" color="primary" large>Validate quality</v-btn>
               </v-flex>
             </v-layout>
           </v-container>
@@ -111,9 +113,7 @@ export default {
     // load image
     async getTest() {
       let randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
-      let image = await this.getImage(randomQuality)
-      image.link = this.getHostURI + image.link
-      this.image1 = image
+      this.image1 = await this.getImage(randomQuality)
       this.selectedQuality = 50
     },
 

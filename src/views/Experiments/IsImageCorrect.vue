@@ -13,9 +13,7 @@
       <!-- ## Actual experiment template ## -->
 
       <!-- Image -->
-      <v-flex xs0 sm3 />
-
-      <v-flex xs12 sm6>
+      <v-flex xs12 sm6 offset-sm3>
         <v-card dark color="primary">
           <v-card-text class="px-0">Reconstructed image</v-card-text>
           <v-container class="pa-1">
@@ -23,9 +21,7 @@
           </v-container>
         </v-card>
       </v-flex>
-
-
-      <v-flex xs0 sm3 />
+      <!--/ Image -->
 
       <!-- Experiment validation button -->
       <v-layout justify-center align-content-center>
@@ -129,8 +125,9 @@ export default {
 
       // construct new image with two different parts
       maxExtracts.extracts[position] = randomExtracts.extracts[position]
-      this.reconstructedImage = maxExtracts.extracts.map(url => this.getHostURI + url)
+      this.reconstructedImage = maxExtracts.extracts
     },
+
     // get next reconstructed image
     async nextReconstructedImage(correct) {
       this.loadingMessage = 'Loading new test...'

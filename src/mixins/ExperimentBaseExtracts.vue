@@ -44,13 +44,14 @@ export default {
           if (!res.ok) throw new Error(res.json.message + res.json.data ? `\n${res.json.data}` : '')
           return res.json
         })
+      data.extracts = data.extracts.map(x => this.getHostURI + x)
       return data
     },
 
     // Convert a simple API extracts object to get more informations
     getExtractFullObject(extractsApiObj) {
       return extractsApiObj.extracts.map((url, i) => ({
-        link: this.getHostURI + url,
+        link: url,
         quality: extractsApiObj.info.image.quality,
         zone: i + 1,
         index: i,
@@ -109,7 +110,7 @@ export default {
 
         // Loading new extract
         const data = await this.getExtracts(newQuality)
-        this.extracts[index].link = this.getHostURI + data.extracts[index]
+        this.extracts[index].link = data.extracts[index]
         this.extracts[index].quality = data.info.image.quality
         this.extracts[index].nextQuality = findNearestUpper(data.info.image.quality, this.qualities)
         this.extracts[index].precQuality = findNearestLower(data.info.image.quality, this.qualities)

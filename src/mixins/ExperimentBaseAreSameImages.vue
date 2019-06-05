@@ -34,11 +34,7 @@ export default {
 
     // Get images links for a test
     async getTest(leftQuality, rightQuality) {
-      const res = await Promise.all([this.getImage(leftQuality), this.getImage(rightQuality)])
-      const [image1, image2] = res.map(x => {
-        x.link = `${this.getHostURI}${x.link}`
-        return x
-      })
+      const [image1, image2] = await Promise.all([this.getImage(leftQuality), this.getImage(rightQuality)])
       return { image1, image2 }
     },
 

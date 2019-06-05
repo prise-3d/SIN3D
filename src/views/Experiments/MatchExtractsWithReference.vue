@@ -7,7 +7,12 @@
   >
     <template v-slot:header>
       <!-- Extract configuration -->
-      <extract-configuration v-if="lockConfig === false" @setExtractConfig="setExtractConfig($event, $refs.configurator)" :loading-error-message="loadingErrorMessage" ref="configurator" />
+      <extract-configuration
+        v-if="lockConfig === false"
+        @setExtractConfig="setExtractConfig($event, $refs.configurator)"
+        :loading-error-message="loadingErrorMessage"
+        ref="configurator"
+      />
       <!--/ Extract configuration -->
     </template>
 
@@ -104,11 +109,7 @@ export default {
 
     // Load scene data from the API
     await Promise.all([
-      this.getImage('max')
-        .then(res => {
-          this.referenceImage = this.getHostURI + res.link
-          this.saveProgress()
-        }),
+      this.getImage('max').then(res => (this.referenceImage = res.link)),
       this.getQualitiesList()
     ])
 
@@ -119,8 +120,6 @@ export default {
     if (this.extracts.length === 0) await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
     this.saveProgress()
-  },
-
-  methods: {}
+  }
 }
 </script>
