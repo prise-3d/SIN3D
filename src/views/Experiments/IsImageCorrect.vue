@@ -168,7 +168,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 /* Experiment-specific style (CSS) */
 </style>

@@ -96,10 +96,10 @@ export default {
 
   methods: {
     // generate next action and save data
-    async nextAction(same){
+    async nextAction(same) {
       let additionalData = {
-          stepCounter: this.testCount,
-          maxStepCount: this.maxTestCount
+        stepCounter: this.testCount,
+        maxStepCount: this.maxTestCount
       }
 
       this.areTheSameAction(same, this.getReferenceTest, additionalData)

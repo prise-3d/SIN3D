@@ -151,7 +151,7 @@ export default {
         randomZone: this.randomZoneIndex + 1,
         randomZoneQuality: this.randomZoneQuality,
         stepCounter: this.testCount,
-        maxStepCount: this.maxTestCount,
+        maxStepCount: this.maxTestCount
       }
       this.areTheSameAction(areTheSame, this.getReferenceOneExtractTest, additionalData)
     }

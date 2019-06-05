@@ -3,19 +3,8 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueNativeSock from 'vue-native-websocket'
 
 Vue.config.productionTip = false
-
-// Connect the WebSocket client to the store
-Vue.use(VueNativeSock, 'ws://example.com', {
-  store,
-  connectManually: true,
-  reconnection: true,
-  reconnectionAttempts: 2,
-  reconnectionDelay: 1000
-})
-store.$socket = Vue.prototype.$socket
 
 // A function loaded before each route change
 router.beforeEach((to, from, next) => {
