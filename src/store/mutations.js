@@ -23,6 +23,13 @@ const createProgressionObj = (state, scenes) => {
 }
 
 export default {
+  setCustomLinkData(state, data) {
+    state.customLinkData = JSON.parse(atob(data))
+  },
+  clearCustomLinkData(state) {
+    state.customLinkData = null
+  },
+
   setGdprValidated(state) {
     state.gdprConsent = true
   },
