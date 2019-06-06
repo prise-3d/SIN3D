@@ -2,7 +2,7 @@
 
 This wiki page details the available npm scripts. These scripts are located in the `scripts` category of [`/package.json`](../package.json).
 
-Keep in mind that this documentation uses the `yarn` command but using `npm` instead will have the same effect.
+Keep in mind that this documentation uses the `yarn` command but **using `npm` instead will have the same effect**.
 
 ## Summary
 

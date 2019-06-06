@@ -18,7 +18,7 @@ These dependencies are mostly used by the server.
 | `body-parser` | [npm](https://www.npmjs.com/package/body-parser) | Parse HTTP request body |
 | `compression` | [npm](https://www.npmjs.com/package/compression) | Turn HTTP server's gzip compression on |
 | `core-js` | [npm](https://www.npmjs.com/package/core-js) | Dependency of Babel (in `@vue/cli-service`) |
-| `cors` | [npm](https://www.npmjs.com/package/cors) | Turn Cross-Origin Resource Sharing (CORS) HTTP header on |
+| `cors` | [npm](https://www.npmjs.com/package/cors) | Turn [Cross-Origin Resource Sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) HTTP header on |
 | `cron` | [npm](https://www.npmjs.com/package/cron) | Cron integrated in Node.js, used for the extracts remover service |
 | `esm` | [npm](https://www.npmjs.com/package/esm) | Node.js JavaScript module loader. Used for the server |
 | `express` | [npm](https://www.npmjs.com/package/express) | API framework |
@@ -31,9 +31,9 @@ These dependencies are mostly used by the server.
 | `winston` | [npm](https://www.npmjs.com/package/winston) | Server logger |
 
 ## Development dependencies
-These dependencies are here for developers only. They contain the web application setup, optimized builders and API automated tests. It also contains API documentation generator and `ESLint` with its plugins.
+These dependencies are here for **developers only**. They contain the web application setup, optimized builders and API automated tests. It also contains API documentation generator and `ESLint` with its plugins.
 
-When the web application files are builded, `Vue.js` and its plugins are not necessary. In fact, the build output will contain portable HTML, CSS and JavaScript.
+When the web application files are builded, `Vue.js` and its plugins are not necessary. In fact, **the build output will contain portable HTML, CSS and JavaScript**.
 
 | Name | Link | Description |
 | --- | --- | --- |
