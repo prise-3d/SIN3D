@@ -10,5 +10,6 @@ export default () => JSON.parse(JSON.stringify({
     port: null
   },
   scenesList: null,
-  progression: {}
+  progression: {},
+  customLinkData: null
 }))

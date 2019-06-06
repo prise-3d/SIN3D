@@ -23,6 +23,11 @@ export default new Router({
       component: HostConfig
     },
     {
+      path: '/linkGenerator',
+      name: 'LinkGenerator',
+      component: () => import('@/views/LinkGenerator')
+    },
+    {
       path: '/experiments',
       name: 'ExperimentsList',
       component: () => import('@/views/ExperimentsList')

@@ -12,6 +12,7 @@ const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
   key: 'webexpe-state',
   reducer: state => ({
+    customLinkData: state.customLinkData,
     uuid: state.uuid,
     userId: state.userId,
     experimentId: state.experimentId,
