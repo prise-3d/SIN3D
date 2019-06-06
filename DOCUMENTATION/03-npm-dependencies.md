@@ -29,7 +29,6 @@ These dependencies are mostly used by the server.
 | `sharp` | [npm](https://www.npmjs.com/package/sharp) | Node.js image processing library |
 | `ua-parser-js` | [npm](https://www.npmjs.com/package/ua-parser-js) | Parse User Agent strings |
 | `winston` | [npm](https://www.npmjs.com/package/winston) | Server logger |
-| `ws` | [npm](https://www.npmjs.com/package/ws) | Node.js WebSockets server |
 
 ## Development dependencies
 These dependencies are here for developers only. They contain the web application setup, optimized builders and API automated tests. It also contains API documentation generator and `ESLint` with its plugins.
@@ -55,7 +54,6 @@ When the web application files are builded, `Vue.js` and its plugins are not nec
 | `supertest` | [npm](https://www.npmjs.com/package/supertest) | HTTP requests test library |
 | `vue` | [npm](https://www.npmjs.com/package/vue) | `Vue.js` JavaScript framework |
 | `vue-cli-plugin-vuetify` | [npm](https://www.npmjs.com/package/vue-cli-plugin-vuetify) | Just a plugin to use `Vuetify` in `Vue.js` |
-| `vue-native-websocket` | [npm](https://www.npmjs.com/package/vue-native-websocket) | WebSockets client library, plugged to `Vuex` |
 | `vue-router` | [npm](https://www.npmjs.com/package/vue-router) | Web application routing system |
 | `vue-template-compiler` | [npm](https://www.npmjs.com/package/vue-template-compiler) | Build `Vue.js` `.vue` files |
 | `vuetify` | [npm](https://www.npmjs.com/package/vuetify) | `Vue.js` specific CSS framework |

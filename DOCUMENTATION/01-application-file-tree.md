@@ -51,7 +51,7 @@ The following file tree represents the full application.
 │   ├── favicon.ico                  || Website favicon
 │   └── index.html                   || 
 ├── README.md                        || 
-├── server                           || Server, database and WebSockets server code
+├── server                           || Server and database code
 │   └── ...                          || 
 ├── src                              || Front-end code
 │   └── ...                          || 
@@ -113,14 +113,12 @@ The `/logs` directory contains all the logs of the application.
     ├── extractsRemoverService.error.log || Extracts remover service errors
     ├── extractsRemoverService.log       || Extracts remover service logs
     ├── server.combined.log              || Server combined logs
-    ├── server.error.log                 || Server errors
-    ├── ws.error.log                     || WebSockets server errors
-    └── ws.log                           || WebSockets server logs
+    └── server.error.log                 || Server errors
 ```
 
 ## `/server` directory
 
-The [`/server`](../server) directory contains the Back-end: server, database and WebSockets server code.
+The [`/server`](../server) directory contains the Back-end: server and database code.
 
 ```console
 └── server                    || 
@@ -131,14 +129,11 @@ The [`/server`](../server) directory contains the Back-end: server, database and
     │   └── models            || Database models (Schemas, types)
     │       └── Data.js       || 
     ├── functions.js          || Common utils for the server
-    ├── index.js              || Server module: links server, database and WebSockets server
+    ├── index.js              || Server module: links server and database
     ├── routes                || All API routes
     │   ├── index.js          || Router module to inject all routes
     │   ├── getImage.js       || 
     │   └── ...               || 
-    ├── webSocket             || WebSockets server
-    │   ├── index.js          || Websockets server module: starts server
-    │   └── messageHandler.js || Handle WebSockets messages (JSON)
     └── winston.config.js     || All the server's logging configuration
 ```
 
