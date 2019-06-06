@@ -128,7 +128,7 @@
                     :value="linkOutput"
                     label="Your generated link"
                     type="text"
-                    disabled
+                    readonly
                   />
 
                   Data in the generated link:

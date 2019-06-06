@@ -24,6 +24,15 @@
             </v-list-tile-content>
           </v-list-tile>
 
+          <v-list-tile to="/linkGenerator" exact>
+            <v-list-tile-action>
+              <v-icon>share</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Link generator</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
           <v-list-tile @click="loadScenesHard">
             <v-list-tile-action>
               <v-icon>refresh</v-icon>
