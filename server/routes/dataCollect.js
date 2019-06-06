@@ -52,12 +52,18 @@ const router = express.Router()
 router.post('/', asyncMiddleware(async (req, res) => {
   // Check the request contains all the required body parameters
   const b = req.body
-  checkRequiredParameters(['uuid', 'screen'], b)
+  checkRequiredParameters(['uuid', 'screen', 'userId', 'experimentId'], b)
 
   let errorList = []
 
   if (typeof b.uuid !== 'string')
     errorList.push('"uuid" must be a string.')
+
+  if (b.userId && typeof b.userId !== 'string')
+    errorList.push('"userId" must be a string.')
+
+  if (b.experimentId && typeof b.experimentId !== 'string')
+    errorList.push('"experimentId" must be a string.')
 
   if (typeof b.screen !== 'object' || Object.keys(b.screen).length > 30)
     errorList.push('"screen" must be a valid object.')
@@ -76,7 +82,9 @@ router.post('/', asyncMiddleware(async (req, res) => {
       screen: b.screen,
       userAgent,
       ip: req.ip
-    }
+    },
+    userid: b.userId || null,
+    experimentId: b.experimentId || null
   }
 
   if (!TEST_MODE) await DataController.add(data)
