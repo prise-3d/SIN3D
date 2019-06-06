@@ -24,7 +24,7 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click="loadScenes">
+          <v-list-tile @click="loadScenesHard">
             <v-list-tile-action>
               <v-icon>refresh</v-icon>
             </v-list-tile-action>
@@ -106,6 +106,11 @@ export default {
 
     loadScenes() {
       return this.load(this.loadScenesList, 'Loading scenes list...')
+    },
+
+    async loadScenesHard() {
+      await this.loadScenes()
+      this.$router.go()
     },
 
     async load(fn, loadingMessage) {
