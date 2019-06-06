@@ -9,7 +9,7 @@
       <!-- ## Template to place in the header (example: Extract-configurator) ## -->
     </template>
 
-    <template v-if="reconstructedImage" v-slot:content>
+    <template v-if="extracts" v-slot:content>
       <!-- ## Actual experiment template ## -->
 
       <!-- Image -->
@@ -17,7 +17,7 @@
         <v-card dark color="primary">
           <v-card-text class="px-0">Reconstructed image</v-card-text>
           <v-container class="pa-1">
-            <ExtractsToImage :extracts="reconstructedImage" :extract-config="extractConfig" />
+            <ExtractsToImage :extracts="extracts" :extract-config="extractConfig" />
           </v-container>
         </v-card>
       </v-flex>
@@ -52,7 +52,6 @@ import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 import { rand } from '@/functions'
 
 export default {
-  name: 'IsImageCorrect', // experiment filename
   components: {
     ExperimentBlock,
     ExtractsToImage
@@ -62,11 +61,6 @@ export default {
   ],
   data() {
     return {
-      experimentName: 'IsImageCorrect', // experiment filename
-      refImage: null,
-      randImage: null,
-      reconstructedImage: null,
-      selectedQuality: 50,
       testCount: 1,
       maxTestCount: 10
     }
@@ -106,18 +100,17 @@ export default {
     // load reconstructed image
     async getReconstructedImage() {
       const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
-      const maxQuality = this.qualities[this.qualities.length - 1]
 
       // Get the reference image, extracts of reference image and random quality extracts
-      const [maxExtracts, randomExtracts, maxImage, randImage] = await Promise.all([
+      const [maxExtracts, randomExtracts] = await Promise.all([
         this.getExtracts('max'),
-        this.getExtracts(randomQuality),
-        this.getImage(maxQuality),
-        this.getImage(randomQuality)
+        this.getExtracts(randomQuality)
       ])
 
-      this.refImage = maxImage
-      this.randImage = randImage
+      this.extractsInfos = {
+        refImage: maxExtracts.info,
+        randImage: randomExtracts.info
+      }
 
       // get part to keep into refImage
       let position = rand(0, 1)
@@ -125,7 +118,7 @@ export default {
 
       // construct new image with two different parts
       maxExtracts.extracts[position] = randomExtracts.extracts[position]
-      this.reconstructedImage = maxExtracts.extracts
+      this.extracts = maxExtracts.extracts
     },
 
     // get next reconstructed image
@@ -136,8 +129,8 @@ export default {
         this.testCount++
 
         const experimentalData = {
-          refImage: this.refImage,
-          randImage: this.randImage,
+          refImage: this.extractsInfos.refImage,
+          randImage: this.extractsInfos.randImage,
           refPosition: this.refPosition,
           imageCorrect: correct,
           stepCounter: this.testCount,
