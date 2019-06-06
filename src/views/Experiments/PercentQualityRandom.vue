@@ -131,10 +131,10 @@ export default {
         }
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: experimentalData })
 
-        await this.getTest()
-
         // Experiment end
         if (this.testCount > this.maxTestCount) return this.finishExperiment()
+
+        await this.getTest()
       }
       catch (err) {
         console.error('Failed to load new test', err)

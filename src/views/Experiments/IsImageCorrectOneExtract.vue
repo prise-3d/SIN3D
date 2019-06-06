@@ -127,6 +127,7 @@ export default {
       maxExtracts.extracts[position] = randomExtracts.extracts[position]
       this.reconstructedImage = maxExtracts.extracts
     },
+
     // get next reconstructed image
     async nextReconstructedImage(correct) {
       this.loadingMessage = 'Loading new test...'
@@ -146,10 +147,10 @@ export default {
         }
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: experimentalData })
 
-        await this.getReconstructedImage()
-
         // Experiment end
         if (this.testCount > this.maxTestCount) return this.finishExperiment()
+
+        await this.getReconstructedImage()
       }
       catch (err) {
         console.error('Failed to load new test', err)

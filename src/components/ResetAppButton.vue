@@ -19,7 +19,6 @@
 
         <v-divider />
 
-
         <v-card-actions>
           <v-btn color="secondary" flat @click="showDialog = false">Cancel</v-btn>
           <v-spacer />
@@ -75,7 +74,8 @@ export default {
       items: [
         { text: 'GDPR consent', value: 'gdprConsent' },
         { text: 'Host configuration and User/Experiment ID', value: 'hostConfig' },
-        { text: 'Progression', value: 'progression' }
+        { text: 'Progression', value: 'progression' },
+        { text: 'Scenes list', value: 'scenesList' }
       ]
     }
   },
@@ -93,6 +93,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['resetApp']),
     toggle() {
       this.$nextTick(() => {
         if (this.selectAll) {
@@ -104,7 +105,6 @@ export default {
       })
     },
 
-    ...mapActions(['resetApp']),
     reset() {
       const toReset = this.selectedItems.reduce((acc, x) => {
         acc[x.value] = true

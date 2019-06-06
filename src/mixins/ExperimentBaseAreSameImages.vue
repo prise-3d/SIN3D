@@ -81,12 +81,12 @@ export default {
         }, additionalData || {})
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
 
+        // Experiment end
+        if (this.testCount > this.maxTestCount) return this.finishExperiment()
+
         const { image1, image2 } = await getTestFn()
         this.image1 = image1
         this.image2 = image2
-
-        // Experiment end
-        if (this.testCount > this.maxTestCount) return this.finishExperiment()
       }
       catch (err) {
         console.error('Failed to load new test', err)
