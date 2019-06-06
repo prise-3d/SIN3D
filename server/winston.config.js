@@ -18,22 +18,6 @@ export const logger = winston.createLogger({
   exitOnError: false
 })
 
-// WebSocket logger configuration
-export const wsLogger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
-  transports: [
-    new winston.transports.File({ filename: 'logs/ws.log' }),
-    new winston.transports.File({ filename: 'logs/ws.error.log', level: 'error' }),
-    new winston.transports.Console({
-      level: 'debug',
-      handleExceptions: true,
-      format: winston.format.json()
-    })
-  ],
-  exitOnError: false
-})
-
 // Database logger configuration
 export const dbLogger = winston.createLogger({
   level: 'info',

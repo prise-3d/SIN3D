@@ -1,7 +1,7 @@
 'use strict'
 
 import path from 'path'
-import { logger, wsLogger, dbLogger } from './server/winston.config'
+import { logger, dbLogger } from './server/winston.config'
 
 export const PRODUCTION_MODE = process.env.NODE_ENV === 'production'
 export const TEST_MODE = process.env.NODE_ENV === 'test'
@@ -39,4 +39,4 @@ export const sceneFileNameBlackList = ['config', 'seuilExpe', extractsDirName]
 export const deleteExtractsCronTime = '0 3 * * *'
 
 // Logger configurations (Default application, WebSocket, Database)
-export { logger, wsLogger, dbLogger }
+export { logger, dbLogger }

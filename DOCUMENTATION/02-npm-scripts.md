@@ -64,7 +64,7 @@ yarn doc
 ```
 
 ## `test`
-Run the API automated tests. It will check for routes/WebSockets server/database errors.
+Run the API automated tests. It will check for routes and database errors.
 
 These tests are automatically ran when using Docker.
 ```sh

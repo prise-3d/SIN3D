@@ -33,7 +33,6 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `sceneFileNameBlackList` | `['config', 'seuilExpe', 'extracts']` | Files to ignore in scenes |
 | `deleteExtractsCronTime` | `0 3 * * *` (every day at 03:00 AM) | Cron time for extracts deletion |
 | `logger` | Logs : `logs/server.combined.log` Errors : `logs/server.error.log` | Default application logger |
-| `wsLogger` | Logs : `logs/ws.log` Errors : `logs/ws.error.log` | WebSocket logger configuration |
 | `dbLogger` | Logs : `logs/db.log` Errors : `logs/db.error.log` | Database logger configuration |
 
 ### Configure experiments
