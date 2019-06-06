@@ -38,7 +38,7 @@
 
                 <h2>User ID and experiment ID</h2>
                 <v-layout row wrap>
-                  <v-flex xs5>
+                  <v-flex xs4>
                     <v-checkbox
                       v-model="form.userId.activated"
                       color="primary"
@@ -46,7 +46,7 @@
                     />
                   </v-flex>
                   <v-spacer />
-                  <v-flex xs6>
+                  <v-flex xs8>
                     <v-text-field
                       v-model="form.userId.value"
                       label="User ID"
@@ -57,7 +57,7 @@
                 </v-layout>
 
                 <v-layout row wrap>
-                  <v-flex xs5>
+                  <v-flex xs4>
                     <v-checkbox
                       v-model="form.experimentId.activated"
                       color="primary"
@@ -65,7 +65,7 @@
                     />
                   </v-flex>
                   <v-spacer />
-                  <v-flex xs6>
+                  <v-flex xs8>
                     <v-text-field
                       v-model="form.experimentId.value"
                       label="Experiment ID"
@@ -78,38 +78,43 @@
 
                 <h2>Experiment name and scene name</h2>
                 <v-layout row wrap>
-                  <v-flex xs5>
+                  <v-flex xs4>
                     <v-checkbox
                       v-model="form.experimentName.activated"
                       color="primary"
                       label="Experiment name"
+                      @click="form.sceneName.activated = false"
                     />
                   </v-flex>
-                  <v-spacer />
-                  <v-flex xs6>
-                    <v-text-field
+                  <v-flex xs8>
+                    <v-select
                       v-model="form.experimentName.value"
+                      :items="experimentsSelectItems"
+                      item-text="text"
+                      item-value="value"
                       label="Experiment name"
-                      type="text"
                       :disabled="!form.experimentName.activated"
                     />
                   </v-flex>
                 </v-layout>
 
                 <v-layout row wrap>
-                  <v-flex xs5>
+                  <v-flex xs4>
                     <v-checkbox
                       v-model="form.sceneName.activated"
                       color="primary"
                       label="Scene name"
+                      :disabled="!form.experimentName.activated || form.experimentName.value === ''"
                     />
                   </v-flex>
                   <v-spacer />
-                  <v-flex xs6>
-                    <v-text-field
+                  <v-flex xs8>
+                    <v-select
                       v-model="form.sceneName.value"
+                      :items="scenesSelectItems"
+                      item-text="text"
+                      item-value="value"
                       label="Scene name"
-                      type="text"
                       :disabled="!form.sceneName.activated"
                     />
                   </v-flex>
@@ -143,6 +148,9 @@
 </template>
 
 <script>
+import Experiments from '@/router/experiments'
+import { getExperimentSceneList } from '@/config.utils'
+
 export default {
   name: 'LinkGenerator',
   components: {
@@ -150,9 +158,9 @@ export default {
   data() {
     return {
       form: {
-        webAppUrl: 'http://diran.univ-littoral.fr',
+        webAppUrl: 'https://diran.univ-littoral.fr',
         server: {
-          ssl: false,
+          ssl: true,
           host: 'diran.univ-littoral.fr',
           port: '80'
         },
@@ -178,10 +186,36 @@ export default {
         }
       },
 
+      experimentsSelectItems: null,
+      scenesSelectItems: null,
+
       linkOutput: null,
       dataOutput: null,
       alertMessage: null
     }
+  },
+
+  watch: {
+    'form.experimentName.activated'(newValue) {
+      // Reset available scenes if experiment changed
+      if (!newValue) this.scenesSelectItems = null
+    },
+    'form.experimentName.value'(newValue) {
+      // Reset available scenes if experiment changed
+      if (newValue !== '') this.scenesSelectItems = getExperimentSceneList(this.form.experimentName.value)
+    },
+    'form.sceneName.activated'(newValue) {
+      // Load available scenes when sceneName is activated
+      if (newValue) this.scenesSelectItems = getExperimentSceneList(this.form.experimentName.value)
+      else this.scenesSelectItems = null
+    }
+  },
+
+  mounted() {
+    this.experimentsSelectItems = Experiments.map(expe => ({
+      text: `${expe.name} - ${expe.meta.fullName}`,
+      value: expe.name
+    }))
   },
 
   methods: {
@@ -204,10 +238,10 @@ export default {
           port: this.form.server.port
         }
       }
-      if (this.form.userId.activated && this.form.userId.value !== '')obj.userId = this.form.userId.value
-      if (this.form.experimentId.activated && this.form.experimentId.value !== '')obj.experimentId = this.form.experimentId.value
-      if (this.form.experimentName.activated && this.form.experimentName.value !== '')obj.experimentName = this.form.experimentName.value
-      if (this.form.sceneName.activated && this.form.sceneName.value !== '')obj.sceneName = this.form.sceneName.value
+      if (this.form.userId.activated && this.form.userId.value !== '') obj.userId = this.form.userId.value
+      if (this.form.experimentId.activated && this.form.experimentId.value !== '') obj.experimentId = this.form.experimentId.value
+      if (this.form.experimentName.activated && this.form.experimentName.value !== '') obj.experimentName = this.form.experimentName.value
+      if (this.form.sceneName.activated && this.form.sceneName.value !== '') obj.sceneName = this.form.sceneName.value
 
       // eslint-disable-next-line no-div-regex
       const q = btoa(JSON.stringify(obj)).replace(/=/g, '')

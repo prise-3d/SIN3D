@@ -42,7 +42,7 @@ export default {
       })
   },
 
-  setUserExperimentId({ commit }, { userId, experimentId }) {
+  setUserExperimentId({ commit }, { userId = null, experimentId = null }) {
     commit('setUserExperimentId', { userId, experimentId })
   },
 
@@ -57,6 +57,8 @@ export default {
       },
       body: JSON.stringify({
         uuid: state.uuid,
+        userId: state.userId,
+        experimentId: state.experimentId,
         screen
       })
     })
