@@ -62,7 +62,6 @@ import ExperimentBaseAreSameImages from '@/mixins/ExperimentBaseAreSameImages'
 import { rand } from '@/functions'
 
 export default {
-  name: 'AreSameImagesReference',
   components: {
     ExperimentBlock
   },
@@ -70,7 +69,6 @@ export default {
 
   data() {
     return {
-      experimentName: 'AreSameImagesReference',
       referenceImagePosition: null
     }
   },

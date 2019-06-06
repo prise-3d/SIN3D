@@ -86,7 +86,6 @@ import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
 
 export default {
-  name: 'MatchExtractsWithReference',
   components: {
     ExperimentBlock,
     ExtractConfiguration
@@ -95,7 +94,6 @@ export default {
 
   data() {
     return {
-      experimentName: 'MatchExtractsWithReference',
       referenceImage: null
     }
   },

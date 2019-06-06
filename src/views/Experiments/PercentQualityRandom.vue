@@ -64,14 +64,12 @@ import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 import { rand } from '@/functions'
 
 export default {
-  name: 'PercentQualityRandom', // experiment filename
   components: {
     ExperimentBlock
   },
   mixins: [ExperimentBase],
   data() {
     return {
-      experimentName: 'PercentQualityRandom', // experiment filename
       image1: null,
       selectedQuality: 50,
       testCount: 1,
