@@ -88,5 +88,37 @@ export const experiments = {
       whitelist: ['Appart1opt02', 'EchecsBas'],
       blacklist: null
     }
+  },
+  IsImageCorrect: {
+    mixins: [mixins.ExperimentBase, mixins.ExperimentBaseExtracts],
+    defaultConfig: {
+      lockConfig: false,
+      showHoverBorder: false,
+      extractConfig: {
+        x: 2,
+        y: 1
+      }
+    },
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: ['Appart1opt02', 'EchecsBas'],
+      blacklist: null
+    }
+  },
+  IsImageCorrectOneExtract: {
+    mixins: [mixins.ExperimentBase, mixins.ExperimentBaseExtracts],
+    defaultConfig: {
+      lockConfig: false,
+      showHoverBorder: false,
+      extractConfig: {
+        x: 4,
+        y: 4
+      }
+    },
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: null,
+      blacklist: null
+    }
   }
 }

@@ -129,17 +129,13 @@ export default {
       // Apply the random quality extract
       maxExtracts.extracts[randomZoneIndex] = randomExtracts.extracts[randomZoneIndex]
 
-      // Fix uris
-      const referenceWithOneExtract = maxExtracts.extracts.map(url => this.getHostURI + url)
-      maxImage.link = this.getHostURI + maxImage.link
-
       // Backup test data
       this.randomZoneIndex = randomZoneIndex
       this.randomZoneQuality = randomQuality
       this.imageOneExtractPosition = rand(0, 1) === 0 ? 'left' : 'right'
 
       return {
-        image1: referenceWithOneExtract,
+        image1: maxExtracts.extracts,
         image2: maxImage
       }
     },
@@ -149,7 +145,9 @@ export default {
         imageOneExtractPosition: this.imageOneExtractPosition,
         randomZoneIndex: this.randomZoneIndex,
         randomZone: this.randomZoneIndex + 1,
-        randomZoneQuality: this.randomZoneQuality
+        randomZoneQuality: this.randomZoneQuality,
+        stepCounter: this.testCount,
+        maxStepCount: this.maxTestCount
       }
       this.areTheSameAction(areTheSame, this.getReferenceOneExtractTest, additionalData)
     }

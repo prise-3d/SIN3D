@@ -114,6 +114,7 @@ export default {
           if (!res.ok) throw new Error(res.json.message + res.json.data ? `\n${res.json.data}` : '')
           return res.json
         })
+      data.link = this.getHostURI + data.link
       return data
     }
   }

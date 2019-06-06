@@ -43,5 +43,23 @@ export default [
     meta: {
       fullName: 'Choose a score for quality'
     }
+  },
+  {
+    path: '/experiments/IsImageCorrect/:sceneName',
+    name: 'IsImageCorrect',
+    component: () => import('@/views/Experiments/IsImageCorrect'),
+    props: true,
+    meta: {
+      fullName: 'Check if reconstructed image is correct'
+    }
+  },
+  {
+    path: '/experiments/IsImageCorrectOneExtract/:sceneName',
+    name: 'IsImageCorrectOneExtract',
+    component: () => import('@/views/Experiments/IsImageCorrectOneExtract'),
+    props: true,
+    meta: {
+      fullName: 'Check if reconstructed image with one different extract is correct'
+    }
   }
 ]

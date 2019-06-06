@@ -1,13 +1,30 @@
 import deepmerge from 'deepmerge'
 import store from '@/store'
+import { experiments as experimentsDEFAULT } from '@/../experimentConfig.default'
 import { experiments } from '@/../experimentConfig'
 
 // Merge a default config with a specific scene config
 const buildConfig = ({ defaultConfig = {}, scenesConfig = {} }, sceneName) =>
   deepmerge(defaultConfig, scenesConfig[sceneName] || {})
 
+// Merge multiple configs (used for multiple mixins)
 const buildMultiConfig = (confArr, sceneName) =>
   deepmerge.all(confArr.map(aConfig => buildConfig(aConfig, sceneName)))
+
+
+/**
+ * Find the configuration.
+ * Will use the default configuration if not found in the real one.
+ * @param {String} experimentName The selected experiment
+ * @returns {Object} Configuration object
+ */
+const getConfigObject = experimentName => {
+  if (experiments[experimentName])
+    return experiments
+  else if (experimentsDEFAULT[experimentName])
+    return experimentsDEFAULT
+  throw new Error(`Could not find the experiment "${experimentName}" in the config file nor the default config file.`)
+}
 
 /**
 * Build a configuration file by merging the default config with the asked scene.
@@ -20,13 +37,12 @@ const buildMultiConfig = (confArr, sceneName) =>
 * @returns {Object} The config for the selected experiment with the selected scene
 */
 export const getExperimentConfig = (experimentName, sceneName) => {
-  if (!experiments[experimentName])
-    throw new Error(`Could not find the experiment "${experimentName}" in the config file.`)
+  const config = getConfigObject(experimentName)
 
   // Build parent mixin config
-  const mixinConfig = buildMultiConfig(experiments[experimentName].mixins, sceneName)
+  const mixinConfig = buildMultiConfig(config[experimentName].mixins, sceneName)
   // Build global config
-  const globalConfig = buildConfig(experiments[experimentName], sceneName)
+  const globalConfig = buildConfig(config[experimentName], sceneName)
   // Merge configs
   return deepmerge(mixinConfig, globalConfig)
 }
@@ -40,12 +56,11 @@ export const getExperimentConfig = (experimentName, sceneName) => {
  * @returns {String[]} The list of available scenes for this experiment
  */
 export const getExperimentSceneList = experimentName => {
-  if (!experiments[experimentName])
-    throw new Error(`Could not find the experiment "${experimentName}" in the config file.`)
+  const config = getConfigObject(experimentName)
 
   let configuredScenesList = []
 
-  const confObj = experiments[experimentName].availableScenes
+  const confObj = config[experimentName].availableScenes
   const scenesList = store.state.scenesList
 
   // Apply whitelist

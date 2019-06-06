@@ -5,8 +5,8 @@ import request from 'supertest'
 import sharp from 'sharp'
 import fs from 'fs-extra'
 import path from 'path'
-import { apiPrefix, imageServedUrl, imagesPath } from '../../config'
-import { json, getHttpServer } from './_test_functions'
+import { apiPrefix, imageServedUrl, imagesPath } from '../../../config'
+import { json, getHttpServer } from '../../utils/_test_functions'
 
 // ROUTE /getImageExtracts
 

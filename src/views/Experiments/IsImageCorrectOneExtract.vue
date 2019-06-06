@@ -9,35 +9,19 @@
       <!-- ## Template to place in the header (example: Extract-configurator) ## -->
     </template>
 
-    <template v-slot:content>
+    <template v-if="reconstructedImage" v-slot:content>
       <!-- ## Actual experiment template ## -->
 
       <!-- Image -->
       <v-flex xs12 sm6 offset-sm3>
         <v-card dark color="primary">
-          <v-card-text class="px-0">Image 1</v-card-text>
-
-          <v-img v-if="image1 && image1.link" :src="image1.link">
-            <template v-slot:placeholder>
-              <v-layout fill-height align-center justify-center ma-0>
-                <v-progress-circular indeterminate color="grey lighten-5" />
-              </v-layout>
-            </template>
-          </v-img>
+          <v-card-text class="px-0">Reconstructed image</v-card-text>
+          <v-container class="pa-1">
+            <ExtractsToImage :extracts="reconstructedImage" :extract-config="extractConfig" />
+          </v-container>
         </v-card>
       </v-flex>
       <!--/ Image -->
-
-      <!-- Quality Slider -->
-      <v-flex xs12>
-        <v-subheader class="pl-0">Mark from 0 to 100 how high you think the quality is</v-subheader>
-        <v-slider
-          v-model="selectedQuality"
-          thumb-label
-        />
-      </v-flex>
-      <!--/ Quality Slider -->
-
 
       <!-- Experiment validation button -->
       <v-layout justify-center align-content-center>
@@ -45,8 +29,11 @@
           <v-container grid-list-md text-xs-center fluid>
             <h2>Test {{ testCount }} / {{ maxTestCount }}</h2>
             <v-layout row wrap>
-              <v-flex sm12 xs12>
-                <v-btn @click="nextRandomImage" color="primary" large>Validate quality</v-btn>
+              <v-flex sm6 xs12>
+                <v-btn @click="nextReconstructedImage(false)" color="error" large>Images is NOT correct</v-btn>
+              </v-flex>
+              <v-flex sm6 xs12>
+                <v-btn @click="nextReconstructedImage(true)" color="success" large>Images is correct</v-btn>
               </v-flex>
             </v-layout>
           </v-container>
@@ -59,20 +46,26 @@
 
 <script>
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
-import ExperimentBase from '@/mixins/ExperimentBase.vue'
+import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
+import ExtractsToImage from '@/components/ExperimentsComponents/ExtractsToImage'
 import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 import { rand } from '@/functions'
 
 export default {
-  name: 'PercentQualityRandom', // experiment filename
+  name: 'IsImageCorrectOneExtract', // experiment filename
   components: {
-    ExperimentBlock
+    ExperimentBlock,
+    ExtractsToImage
   },
-  mixins: [ExperimentBase],
+  mixins: [
+    ExperimentBaseExtracts
+  ],
   data() {
     return {
-      experimentName: 'PercentQualityRandom', // experiment filename
-      image1: null,
+      experimentName: 'IsImageCorrectOneExtract', // experiment filename
+      refImage: null,
+      randImage: null,
+      reconstructedImage: null,
       selectedQuality: 50,
       testCount: 1,
       maxTestCount: 10
@@ -92,7 +85,7 @@ export default {
       // Load scene qualities list
       await this.getQualitiesList()
 
-      if (!this.image1) await this.getTest()
+      if (!this.reconstructedImage) await this.getReconstructedImage()
     }
     catch (err) {
       console.error(err)
@@ -110,28 +103,50 @@ export default {
 
   // List of experiment-specific methods
   methods: {
-    // load image
-    async getTest() {
-      let randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
-      this.image1 = await this.getImage(randomQuality)
-      this.selectedQuality = 50
-    },
+    // load reconstructed image
+    async getReconstructedImage() {
+      const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
+      const maxQuality = this.qualities[this.qualities.length - 1]
 
-    async nextRandomImage() {
+      // Get the reference image, extracts of reference image and random quality extracts
+      const [maxExtracts, randomExtracts, maxImage, randImage] = await Promise.all([
+        this.getExtracts('max'),
+        this.getExtracts(randomQuality),
+        this.getImage(maxQuality),
+        this.getImage(randomQuality)
+      ])
+
+      this.refImage = maxImage
+      this.randImage = randImage
+
+      // get part to keep into refImage
+      let position = rand(0, randomExtracts.extracts.length)
+      this.randZonePosition = position
+
+      // construct new image with two different parts
+      maxExtracts.extracts[position] = randomExtracts.extracts[position]
+      this.reconstructedImage = maxExtracts.extracts
+    },
+    // get next reconstructed image
+    async nextReconstructedImage(correct) {
       this.loadingMessage = 'Loading new test...'
       this.loadingErrorMessage = null
       try {
         this.testCount++
 
         const experimentalData = {
-          image1: this.image1,
-          selectedQuality: this.selectedQuality,
+          refImage: this.refImage,
+          randImage: this.randImage,
+          randZoneId: this.randZonePosition,
+          imageCorrect: correct,
+          stepCounter: this.testCount,
+          maxStepCount: this.maxTestCount,
           experimentName: this.experimentName,
           sceneName: this.sceneName
         }
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: experimentalData })
 
-        await this.getTest()
+        await this.getReconstructedImage()
 
         // Experiment end
         if (this.testCount > this.maxTestCount) return this.finishExperiment()
@@ -148,7 +163,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
 /* Experiment-specific style (CSS) */

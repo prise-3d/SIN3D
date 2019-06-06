@@ -11,9 +11,5 @@ export default () => JSON.parse(JSON.stringify({
   },
   scenesList: null,
   progression: {},
-  socket: {
-    isConnected: false,
-    message: '',
-    reconnectError: false
-  }
+  customLinkData: null
 }))

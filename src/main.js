@@ -3,24 +3,44 @@ import './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VueNativeSock from 'vue-native-websocket'
 
 Vue.config.productionTip = false
 
-// Connect the WebSocket client to the store
-Vue.use(VueNativeSock, 'ws://example.com', {
-  store,
-  connectManually: true,
-  reconnection: true,
-  reconnectionAttempts: 2,
-  reconnectionDelay: 1000
-})
-store.$socket = Vue.prototype.$socket
-
 // A function loaded before each route change
 router.beforeEach((to, from, next) => {
+  // Check if there is a special query in the URI
+  if (to.query.q) {
+    store.commit('setCustomLinkData', to.query.q)
+    // GDPR notice not approved
+    if (!store.getters.isGdprValidated) {
+      if (to.name !== 'GdprNotice')
+        return next('/gdpr')
+    }
+  }
+  if (store.getters.isGdprValidated && store.state.customLinkData) {
+    const request = JSON.parse(JSON.stringify(store.state.customLinkData)) // DEEP COPY
+    store.commit('clearCustomLinkData')
+
+    // Identify the user
+    store.dispatch('setAppUniqueId')
+
+    // Set the host configuration
+    store.commit('setHostConfig', request.hostConfig)
+
+    // Set the userId and experimentId (to explicitly identify the user)
+    store.commit('setUserExperimentId', { userId: request.userId, experimentId: request.experimentId })
+
+    // Redirect to the experiment scene selector (or directly to a scene if specified)
+    if (request.experimentName) {
+      if (request.sceneName)
+        return next(`/experiments/${request.experimentName}/${request.sceneName}`)
+      return next(`/experiments/${request.experimentName}/`)
+    }
+    return next()
+  }
+
   // Redirect from config pages if already configured
-  if (to.path === '/gdpr' && store.getters.isGdprValidated)
+  if (to.name === 'GdprNotice' && store.getters.isGdprValidated)
     return next('/hostConfig')
 
   if (to.path === '/hostConfig' && store.getters.isHostConfigured)
@@ -30,7 +50,7 @@ router.beforeEach((to, from, next) => {
   // Redirect to configuration pages
   // Check GDPR before doing anything and redirect if necessary
   if (!store.getters.isGdprValidated) {
-    if (to.path !== '/gdpr') return next('/gdpr')
+    if (to.name !== 'GdprNotice') return next('/gdpr')
     return next()
   }
 

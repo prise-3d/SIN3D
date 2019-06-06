@@ -167,7 +167,7 @@ yarn test
 ```
 
 ## Documentation
-The `docker-compose` script will automatically build the documentation. Use the following command to build it by hand.
+The `docker-compose` script will automatically build the API documentation. Use the following command to build it by hand.
 ```sh
 yarn doc
 ```
