@@ -98,6 +98,9 @@ export default {
     },
     isHostConfigured(isConfigured) {
       if (isConfigured) this.APP_LOADER()
+    },
+    areScenesLoaded(areLoaded) {
+      if (areLoaded) this.APP_LOADER()
     }
   },
   mounted() {

@@ -13,7 +13,11 @@ export default {
     if (!state.uuid) commit('setAppUniqueId')
   },
 
-  resetApp({ commit }, { gdprConsent = false, hostConfig = false, progression = false }) {
+  async resetApp({ dispatch, commit }, { gdprConsent = false, hostConfig = false, progression = false, scenesList = false }) {
+    if (!gdprConsent && !hostConfig && scenesList) {
+      await dispatch('loadScenesList')
+      router.go()
+    }
     commit('resetApp', { gdprConsent, hostConfig, progression })
   },
 

@@ -42,11 +42,11 @@ export default {
     const defaultStateObj = defaultState()
     if (gdprConsent) {
       state.gdprConsent = false
-      delete state.userId
-      delete state.experimentId
-      delete state.hostConfig
-      delete state.progression
-      delete state.scenesList
+      state.hostConfig = defaultStateObj.hostConfig
+      state.userId = defaultStateObj.userId
+      state.experimentId = defaultStateObj.experimentId
+      state.progression = defaultStateObj.progression
+      state.scenesList = defaultStateObj.scenesList
       return
     }
 
