@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      experimentName: null, // Must be redefined in parent component
+      experimentName: this.$route.name,
 
       loadingMessage: null,
       loadingErrorMessage: null,

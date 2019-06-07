@@ -99,9 +99,9 @@ export default {
   data() {
     return {
       config: {
-        ssl: false,
+        ssl: true,
         host: 'diran.univ-littoral.fr',
-        port: '80'
+        port: '443'
       },
 
       id: {
@@ -135,8 +135,8 @@ export default {
     ...mapActions(['setHostConfig', 'setUserExperimentId']),
     reset() {
       this.config.ssl = true
-      this.config.host = ''
-      this.config.port = null
+      this.config.host = 'diran.univ-littoral.fr'
+      this.config.port = 443
       this.id.user = null
       this.id.hasUserId = false
       this.id.experiment = null

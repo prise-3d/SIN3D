@@ -59,9 +59,9 @@
 <script>
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBaseAreSameImages from '@/mixins/ExperimentBaseAreSameImages'
+import { rand } from '@/functions'
 
 export default {
-  name: 'AreSameImagesReference',
   components: {
     ExperimentBlock
   },
@@ -69,7 +69,6 @@ export default {
 
   data() {
     return {
-      experimentName: 'AreSameImagesReference',
       referenceImagePosition: null
     }
   },
@@ -95,6 +94,19 @@ export default {
   },
 
   methods: {
+    // Get a test with random qualities
+    getReferenceTest() {
+      // Randomly choose which is the reference image (0 = left, 1 = right)
+      const isReferenceLeft = rand(0, 1) === 0
+      // Randomly choose a quality for the other image
+      const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
+
+      const res = [this.qualities[this.qualities.length - 1], randomQuality]
+      this.referenceImagePosition = isReferenceLeft ? 'left' : 'right'
+      const table = isReferenceLeft ? res : res.reverse()
+      return this.getTest(table[0], table[1])
+    },
+
     // generate next action and save data
     async nextAction(same) {
       let additionalData = {

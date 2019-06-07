@@ -18,7 +18,7 @@ These dependencies are mostly used by the server.
 | `body-parser` | [npm](https://www.npmjs.com/package/body-parser) | Parse HTTP request body |
 | `compression` | [npm](https://www.npmjs.com/package/compression) | Turn HTTP server's gzip compression on |
 | `core-js` | [npm](https://www.npmjs.com/package/core-js) | Dependency of Babel (in `@vue/cli-service`) |
-| `cors` | [npm](https://www.npmjs.com/package/cors) | Turn Cross-Origin Resource Sharing (CORS) HTTP header on |
+| `cors` | [npm](https://www.npmjs.com/package/cors) | Turn [Cross-Origin Resource Sharing (CORS)](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing) HTTP header on |
 | `cron` | [npm](https://www.npmjs.com/package/cron) | Cron integrated in Node.js, used for the extracts remover service |
 | `esm` | [npm](https://www.npmjs.com/package/esm) | Node.js JavaScript module loader. Used for the server |
 | `express` | [npm](https://www.npmjs.com/package/express) | API framework |
@@ -29,12 +29,11 @@ These dependencies are mostly used by the server.
 | `sharp` | [npm](https://www.npmjs.com/package/sharp) | Node.js image processing library |
 | `ua-parser-js` | [npm](https://www.npmjs.com/package/ua-parser-js) | Parse User Agent strings |
 | `winston` | [npm](https://www.npmjs.com/package/winston) | Server logger |
-| `ws` | [npm](https://www.npmjs.com/package/ws) | Node.js WebSockets server |
 
 ## Development dependencies
-These dependencies are here for developers only. They contain the web application setup, optimized builders and API automated tests. It also contains API documentation generator and `ESLint` with its plugins.
+These dependencies are here for **developers only**. They contain the web application setup, optimized builders and API automated tests. It also contains API documentation generator and `ESLint` with its plugins.
 
-When the web application files are builded, `Vue.js` and its plugins are not necessary. In fact, the build output will contain portable HTML, CSS and JavaScript.
+When the web application files are builded, `Vue.js` and its plugins are not necessary. In fact, **the build output will contain portable HTML, CSS and JavaScript**.
 
 | Name | Link | Description |
 | --- | --- | --- |
@@ -55,7 +54,6 @@ When the web application files are builded, `Vue.js` and its plugins are not nec
 | `supertest` | [npm](https://www.npmjs.com/package/supertest) | HTTP requests test library |
 | `vue` | [npm](https://www.npmjs.com/package/vue) | `Vue.js` JavaScript framework |
 | `vue-cli-plugin-vuetify` | [npm](https://www.npmjs.com/package/vue-cli-plugin-vuetify) | Just a plugin to use `Vuetify` in `Vue.js` |
-| `vue-native-websocket` | [npm](https://www.npmjs.com/package/vue-native-websocket) | WebSockets client library, plugged to `Vuex` |
 | `vue-router` | [npm](https://www.npmjs.com/package/vue-router) | Web application routing system |
 | `vue-template-compiler` | [npm](https://www.npmjs.com/package/vue-template-compiler) | Build `Vue.js` `.vue` files |
 | `vuetify` | [npm](https://www.npmjs.com/package/vuetify) | `Vue.js` specific CSS framework |

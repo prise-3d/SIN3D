@@ -17,18 +17,15 @@
 
 <script>
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
-import ExperimentBaseAreTheSame from '@/mixins/ExperimentBaseAreSameImages'
+import ExperimentBase from '@/mixins/ExperimentBase'
 
 export default {
-  name: 'YourExperimentName',
   components: {
     ExperimentBlock
   },
-  mixins: [ExperimentBaseAreTheSame],
+  mixins: [ExperimentBase],
   data() {
-    return {
-      experimentName: 'YourExperimentName'
-    }
+    return {}
   },
 
   // When experiment is loaded, this function is ran

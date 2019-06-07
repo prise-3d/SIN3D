@@ -8,7 +8,6 @@
 import ExperimentBase from '@/mixins/ExperimentBase'
 
 import { mapGetters } from 'vuex'
-import { rand } from '@/functions'
 import { EXPERIMENT as experimentMsgId } from '@/../config.messagesId'
 
 export default {
@@ -38,27 +37,6 @@ export default {
       return { image1, image2 }
     },
 
-    // Get a test with random qualities
-    getRandomTest() {
-      return this.getTest(
-        this.qualities[rand(0, this.qualities.length - 1)],
-        this.qualities[rand(0, this.qualities.length - 1)]
-      )
-    },
-
-    // Get a test with random qualities
-    getReferenceTest() {
-      // Randomly choose which is the reference image (0 = left, 1 = right)
-      const isReferenceLeft = rand(0, 1) === 0
-      // Randomly choose a quality for the other image
-      const randomQuality = this.qualities[rand(0, this.qualities.length - 1)]
-
-      const res = [this.qualities[this.qualities.length - 1], randomQuality]
-      this.referenceImagePosition = isReferenceLeft ? 'left' : 'right'
-      const table = isReferenceLeft ? res : res.reverse()
-      return this.getTest(table[0], table[1])
-    },
-
     /** An action was triggered, load a new test and save progression
      * @param {Boolean} areTheSame Are the images the same
      * @param {Function} getTestFn Function to be called to get the next tests
@@ -81,12 +59,12 @@ export default {
         }, additionalData || {})
         this.sendMessage({ msgId: experimentMsgId.DATA, msg: obj })
 
+        // Experiment end
+        if (this.testCount > this.maxTestCount) return this.finishExperiment()
+
         const { image1, image2 } = await getTestFn()
         this.image1 = image1
         this.image2 = image2
-
-        // Experiment end
-        if (this.testCount > this.maxTestCount) return this.finishExperiment()
       }
       catch (err) {
         console.error('Failed to load new test', err)

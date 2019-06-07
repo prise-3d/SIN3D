@@ -1,6 +1,6 @@
 {
   "name": "expe-web",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": true,
   "scripts": {
     "server:start": "node -r esm index.js",

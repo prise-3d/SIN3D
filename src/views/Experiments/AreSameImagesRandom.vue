@@ -58,19 +58,17 @@
 
 <script>
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
-import ExperimentBaseAreTheSame from '@/mixins/ExperimentBaseAreSameImages'
+import ExperimentBaseAreSameImages from '@/mixins/ExperimentBaseAreSameImages'
+import { rand } from '@/functions'
 
 export default {
-  name: 'AreSameImagesRandom',
   components: {
     ExperimentBlock
   },
-  mixins: [ExperimentBaseAreTheSame],
+  mixins: [ExperimentBaseAreSameImages],
 
   data() {
-    return {
-      experimentName: 'AreSameImagesRandom'
-    }
+    return {}
   },
 
   async mounted() {
@@ -94,6 +92,14 @@ export default {
   },
 
   methods: {
+    // Get a test with random qualities
+    getRandomTest() {
+      return this.getTest(
+        this.qualities[rand(0, this.qualities.length - 1)],
+        this.qualities[rand(0, this.qualities.length - 1)]
+      )
+    },
+
     // generate next action and save data
     async nextAction(same) {
       let additionalData = {
@@ -101,7 +107,7 @@ export default {
         maxStepCount: this.maxTestCount
       }
 
-      this.areTheSameAction(same, this.getReferenceTest, additionalData)
+      this.areTheSameAction(same, this.getRandomTest, additionalData)
     }
   }
 }

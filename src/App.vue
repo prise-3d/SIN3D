@@ -24,7 +24,16 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click="loadScenes">
+          <v-list-tile to="/linkGenerator" exact>
+            <v-list-tile-action>
+              <v-icon>share</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Link generator</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile @click="loadScenesHard">
             <v-list-tile-action>
               <v-icon>refresh</v-icon>
             </v-list-tile-action>
@@ -89,6 +98,9 @@ export default {
     },
     isHostConfigured(isConfigured) {
       if (isConfigured) this.APP_LOADER()
+    },
+    areScenesLoaded(areLoaded) {
+      if (areLoaded) this.APP_LOADER()
     }
   },
   mounted() {
@@ -106,6 +118,11 @@ export default {
 
     loadScenes() {
       return this.load(this.loadScenesList, 'Loading scenes list...')
+    },
+
+    async loadScenesHard() {
+      await this.loadScenes()
+      this.$router.go()
     },
 
     async load(fn, loadingMessage) {

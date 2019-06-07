@@ -69,7 +69,6 @@ import ExtractsToImage from '@/components/ExperimentsComponents/ExtractsToImage'
 import { rand } from '@/functions'
 
 export default {
-  name: 'AreSameImagesReferenceOneExtract',
   components: {
     ExperimentBlock,
     ExtractsToImage
@@ -81,8 +80,6 @@ export default {
 
   data() {
     return {
-      experimentName: 'AreSameImagesReferenceOneExtract',
-
       imageOneExtractPosition: null,
       randomZoneIndex: null,
       randomZoneQuality: null
