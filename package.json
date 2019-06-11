@@ -1,7 +1,7 @@
 {
   "name": "sin3d",
   "description": "Synthesis Image Noise Detection on Distributed Data",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "private": true,
   "keywords": [
     "noise",
