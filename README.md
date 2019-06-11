@@ -1,10 +1,12 @@
-# Antoine_Internship
+# SIN3D
+> Synthesis Image Noise Detection on Distributed Data
+
 A web app to collect data on noise detection by humans on images.
 
 ## Download project
 ```sh
-git clone https://gogs.univ-littoral.fr/Prise3D/Antoine_Internship.git
-cd Antoine_Internship
+git clone https://gogs.univ-littoral.fr/Prise3D/SIN3D.git
+cd SIN3D
 ```
 
 ## Run as a Docker instance
@@ -16,7 +18,7 @@ Use the following environment variables to configure the application.
 | `PORT` | `5000` | The port used by the started application |  ✅  | ✅ |
 | `SERVE_CLIENT` | `true` | Should the server serve client (Fully local application) |  ✅  | ⬜️ |
 | `IMAGES_PATH` | `./images` | The directory where the images are stored (absolute path if changed ⚠️) |  ✅  | ⬜️ |
-| `MONGO_URI` | `mongodb://localhost/webexpe` | MongoDB database connection URI |  ✅  | ⬜️ |
+| `MONGO_URI` | `mongodb://localhost/sin3d` | MongoDB database connection URI |  ✅  | ⬜️ |
 
 Configure more deeply the way the app works by modifying *[config.js](config.js)*.
 
@@ -25,7 +27,7 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `apiPrefix` | `/api` | The url prefix for the API |
 | `imageServedUrl` | `/api/images` | The url prefix from where the images are served |
 | `serverPort` | `5000` | The port used by the server |
-| `mongoDatabaseURI` | `mongodb://localhost/webexpe` | MongoDB database connection URI |
+| `mongoDatabaseURI` | `mongodb://localhost/sin3d` | MongoDB database connection URI |
 | `imagesPath` | `./images` | The directory where the images are stored |
 | `serveClient` | `true` | Should the server serve client files from the `/dist` directory |
 | `fileNameConvention` | `/^(.*)?_([0-9]{2,})\.(.*)$/` | File name convention for images |

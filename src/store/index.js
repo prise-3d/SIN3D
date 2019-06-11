@@ -10,7 +10,7 @@ Vue.use(Vuex)
 
 const vuexLocal = new VuexPersistence({
   storage: window.localStorage,
-  key: 'webexpe-state',
+  key: 'sin3d-state',
   reducer: state => ({
     customLinkData: state.customLinkData,
     uuid: state.uuid,
