@@ -1,5 +1,5 @@
 # SIN3D
-> Synthesis Image Noise Detection on Distributed Data
+> Synthesis Image Noise Detection on Distributed Data (SIN3D)
 
 A web app to collect data on noise detection by humans on images.
 
@@ -8,6 +8,12 @@ A web app to collect data on noise detection by humans on images.
 git clone https://gogs.univ-littoral.fr/Prise3D/SIN3D.git
 cd SIN3D
 ```
+
+## Developer documentation
+See [`/DOCUMENTATION`](./DOCUMENTATION).
+
+## Data extraction
+You can use the [SIN3D-data-extract](https://gogs.univ-littoral.fr/Prise3D/SIN3D-data-extract) library to easily extract data from this application database.
 
 ## Run as a Docker instance
 ### Configure application
@@ -36,16 +42,6 @@ Configure more deeply the way the app works by modifying *[config.js](config.js)
 | `deleteExtractsCronTime` | `0 3 * * *` (every day at 03:00 AM) | Cron time for extracts deletion |
 | `logger` | Logs : `logs/server.combined.log` Errors : `logs/server.error.log` | Default application logger |
 | `dbLogger` | Logs : `logs/db.log` Errors : `logs/db.error.log` | Database logger configuration |
-
-### Configure experiments
-If you want to use the default experiments configurations, you can skip this part, the Dockerfile does it for you.
-
-You can modify the configuration for each mixins, experiments or scene. To do so, you first need to initialize experiment configurations first.
-```sh
-cp -r experimentConfig.default experimentConfig
-```
-You can modify the configuration for each mixins, experiments or scene by modifying files in the newly created *`./experimentConfig`* directory.
-You configuration will be copied in the Docker instance.
 
 ### Run server + client
 Linux
@@ -167,7 +163,7 @@ The `docker-compose` script will automatically run tests. Use the following comm
 yarn test
 ```
 
-## Documentation
+## API Documentation
 The `docker-compose` script will automatically build the API documentation. Use the following command to build it by hand.
 ```sh
 yarn doc
