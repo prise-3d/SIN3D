@@ -1,6 +1,6 @@
 {
   "name": "sin3d",
-  "description": "Synthesis Image Noise Detection on Distributed Data",
+  "description": "Synthesis Image Noise Detection on Distributed Data : A web app to collect data on noise detection by humans on images.",
   "version": "0.3.0",
   "private": true,
   "keywords": [
@@ -95,8 +95,8 @@
     "not ie <= 8"
   ],
   "apidoc": {
-    "url": "http://diran.univ-littoral.fr/api",
-    "sampleUrl": "http://diran.univ-littoral.fr/api",
+    "url": "https://diran.univ-littoral.fr/api",
+    "sampleUrl": "https://diran.univ-littoral.fr/api",
     "template": {
       "forceLanguage": "en"
     }

@@ -13,7 +13,7 @@ const router = express.Router()
  * @apiDescription Check if the API is up
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://diran.univ-littoral.fr/api/ping"
+ * curl -i -L -X GET "https://diran.univ-littoral.fr/api/ping"
  *
  * @apiSuccessExample {string} Success response example
  * HTTP/1.1 200 OK /api/ping

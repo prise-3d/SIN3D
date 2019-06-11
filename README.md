@@ -9,8 +9,14 @@ git clone https://gogs.univ-littoral.fr/Prise3D/SIN3D.git
 cd SIN3D
 ```
 
+## Application
+See [https://diran.univ-littoral.fr](https://diran.univ-littoral.fr)
+
 ## Developer documentation
-See [`/DOCUMENTATION`](./DOCUMENTATION).
+See [`/DOCUMENTATION`](./DOCUMENTATION)
+
+## API documentation
+See [https://diran.univ-littoral.fr/doc](https://diran.univ-littoral.fr/doc)
 
 ## Data extraction
 You can use the [SIN3D-data-extract](https://gogs.univ-littoral.fr/Prise3D/SIN3D-data-extract) library to easily extract data from this application database.
@@ -163,7 +169,7 @@ The `docker-compose` script will automatically run tests. Use the following comm
 yarn test
 ```
 
-## API Documentation
+## Generate API documentation
 The `docker-compose` script will automatically build the API documentation. Use the following command to build it by hand.
 ```sh
 yarn doc
