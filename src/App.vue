@@ -48,7 +48,7 @@
       <!-- Top bar -->
       <v-toolbar app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="drawer = !drawer" />
-        <v-toolbar-title>Web experiment</v-toolbar-title>
+        <v-toolbar-title>SIN3D</v-toolbar-title>
       </v-toolbar>
       <!--/ Top bar -->
     </div>

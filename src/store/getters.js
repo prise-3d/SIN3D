@@ -1,5 +1,3 @@
-import { buildURI } from '../functions'
-
 export default {
   isGdprValidated(state) {
     if (!state) return
@@ -7,12 +5,12 @@ export default {
   },
   isHostConfigured(state) {
     if (!state) return
-    return !!(state.hostConfig.ssl !== null && state.hostConfig.host && state.hostConfig.port)
+    return state.hostConfig !== null
   },
   getHostURI(state, getters) {
     if (!state) return
     if (getters.isHostConfigured)
-      return buildURI(state.hostConfig.ssl, state.hostConfig.host, state.hostConfig.port)
+      return state.hostConfig
   },
 
   areScenesLoaded(state) {

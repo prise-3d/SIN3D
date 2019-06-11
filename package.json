@@ -1,7 +1,34 @@
 {
-  "name": "expe-web",
-  "version": "0.2.8",
+  "name": "sin3d",
+  "description": "Synthesis Image Noise Detection on Distributed Data",
+  "version": "0.3.0",
   "private": true,
+  "keywords": [
+    "noise",
+    "detection",
+    "synthesis image",
+    "distributed",
+    "data",
+    "web",
+    "experiment"
+  ],
+  "directories": {
+    "doc": "./DOCUMENTATION"
+  },
+  "homepage": "https://gogs.univ-littoral.fr/Prise3D/SIN3D",
+  "author": "Antoine Sauvage <contact@asauvage.fr> (https://asauvage.fr/)",
+  "contributors": [
+    "Jérôme Buisine <contact@jeromebuisine.fr> (https://jeromebuisine.fr/)",
+    "Samuel Delepoulle <delepoulle@lisic.univ-littoral.fr>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://gogs.univ-littoral.fr/Prise3D/SIN3D.git"
+  },
+  "bugs": {
+    "url": "https://gogs.univ-littoral.fr/Prise3D/SIN3D/issues"
+  },
+  "license": "MIT",
   "scripts": {
     "server:start": "node -r esm index.js",
     "server:start:no-delete-extracts": "node -r esm index.js --no-delete",
@@ -58,6 +85,9 @@
     "plugins": {
       "autoprefixer": {}
     }
+  },
+  "engines": {
+    "node": ">= 8.30.0"
   },
   "browserslist": [
     "> 1%",

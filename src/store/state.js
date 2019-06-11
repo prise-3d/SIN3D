@@ -4,11 +4,7 @@ export default () => JSON.parse(JSON.stringify({
   userId: null,
   experimentId: null,
   gdprConsent: false,
-  hostConfig: {
-    ssl: null,
-    host: null,
-    port: null
-  },
+  hostConfig: null,
   scenesList: null,
   progression: {},
   customLinkData: null

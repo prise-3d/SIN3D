@@ -50,11 +50,7 @@ export default {
       return
     }
 
-    if (hostConfig) {
-      state.hostConfig = defaultStateObj.hostConfig
-      state.userId = defaultStateObj.userId
-      state.experimentId = defaultStateObj.experimentId
-    }
+    if (hostConfig) state.hostConfig = defaultStateObj.hostConfig
     if (progression) {
       // Reset progression and recreate the progression object
       state.progression = defaultStateObj.progression
