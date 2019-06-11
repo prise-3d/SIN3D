@@ -16,7 +16,7 @@ const router = express.Router()
  * @apiParam {String} sceneName The selected scene
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://diran.univ-littoral.fr/api/listSceneQualities?sceneName=bathroom"
+ * curl -i -L -X GET "https://diran.univ-littoral.fr/api/listSceneQualities?sceneName=bathroom"
  *
  * @apiSuccess {Number[]} data List of available qualities
  * @apiSuccessExample {json} Success response example

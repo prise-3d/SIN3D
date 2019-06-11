@@ -19,7 +19,7 @@ const router = express.Router()
  * @apiSampleRequest /listScenes
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://diran.univ-littoral.fr/api/listScenes"
+ * curl -i -L -X GET "https://diran.univ-littoral.fr/api/listScenes"
  *
  * @apiSuccess {String[]} data List of available scenes
  * @apiSuccessExample {json} Success response example

@@ -21,7 +21,7 @@ const router = express.Router()
  * @apiParam {any} Any data that needs to be stored
  *
  * @apiExample Usage example
- * curl -i -L -H "Content-Type: application/json" -X POST "http://diran.univ-littoral.fr/api/experimentCollect" -d {"msgId":"test","msg":{}}
+ * curl -i -L -H "Content-Type: application/json" -X POST "https://diran.univ-littoral.fr/api/experimentCollect" -d {"msgId":"test","msg":{}}
  *
  * @apiSuccessExample {string} Success response example
  * HTTP/1.1 204 OK /api/experimentCollect

@@ -23,7 +23,7 @@ const router = express.Router()
  * @apiParam {Boolean} [nearestQuality=false] if selected quality not availabie, select the nearest one
  *
  * @apiExample Usage example
- * curl -i -L -X GET "http://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
+ * curl -i -L -X GET "https://diran.univ-littoral.fr/api/getImage?sceneName=bathroom&imageQuality=200"
  *
  * @apiSuccess {Object} data Informations on the image
  * @apiSuccess {String} data.link Path to the image

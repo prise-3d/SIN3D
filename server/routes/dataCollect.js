@@ -26,7 +26,7 @@ const router = express.Router()
  * @apiParam {Object} screen Screen data, `window.screen` @see https://developer.mozilla.org/en-US/docs/Web/API/Screen
  *
  * @apiExample Usage example
- * curl -i -L -H "Content-Type: application/json" -X POST "http://diran.univ-littoral.fr/api/dataCollect" -d {"uuid":"test","userId":"rigwild","experimentId":"expe-test","screen":{"width":1920,"height":1024}}
+ * curl -i -L -H "Content-Type: application/json" -X POST "https://diran.univ-littoral.fr/api/dataCollect" -d {"uuid":"test","userId":"rigwild","experimentId":"expe-test","screen":{"width":1920,"height":1024}}
  *
  * @apiSuccessExample {string} Success response example
  * HTTP/1.1 200 OK /api/dataCollect
