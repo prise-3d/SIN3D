@@ -112,7 +112,6 @@ export default {
       this.id.experiment = null
       this.id.hasExperimentId = false
       this.configErrorMessage = null
-      this.$refs.form.reset()
     },
 
     async validate() {
