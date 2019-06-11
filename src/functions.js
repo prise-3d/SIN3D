@@ -23,8 +23,6 @@ export const API_ROUTES = {
 
 export const delay = ms => new Promise(res => setTimeout(res, ms))
 
-export const buildURI = (ssl, host, port, route = '') => `${ssl ? 'https' : 'http'}://${host}:${port}${route}`
-
 export const sortIntArray = intArray => intArray ? intArray.sort((a, b) => a - b) : null
 
 export const findNearestUpper = (value, arrInt) => {

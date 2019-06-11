@@ -9,32 +9,14 @@
             <v-card-text>
               <v-form>
                 <h2>*Host configuration</h2>
-                <h4>Web application configuration</h4>
                 <v-text-field
                   v-model="form.webAppUrl"
                   label="*Web application link"
                 />
-
-                <h4>Server configuration</h4>
-                <v-flex xs3>
-                  <v-select
-                    v-model="form.server.ssl"
-                    :items="[false, true]"
-                    label="*SSL"
-                  />
-                </v-flex>
-
                 <v-text-field
-                  v-model="form.server.host"
-                  label="*Host IP address or hostname"
+                  v-model="form.hostConfig"
+                  label="*Server link"
                 />
-
-                <v-text-field
-                  v-model="form.server.port"
-                  label="*Port"
-                  type="number"
-                />
-
 
                 <h2>User ID and experiment ID</h2>
                 <v-layout row wrap>
@@ -159,11 +141,7 @@ export default {
     return {
       form: {
         webAppUrl: 'https://diran.univ-littoral.fr',
-        server: {
-          ssl: true,
-          host: 'diran.univ-littoral.fr',
-          port: '80'
-        },
+        hostConfig: 'https://diran.univ-littoral.fr',
 
         userId: {
           activated: false,
@@ -223,7 +201,7 @@ export default {
       this.alertMessage = null
 
       // Check host configuration is set
-      if (this.form.webAppUrl === '' || this.form.server.host === '' || this.form.server.port === '') {
+      if (this.form.webAppUrl === '' || this.form.hostConfig === '') {
         this.alertMessage = 'The host configuration is required.'
         this.linkOutput = null
         this.dataOutput = null
@@ -232,11 +210,7 @@ export default {
 
       // Generate the link
       const obj = {
-        hostConfig: {
-          ssl: this.form.server.ssl,
-          host: this.form.server.host,
-          port: this.form.server.port
-        }
+        hostConfig: this.form.hostConfig
       }
       if (this.form.userId.activated && this.form.userId.value !== '') obj.userId = this.form.userId.value
       if (this.form.experimentId.activated && this.form.experimentId.value !== '') obj.experimentId = this.form.experimentId.value

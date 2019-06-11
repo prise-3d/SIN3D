@@ -10,26 +10,10 @@
               <v-slide-y-transition mode="out-in">
                 <loader v-if="loadingMessage" :message="loadingMessage" />
                 <v-form v-else ref="form">
-                  <v-flex xs3>
-                    <v-select
-                      v-model="config.ssl"
-                      :items="[false, true]"
-                      label="SSL"
-                    />
-                  </v-flex>
-
                   <v-text-field
-                    v-model="config.host"
-                    label="Host IP address or hostname"
+                    v-model="hostConfig"
+                    label="Host link"
                     :rules="[v => !!v || 'Host is required']"
-                    required
-                  />
-
-                  <v-text-field
-                    v-model="config.port"
-                    label="Port"
-                    type="number"
-                    :rules="[v => !!v || 'Port is required']"
                     required
                   />
 
@@ -98,11 +82,7 @@ export default {
   },
   data() {
     return {
-      config: {
-        ssl: true,
-        host: 'diran.univ-littoral.fr',
-        port: '443'
-      },
+      hostConfig: null,
 
       id: {
         user: null,
@@ -116,27 +96,17 @@ export default {
     }
   },
 
-  watch: {
-    'config.ssl'(newValue) {
-      if (newValue === true) this.config.port = 443
-    }
-  },
-
   mounted() {
     // if (process.env.NODE_ENV === 'development')
-    //   this.config = {
-    //     ssl: false,
-    //     host: 'localhost',
-    //     port: '5000'
-    //   }
+    //   this.hostConfig = 'http://localhost:5000'
+
+    this.reset()
   },
 
   methods: {
     ...mapActions(['setHostConfig', 'setUserExperimentId']),
     reset() {
-      this.config.ssl = true
-      this.config.host = 'diran.univ-littoral.fr'
-      this.config.port = 443
+      this.hostConfig = 'https://diran.univ-littoral.fr'
       this.id.user = null
       this.id.hasUserId = false
       this.id.experiment = null
@@ -144,13 +114,14 @@ export default {
       this.configErrorMessage = null
       this.$refs.form.reset()
     },
+
     async validate() {
       if (!this.$refs.form.validate()) return
 
       this.loadingMessage = 'Checking host configuration...'
       this.configErrorMessage = null
       try {
-        await this.setHostConfig(this.config)
+        await this.setHostConfig(this.hostConfig)
         this.setUserExperimentId({ userId: this.id.user, experimentId: this.id.experiment })
       }
       catch (err) {

@@ -1,5 +1,5 @@
 import router from '../router'
-import { API_ROUTES, buildURI, serialize } from '../functions'
+import { API_ROUTES, serialize } from '../functions'
 
 export default {
   setGdprValidated({ state, commit }) {
@@ -21,13 +21,13 @@ export default {
     commit('resetApp', { gdprConsent, hostConfig, progression })
   },
 
-  async setHostConfig({ commit, dispatch }, { ssl, host, port }) {
+  async setHostConfig({ commit, dispatch }, hostConfig) {
     // Timeout after 1s
     const controller = new AbortController()
     const signal = controller.signal
     setTimeout(() => controller.abort(), 1500)
 
-    const URI = buildURI(ssl, host, port, API_ROUTES.ping)
+    const URI = `${hostConfig}${API_ROUTES.ping}`
     return fetch(URI, { signal })
       .then(async res => {
         if (res.status !== 200) throw new Error(`Received wrong HTTP status code : ${res.status} (Need 200).`)
@@ -36,7 +36,7 @@ export default {
         if (content !== 'pong') throw new Error('Received wrong web content (Need to receive "pong").')
 
         // Configuration is valid
-        commit('setHostConfig', { ssl, host, port })
+        commit('setHostConfig', hostConfig)
         router.push('/experiments')
         dispatch('collectUserData')
       })
