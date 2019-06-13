@@ -1,7 +1,7 @@
 {
   "name": "sin3d",
   "description": "Synthesis Image Noise Detection on Distributed Data : A web app to collect data on noise detection by humans on images.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "keywords": [
     "noise",
@@ -79,7 +79,8 @@
     "vuetify": "^1.5.14",
     "vuetify-loader": "^1.2.2",
     "vuex": "^3.1.0",
-    "vuex-persist": "^2.0.0"
+    "vuex-persist": "^2.0.0",
+    "yargs": "^13.2.4"
   },
   "postcss": {
     "plugins": {
