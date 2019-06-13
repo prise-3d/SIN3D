@@ -151,7 +151,7 @@ const router = express.Router()
  * @param {Number} yExtracts the number of extract to do on the vertical axis (integer)
  * @returns {Promise<Image[]>} the list of extracted images
  */
-const cutImage = async (image, xExtracts, yExtracts) => {
+export const cutImage = async (image, xExtracts, yExtracts) => {
   const input = sharp(image.path)
 
   const { width, height } = await input.metadata()
