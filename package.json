@@ -1,7 +1,7 @@
 {
   "name": "sin3d",
   "description": "Synthesis Image Noise Detection on Distributed Data : A web app to collect data on noise detection by humans on images.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "keywords": [
     "noise",
