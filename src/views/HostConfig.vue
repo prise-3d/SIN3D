@@ -1,6 +1,11 @@
 <template>
   <v-layout justify-center align-center>
     <v-flex xs12 sm5>
+      <v-btn @click="backToGDPR">
+        <v-icon left>arrow_back</v-icon>
+        Go back to GDPR notice
+      </v-btn>
+
       <v-card>
         <v-container fluid fill-height>
           <v-layout column align-center>
@@ -99,12 +104,16 @@ export default {
   mounted() {
     // if (process.env.NODE_ENV === 'development')
     //   this.hostConfig = 'http://localhost:5000'
-
     this.reset()
   },
 
   methods: {
-    ...mapActions(['setHostConfig', 'setUserExperimentId']),
+    ...mapActions(['setHostConfig', 'setUserExperimentId', 'resetApp']),
+    backToGDPR() {
+      this.resetApp({ gdprConsent: true })
+      this.$router.push('/')
+    },
+
     reset() {
       this.hostConfig = 'https://diran.univ-littoral.fr'
       this.id.user = null
