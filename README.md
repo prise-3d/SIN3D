@@ -176,5 +176,15 @@ yarn doc
 ```
 The documentation is generated to the `doc/` directory. If you started the server, the documentation is served at `/doc/`.
 
+## Collected DATA
+
+During application use a lot of data is collected by platform, here a description of main message identifier used:
+
+- COLLECT_DATA: specify that the collected data process began.
+- EXPERIMENT_STARTED: message which is used for start of an experiment.
+- EXPERIMENT_DATA: message for data of an experiment.
+- EXPERIMENT_VALIDATED: end of experiences message.
+
 ## License
+
 [The MIT license](LICENSE)
