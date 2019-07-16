@@ -13,9 +13,9 @@ router.beforeEach((to, from, next) => {
     store.commit('setCustomLinkData', to.query.q)
     // GDPR notice not approved
     if (!store.getters.isGdprValidated) {
-      if (to.name !== 'GdprNotice')
-        return next('/gdpr')
+      if (to.name !== 'GdprNotice') return next('/gdpr')
     }
+    return next('/experiments')
   }
   if (store.getters.isGdprValidated && store.state.customLinkData) {
     const request = JSON.parse(JSON.stringify(store.state.customLinkData)) // DEEP COPY
