@@ -1,12 +1,7 @@
 <template>
   <v-app :dark="darkMode">
-    <!-- Application cache reset button -->
-    <div class="reset-button">
-      <ResetAppButton />
-    </div>
-    <!--/ Application cache reset button -->
-
     <div v-if="!loadingMessage && isGdprValidated && isHostConfigured">
+      <ResetAppMenu ref="resetApp" />
       <!-- Sidebar menu -->
       <v-navigation-drawer
         v-model="drawer"
@@ -33,14 +28,16 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click="loadScenesHard">
-            <v-list-tile-action>
-              <v-icon>refresh</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Refresh list of scenes</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <v-fade-transition>
+            <v-list-tile v-if="showResetAppInMenu" @click="$refs.resetApp.show(), drawer = false">
+              <v-list-tile-action>
+                <v-icon>refresh</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-content>
+                <v-list-tile-title>Application reset menu</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-fade-transition>
         </v-list>
       </v-navigation-drawer>
       <!--/ Sidebar menu -->
@@ -48,7 +45,7 @@
       <!-- Top bar -->
       <v-toolbar app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="drawer = !drawer" />
-        <v-toolbar-title>SIN3D</v-toolbar-title>
+        <v-toolbar-title @click="showResetAppInMenu = !showResetAppInMenu">SIN3D</v-toolbar-title>
       </v-toolbar>
       <!--/ Top bar -->
     </div>
@@ -73,17 +70,18 @@
 
 <script>
 import './style.css'
-import ResetAppButton from '@/components/ResetAppButton.vue'
+import ResetAppMenu from '@/components/ResetAppMenu.vue'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
-    ResetAppButton
+    ResetAppMenu
   },
   data() {
     return {
       darkMode: true,
       drawer: false,
+      showResetAppInMenu: false,
 
       loadingErrorMessage: null,
       loadingMessage: null
@@ -112,17 +110,8 @@ export default {
     // Main app function that redirect the user where he needs to be at
     async APP_LOADER() {
       if (this.isGdprValidated && this.isHostConfigured) {
-        if (!this.areScenesLoaded) await this.loadScenes()
+        if (!this.areScenesLoaded) await this.load(this.loadScenesList, 'Loading scenes list...')
       }
-    },
-
-    loadScenes() {
-      return this.load(this.loadScenesList, 'Loading scenes list...')
-    },
-
-    async loadScenesHard() {
-      await this.loadScenes()
-      this.$router.go()
     },
 
     async load(fn, loadingMessage) {
@@ -143,12 +132,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.reset-button {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  z-index: 999;
-}
-</style>

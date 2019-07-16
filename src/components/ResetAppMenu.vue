@@ -5,9 +5,9 @@
       width="800"
       :fullscreen="$vuetify.breakpoint.smAndDown"
     >
-      <template v-slot:activator="{ on }">
+      <!-- <template v-slot:activator="{ on }">
         <v-btn small dark v-on="on">Reset app</v-btn>
-      </template>
+      </template> -->
 
       <v-card>
         <v-card-title class="headline" primary-title>Reset app</v-card-title>
@@ -62,7 +62,7 @@ import { mapActions } from 'vuex'
 import ToastMessage from '@/components/ToastMessage.vue'
 
 export default {
-  name: 'ResetAppButton',
+  name: 'ResetAppMenu',
   components: {
     ToastMessage
   },
@@ -94,6 +94,11 @@ export default {
   },
   methods: {
     ...mapActions(['resetApp']),
+
+    show() {
+      this.showDialog = true
+    },
+
     toggle() {
       this.$nextTick(() => {
         if (this.selectAll) {
