@@ -50,14 +50,19 @@ router.post('/', asyncMiddleware(async (req, res) => {
   const b = req.body
   checkRequiredParameters(['msgId', 'msg'], b)
 
-  const { msgId, msg } = req.body
+  const {
+    msgId,
+    msg,
+    userId = null,
+    experimentId = null
+  } = req.body
 
   // Check there is no errors with parameters
   if (typeof b.msgId !== 'string')
     throw boom.badRequest('Invalid body parameter(s).', ['"msgId" must be a string.'])
 
   // Add data to the database
-  if (!TEST_MODE) await DataController.add({ msgId, msg })
+  if (!TEST_MODE) await DataController.add({ msgId, msg, userId, experimentId })
 
   res.status(204).send()
 }))

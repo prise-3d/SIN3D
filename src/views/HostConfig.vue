@@ -129,13 +129,12 @@ export default {
       this.loadingMessage = 'Checking host configuration...'
       this.configErrorMessage = null
       try {
-        await this.setHostConfig(this.hostConfig)
         this.setUserExperimentId({ userId: this.id.user, experimentId: this.id.experiment })
+        await this.setHostConfig(this.hostConfig)
       }
       catch (err) {
         console.error(err)
         this.configErrorMessage = err.message
-        return
       }
       finally {
         this.loadingMessage = null

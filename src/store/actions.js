@@ -2,11 +2,9 @@ import router from '../router'
 import { API_ROUTES, serialize } from '../functions'
 
 export default {
-  setGdprValidated({ state, commit }) {
-    if (!state.gdprConsent) {
-      commit('setGdprValidated')
-      router.push('/hostConfig')
-    }
+  setGdprValidated({ commit }) {
+    commit('setGdprValidated')
+    router.push('/hostConfig')
   },
 
   setAppUniqueId({ state, commit }) {
@@ -22,7 +20,7 @@ export default {
   },
 
   async setHostConfig({ commit, dispatch }, hostConfig) {
-    // Timeout after 1s
+    // Timeout after 1.5s
     const controller = new AbortController()
     const signal = controller.signal
     setTimeout(() => controller.abort(), 1500)
