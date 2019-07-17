@@ -1,4 +1,4 @@
-FROM node:11.7.0-alpine
+FROM node:12.6.0-alpine
 
 # Back docker image
 COPY . /usr/src/app
