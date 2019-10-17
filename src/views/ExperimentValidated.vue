@@ -8,6 +8,8 @@
         <div class="headline">Experiment validated for the scene "{{ sceneName }}"</div>
         <v-spacer />
       </v-card-title>
+
+      <!--
       <v-card-actions>
         <v-spacer />
         <v-btn flat exact to="/experiments/">
@@ -26,6 +28,7 @@
         </v-btn>
         <v-spacer />
       </v-card-actions>
+      !-->
     </v-card>
   </div>
 </template>
