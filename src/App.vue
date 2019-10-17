@@ -2,8 +2,10 @@
   <v-app :dark="darkMode">
     <div v-if="!loadingMessage && isGdprValidated && isHostConfigured">
       <ResetAppMenu ref="resetApp" />
+
+      <!-- DISABLE : This part is commented to disable view of menu when starting scene experiment -->
       <!-- Sidebar menu -->
-      <v-navigation-drawer
+      <!--<v-navigation-drawer
         v-model="drawer"
         clipped
         fixed
@@ -39,14 +41,14 @@
             </v-list-tile>
           </v-fade-transition>
         </v-list>
-      </v-navigation-drawer>
+      </v-navigation-drawer>-->
       <!--/ Sidebar menu -->
 
       <!-- Top bar -->
-      <v-toolbar app fixed clipped-left>
+      <!-- <v-toolbar app fixed clipped-left>
         <v-toolbar-side-icon @click.stop="drawer = !drawer" />
         <v-toolbar-title @click="showResetAppInMenu = !showResetAppInMenu">SIN3D</v-toolbar-title>
-      </v-toolbar>
+      </v-toolbar> -->
       <!--/ Top bar -->
     </div>
 

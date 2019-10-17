@@ -4,12 +4,16 @@
       <v-layout row wrap>
         <!-- Experiment header -->
         <v-flex xs12>
+
+          <!-- DISABLE : This part is commented to disable view of back scene selection button when starting scene experiment -->
+          <!--
           <v-layout justify-start>
             <v-btn flat exact :to="`/experiments/${experimentName}`">
               <v-icon left>arrow_back</v-icon>
               Back to scene selection
             </v-btn>
           </v-layout>
+          -->
 
           <h2>Experiment "{{ $route.meta.fullName }}"</h2>
           <h3>{{ sceneName }}</h3>
