@@ -120,5 +120,16 @@ export const experiments = {
       whitelist: null,
       blacklist: null
     }
+  },
+  CalibrationMeasurement: {
+    mixins: [mixins.ExperimentBaseExtracts],
+    defaultConfig: {
+      lockConfig: true
+    },
+    scenesConfig: {},
+    availableScenes: {
+      whitelist: ['50_shades_of_grey'],
+      blacklist: null
+    }
   }
 }
