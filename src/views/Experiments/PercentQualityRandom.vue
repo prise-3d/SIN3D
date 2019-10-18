@@ -30,7 +30,7 @@
 
       <!-- Quality Slider -->
       <v-flex xs12>
-        <v-subheader class="pl-0">Mark from 0 to 100 how high you think the quality is</v-subheader>
+        <v-subheader class="pl-0">Donner votre score entre 0 et 100</v-subheader>
         <v-slider
           v-model="selectedQuality"
           thumb-label
