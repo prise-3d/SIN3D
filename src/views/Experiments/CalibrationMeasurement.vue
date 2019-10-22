@@ -30,14 +30,8 @@
                   class="pa-0"
                 >
                   <v-card flat tile class="d-flex height100">
-                    <div
-                      v-if="anExtract.loading"
-                      class="img-extract-loader"
-                      @click.right.prevent
-                    >
-                      <v-progress-circular
-                        :indeterminate="true"
-                      />
+                    <div v-if="anExtract.loading" class="img-extract-loader" @click.right.prevent>
+                      <v-progress-circular :indeterminate="true" />
                     </div>
                     <v-img
                       v-else
@@ -48,12 +42,7 @@
                       :class="{ 'extract-hover-border': showHoverBorder === true }"
                     >
                       <template v-slot:placeholder>
-                        <v-layout
-                          fill-height
-                          align-center
-                          justify-center
-                          ma-0
-                        >
+                        <v-layout fill-height align-center justify-center ma-0>
                           <v-progress-circular indeterminate color="grey lighten-5" />
                         </v-layout>
                       </template>
@@ -68,7 +57,28 @@
       <v-flex sm6 xs12>
         <v-card dark color="primary">
           <v-card-text>Reference image</v-card-text>
-          <v-img v-if="referenceImage" :src="referenceImage" />
+
+          <v-container v-if="referenceExtracts" class="pa-1">
+            <template v-for="i in extractConfig.y">
+              <v-layout row wrap :key="`row-${i}`">
+                <v-flex
+                  v-for="(anExtract, index) in referenceExtracts.slice(extractConfig.x * (i - 1), (extractConfig.x * i))"
+                  :key="`reference-extract-${i}-${extractConfig.x}-${extractConfig.y}-${index}-${anExtract.quality}`"
+                  class="pa-0"
+                >
+                  <v-card flat tile class="d-flex height100">
+                    <v-img :src="anExtract.link">
+                      <template v-slot:placeholder>
+                        <v-layout fill-height align-center justify-center ma-0>
+                          <v-progress-circular indeterminate color="grey lighten-5" />
+                        </v-layout>
+                      </template>
+                    </v-img>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </template>
+          </v-container>
         </v-card>
       </v-flex>
       <!-- Experiment validation button -->
@@ -84,7 +94,7 @@
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
-import { API_ROUTES } from '@/functions'
+import { API_ROUTES, shuffleArray } from '@/functions'
 
 export default {
   components: {
@@ -95,7 +105,8 @@ export default {
 
   data() {
     return {
-      referenceImage: null
+      referenceExtracts: null,
+      extractsIndices: null
     }
   },
 
@@ -107,23 +118,56 @@ export default {
     this.loadProgress()
 
     // Load scene data from the API
-    await this.getImage('max').then(res => (this.referenceImage = res.link))
 
-    if (this.qualities == null){
-        const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(this.sceneName)}`
-        const { data } = await fetch(URI).then(res => res.json())
-        this.qualities = data
+    if (this.qualities === null) {
+      const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(
+        this.sceneName
+      )}`
+      const { data } = await fetch(URI).then(res => res.json())
+      this.qualities = data
 
-        // remove reference
-        this.qualities.pop()
+      // remove reference
+      this.qualities.pop()
     }
 
-
     // Load the cached configuration in the configurator component
-    if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
+    if (this.lockConfig === false)
+      this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
     // Load extracts if none were cached
-    if (this.extracts.length === 0) await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
+    if (this.extracts.length === 0)
+      await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
+
+    // if no cache let random shuffle extract zone
+    if (this.extractsIndices === null) {
+      let indices = [
+        ...Array(this.extractConfig.x * this.extractConfig.y).keys()
+      ]
+      this.extractsIndices = shuffleArray(indices)
+
+      // get extract for reference image
+      const data = await this.getExtracts('max')
+
+      this.referenceExtracts = data.extracts.map((url, i) => ({
+        link: url,
+        quality: data.info.image.quality,
+        zone: i + 1,
+        index: i
+      }))
+
+      // reorder extracts following random indices
+      let referenceExtractsRandom = []
+      let extractsRandom = []
+
+      for (const [i, index] of this.extractsIndices.entries()) {
+        referenceExtractsRandom.push(this.referenceExtracts[index])
+        extractsRandom.push(this.extracts[index])
+        extractsRandom[i].index = index
+      }
+
+      this.referenceExtracts = referenceExtractsRandom
+      this.extracts = extractsRandom
+    }
 
     this.saveProgress()
   }
