@@ -162,7 +162,7 @@ export default {
       for (const [i, index] of this.extractsIndices.entries()) {
         referenceExtractsRandom.push(this.referenceExtracts[index])
         extractsRandom.push(this.extracts[index])
-        extractsRandom[i].index = index
+        extractsRandom[i].index = i
       }
 
       this.referenceExtracts = referenceExtractsRandom
