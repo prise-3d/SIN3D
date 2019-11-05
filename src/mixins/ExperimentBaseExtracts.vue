@@ -25,7 +25,8 @@ export default {
       extractsInfos: null,
 
       showHoverBorder: null,
-      lockConfig: null
+      lockConfig: null,
+      comment: null
     }
   },
   computed: {
@@ -207,7 +208,8 @@ export default {
           zone: x.zone
         })),
         qualities: this.qualities,
-        referenceImage: this.referenceImage
+        referenceImage: this.referenceImage,
+        comment: this.comment
       }
       this.sendMessage({ msgId: experimentMsgId.VALIDATED, msg: obj })
       this.setExperimentFinished()
