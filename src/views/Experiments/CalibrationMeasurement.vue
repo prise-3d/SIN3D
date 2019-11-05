@@ -83,6 +83,10 @@
       </v-flex>
       <!-- Experiment validation button -->
       <v-layout justify-end align-content-end>
+        <v-text-field
+          v-model="comment"
+          label="Add a comment here"
+        />
         <v-btn @click="finishExperiment" color="primary" large right>Finish experiment</v-btn>
       </v-layout>
       <!--/ Experiment validation button -->
