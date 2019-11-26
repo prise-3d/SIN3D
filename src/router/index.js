@@ -33,6 +33,11 @@ export default new Router({
       component: () => import('@/views/ExperimentsList')
     },
     {
+      path: '/scenes',
+      name: 'ScenesList',
+      component: () => import('@/views/ScenesList')
+    },
+    {
       path: '/experiments/:experimentName',
       name: 'SelectExperimentScene',
       component: () => import('@/views/SelectExperimentScene'),
