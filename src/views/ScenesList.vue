@@ -14,7 +14,7 @@
           >
             <v-card>
               <a
-                :href="aScene.qualitiesLink"
+                :href="aScene.thumbLink"
               >
                 <v-img
                   :src="aScene.thumbLink"
