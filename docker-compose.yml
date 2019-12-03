@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
 
@@ -8,7 +8,10 @@ services:
         image: mongo
         restart: always
         volumes:
-            - "./data:/data/db" # get access to database files
+            - type: bind
+              source: ./data
+              target: /data/db
+              read_only: false
         ports:
            - "27017:27017"
         networks:
