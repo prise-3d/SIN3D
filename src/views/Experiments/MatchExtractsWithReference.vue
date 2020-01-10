@@ -18,7 +18,7 @@
 
     <template v-slot:content>
       <v-flex xs12 sm6>
-        <v-card dark color="primary">
+        <v-card dark color="primary" :max-width="maxWidth">
           <v-card-text class="px-0">Experiment image</v-card-text>
 
           <v-container class="pa-1">
@@ -66,9 +66,9 @@
         </v-card>
       </v-flex>
       <v-flex sm6 xs12>
-        <v-card dark color="primary">
+        <v-card dark color="primary" :max-width="maxWidth">
           <v-card-text>Reference image</v-card-text>
-          <v-img v-if="referenceImage" :src="referenceImage" />
+          <v-img v-if="referenceImage" :src="referenceImage" :max-height="maxHeight" :max-width="maxWidth" />
         </v-card>
       </v-flex>
       <!-- Experiment validation button -->
@@ -98,7 +98,9 @@ export default {
 
   data() {
     return {
-      referenceImage: null
+      referenceImage: null,
+      maxWidth: null,
+      maxHeight: null
     }
   },
 
@@ -109,11 +111,18 @@ export default {
     // Load progress from store into local state
     this.loadProgress()
 
+    let reference = null
+
     // Load scene data from the API
     await Promise.all([
-      this.getImage('max').then(res => (this.referenceImage = res.link)),
+      this.getImage('max').then(res => (reference = res)),
       this.getQualitiesList()
     ])
+
+    this.referenceImage = reference.link
+
+    this.maxWidth = reference.metadata.width
+    this.maxHeight = reference.metadata.height
 
     // Load the cached configuration in the configurator component
     if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
