@@ -18,7 +18,7 @@
 
     <template v-slot:content>
       <v-flex xs12 sm6>
-        <v-card dark color="primary">
+        <v-card dark color="primary" :max-width="maxWidth">
           <v-card-text class="px-0">Experiment image</v-card-text>
 
           <v-container class="pa-1">
@@ -55,7 +55,7 @@
         </v-card>
       </v-flex>
       <v-flex sm6 xs12>
-        <v-card dark color="primary">
+        <v-card dark color="primary" :max-width="maxWidth">
           <v-card-text>Reference image</v-card-text>
 
           <v-container v-if="referenceExtracts" class="pa-1">
@@ -110,7 +110,9 @@ export default {
   data() {
     return {
       referenceExtracts: null,
-      extractsIndices: null
+      extractsIndices: null,
+      maxWidth: null,
+      maxHeight: null
     }
   },
 
@@ -121,8 +123,9 @@ export default {
     // Load progress from store into local state
     this.loadProgress()
 
-    // Load scene data from the API
+    let reference = null
 
+    // Load scene data from the API
     if (this.qualities === null) {
       const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(
         this.sceneName
@@ -133,6 +136,14 @@ export default {
       // remove reference
       this.qualities.pop()
     }
+
+    // get reference size of image
+    await Promise.all([
+      this.getImage('max').then(res => (reference = res))
+    ])
+
+    this.maxWidth = reference.metadata.width
+    this.maxHeight = reference.metadata.height
 
     // Load the cached configuration in the configurator component
     if (this.lockConfig === false)
@@ -173,6 +184,8 @@ export default {
       this.extracts = extractsRandom
     }
 
+    console.log(this.referenceExtracts[0].link)
+    
     this.saveProgress()
   }
 }
