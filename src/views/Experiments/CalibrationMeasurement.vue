@@ -183,9 +183,6 @@ export default {
       this.referenceExtracts = referenceExtractsRandom
       this.extracts = extractsRandom
     }
-
-    console.log(this.referenceExtracts[0].link)
-    
     this.saveProgress()
   }
 }
