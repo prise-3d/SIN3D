@@ -3,8 +3,8 @@
     <v-container grid-list-md text-xs-center fluid>
       <v-layout row wrap>
         <!-- Experiment header -->
-        <v-flex xs12>
 
+        <v-flex xs12>
           <!-- DISABLE : This part is commented to disable view of back scene selection button when starting scene experiment -->
           <!--
           <v-layout justify-start>

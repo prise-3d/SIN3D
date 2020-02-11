@@ -2,6 +2,17 @@
   <div>
     Scenes list
     <v-card>
+      <v-card-title>
+        Search into scenes
+        <v-spacer />
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Search"
+          single-line
+          hide-details
+        />
+      </v-card-title>
       <v-container
         fluid
         grid-list-md
@@ -9,7 +20,7 @@
         <v-layout row wrap>
           <v-flex
             md3
-            v-for="aScene in scenes"
+            v-for="aScene in filteredScenes()"
             :key="aScene.name"
           >
             <v-card>
@@ -44,7 +55,8 @@ export default {
   name: 'ScenesList',
   data() {
     return {
-      scenes: []
+      scenes: [],
+      search: ''
     }
   },
   computed: {
@@ -67,6 +79,14 @@ export default {
       }
 
       this.scenes.push(sceneObj)
+    }
+  },
+  methods: {
+    filteredScenes: function () {
+      let searchCriteria = this.search
+      return this.scenes.filter(function (s) {
+        return s.name.includes(searchCriteria) || searchCriteria === ''
+      })
     }
   }
 }
