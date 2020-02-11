@@ -138,6 +138,7 @@ test.serial('GET /getImageExtracts?sceneName=bathroom&imageQuality=10&horizontal
         depth: 'uchar',
         density: 72,
         isProgressive: false,
+        paletteBitDepth: 8,
         hasProfile: false,
         hasAlpha: false
       }
