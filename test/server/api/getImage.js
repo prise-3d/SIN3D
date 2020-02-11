@@ -108,6 +108,7 @@ test('GET /getImage?sceneName=bathroom&imageQuality=10', async t => {
       depth: 'uchar',
       density: 72,
       isProgressive: false,
+      paletteBitDepth: 8,
       hasProfile: false,
       hasAlpha: false
     }
