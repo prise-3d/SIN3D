@@ -19,7 +19,7 @@
     <template v-slot:content>
       <v-flex xs12 sm6>
         <v-card dark color="primary" :max-width="maxWidth">
-          <v-card-text class="px-0">Experiment image</v-card-text>
+          <!-- <v-card-text class="px-0">Experiment image</v-card-text> -->
 
           <v-container class="pa-1">
             <template v-for="i in extractConfig.y">
@@ -67,7 +67,7 @@
       </v-flex>
       <v-flex sm6 xs12>
         <v-card dark color="primary" :max-width="maxWidth">
-          <v-card-text>Reference image</v-card-text>
+          <!-- <v-card-text>Reference image</v-card-text> -->
           <v-img v-if="referenceImage" :src="referenceImage" :max-height="maxHeight" :max-width="maxWidth" />
         </v-card>
       </v-flex>
