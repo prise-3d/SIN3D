@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container grid-list-md text-xs-center fluid>
+    <v-container grid-list-md text-xs-center fluid style="padding-top: 0px !important;">
       <v-layout row wrap>
         <!-- Experiment header -->
 
@@ -16,7 +16,7 @@
           -->
 
           <h2>Experiment "{{ $route.meta.fullName }}"</h2>
-          <h3>{{ sceneName }}</h3>
+          <!-- <h3>{{ sceneName }}</h3> -->
 
           <slot name="header"></slot>
         </v-flex>

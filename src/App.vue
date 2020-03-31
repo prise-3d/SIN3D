@@ -54,7 +54,7 @@
 
     <!-- Pages content -->
     <v-content>
-      <v-container fill-height>
+      <v-container fill-height style="padding-top:0px !important; padding-bottom:0px !important">
         <v-layout justify-center>
           <v-flex xs12>
             <v-scroll-x-reverse-transition mode="out-in">

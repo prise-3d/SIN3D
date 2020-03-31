@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Experiment "{{ experimentFullName }}"</h2>
+    <h2>"{{ experimentFullName }}"</h2>
 
     <v-card>
       <v-card-title primary-title>
@@ -8,11 +8,9 @@
         <div class="headline">Experiment validated for the scene "{{ sceneName }}"</div>
         <v-spacer />
       </v-card-title>
-
-      <!--
       <v-card-actions>
         <v-spacer />
-        <v-btn flat exact to="/experiments/">
+        <!-- <v-btn flat exact to="/experiments/">
           <v-icon left>home</v-icon>
           Select another experiment
         </v-btn>
@@ -20,15 +18,15 @@
         <v-btn flat exact :to="`/experiments/${experimentName}`">
           <v-icon left>arrow_back</v-icon>
           Go back to scene selection
-        </v-btn>
-
+        </v-btn> -->
         <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene}`">
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
         </v-btn>
+        <div v-if="!hasScenesLeft" class="headline">You finished all the scene, thanks for your contribution</div>
+
         <v-spacer />
       </v-card-actions>
-      !-->
     </v-card>
   </div>
 </template>
@@ -79,6 +77,8 @@ export default {
         scenesList.includes(aScene) &&
         this.progression[this.experimentName] &&
         !this.progression[this.experimentName][aScene].done)
+
+    this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
   }
 }
 </script>

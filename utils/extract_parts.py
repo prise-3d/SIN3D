@@ -13,7 +13,6 @@ def get_parts(img):
 
     parts = []
 
-
     h, w, c = img.shape
     h_block, w_block = image_block
     h_zone, w_zone = zone_block
@@ -26,26 +25,32 @@ def get_parts(img):
 
     # extract left up  image
     h_start = int((h % h_zone) / 2)
-    left_up_image = img[h_start:h_block+h_start, m_w-h_block:m_w]
+    w_start = int((w % w_zone) / 2)
+    left_up_image = img[h_start:h_block+h_start, w_start:w_start+w_block]
 
     parts.append(left_up_image)
 
     # extract middle up image
     h_start = int((h % h_zone) / 2)
+
     middle_up_image = img[h_start:h_block+h_start, m_w-m_w_img_block:m_w+m_w_img_block]
 
     parts.append(middle_up_image)
 
     # extract right up  image
     h_start = int((h % h_zone) / 2)
-    right_up_image = img[h_start:h_block+h_start, m_w:m_w+w_block]
-    
+    w_end = w - int((w % w_zone) / 2)
+
+    right_up_image = img[h_start:h_block+h_start, w_end-w_block:w_end]
+
     parts.append(right_up_image)
 
     # extract left bottom image
     h_end = h - int((h % h_zone) / 2)
     h_start = h_end - h_block
-    left_bottom_image = img[h_start:h_end, m_w-h_block:m_w]
+    w_start = int((w % w_zone) / 2)
+
+    left_bottom_image = img[h_start:h_end, w_start:w_start+w_block]
 
     parts.append(left_bottom_image)
 
@@ -60,7 +65,9 @@ def get_parts(img):
     # extract left bottom image
     h_end = h - int((h % h_zone) / 2)
     h_start = h_end - h_block
-    right_bottom_image = img[h_start:h_end, m_w:m_w+w_block]
+    w_end = w - int((w % w_zone) / 2)
+
+    right_bottom_image = img[h_start:h_end,  w_end-w_block:w_end]
 
     parts.append(right_bottom_image)
 
