@@ -42,7 +42,7 @@ export const experiments = {
   MatchExtractsWithReference: {
     mixins: [mixins.ExperimentBaseExtracts],
     defaultConfig: {
-      lockConfig: false,
+      lockConfig: true,
       showHoverBorder: true,
       extractConfig: {
         x: 4,
