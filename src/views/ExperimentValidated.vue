@@ -23,8 +23,7 @@
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
         </v-btn>
-        <div v-if="!hasScenesLeft" class="headline">You finished all the scene, thanks for your contribution</div>
-
+        <div v-if="!hasScenesLeft" class="headline">You finished all the scenes, thanks for your contribution!</div>
         <v-spacer />
       </v-card-actions>
     </v-card>
@@ -78,7 +77,9 @@ export default {
         this.progression[this.experimentName] &&
         !this.progression[this.experimentName][aScene].done)
 
-    this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+    if (this.hasScenesLeft) {
+      this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+    }
   }
 }
 </script>

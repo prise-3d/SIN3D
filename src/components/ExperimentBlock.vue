@@ -15,7 +15,7 @@
           </v-layout>
           -->
 
-          <h2>Experiment "{{ $route.meta.fullName }}"</h2>
+          <h2>"{{ $route.meta.fullName }}"</h2>
           <!-- <h3>{{ sceneName }}</h3> -->
 
           <slot name="header"></slot>
