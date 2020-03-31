@@ -96,7 +96,7 @@ export const experiments = {
         'p3d_villa-daylight_800_800',
         'p3d_vw-van_800_800',
         // 'p3d_water-caustic_800_800',
-        'p3d_whiteroom-daytime_800_800',
+        // 'p3d_whiteroom-daytime_800_800',
         'p3d_whiteroom-night_800_800'
       ],
       blacklist: null
