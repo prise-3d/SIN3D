@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout justify-start>
+    <!-- <v-layout justify-start>
       <v-btn flat exact :to="`/experiments`">
         <v-icon left>arrow_back</v-icon>
         Back to experiment selection
@@ -8,9 +8,11 @@
     </v-layout>
 
     <h4>Select a scene for the experiment "{{ experimentFullName }}"</h4>
-    <span>Completion: {{ numberOfValidatedScenes }}/{{ numberOfScenes }} - {{ completionPercent }}%</span>
+    <span>Completion: {{ numberOfValidatedScenes }}/{{ numberOfScenes }} - {{ completionPercent }}%</span> -->
 
-    <v-card>
+    <loader v-if="loadingMessage" :message="loadingMessage" />
+
+    <!-- <v-card>
       <v-container
         fluid
         grid-list-md
@@ -58,11 +60,12 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-card>
+    </v-card> -->
   </div>
 </template>
 
 <script>
+import Loader from '@/components/Loader.vue'
 import { mapState, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
@@ -70,6 +73,9 @@ import { getExperimentSceneList } from '@/config.utils'
 
 export default {
   name: 'SelectExperimentScene',
+  components: {
+    Loader
+  },
   props: {
     experimentName: {
       type: String,
@@ -79,7 +85,8 @@ export default {
   data() {
     return {
       scenes: [],
-      experimentFullName: null
+      experimentFullName: null,
+      loadingMessage: 'Loading your experiment...'
     }
   },
   computed: {
@@ -137,8 +144,16 @@ export default {
     working = shuffleArray(working)
     done = shuffleArray(done)
 
+    // for the experiment user is redirect to current working on
+    if (working.length > 0) {
+      this.$router.push(working[0].experimentLink)
+    }
+    // for the experiment user is redirect to new random scene (already shuffle, so first element)
+    else {
+      this.$router.push(todo[0].experimentLink)
+    }
     // Render the scenes, in the following order : working, todo, done
-    this.scenes = this.scenes.concat(working, todo, done)
+    // this.scenes = this.scenes.concat(working, todo, done)
   }
 }
 </script>
