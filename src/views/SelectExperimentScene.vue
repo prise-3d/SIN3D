@@ -10,9 +10,9 @@
     <h4>Select a scene for the experiment "{{ experimentFullName }}"</h4>
     <span>Completion: {{ numberOfValidatedScenes }}/{{ numberOfScenes }} - {{ completionPercent }}%</span> -->
 
-    <loader v-if="loadingMessage" :message="loadingMessage" />
+    <loader v-if="!loaded" :message="loadingMessage" />
 
-    <!-- <v-card>
+    <v-card v-if="loaded">
       <v-container
         fluid
         grid-list-md
@@ -60,7 +60,7 @@
           </v-flex>
         </v-layout>
       </v-container>
-    </v-card> -->
+    </v-card>
   </div>
 </template>
 
@@ -86,6 +86,7 @@ export default {
     return {
       scenes: [],
       experimentFullName: null,
+      loaded: false,
       loadingMessage: 'Loading your experiment...'
     }
   },
@@ -149,11 +150,14 @@ export default {
       this.$router.push(working[0].experimentLink)
     }
     // for the experiment user is redirect to new random scene (already shuffle, so first element)
-    else {
+    else if (todo.length > 0) {
       this.$router.push(todo[0].experimentLink)
     }
     // Render the scenes, in the following order : working, todo, done
-    // this.scenes = this.scenes.concat(working, todo, done)
+    this.scenes = this.scenes.concat(working, todo, done)
+    this.loaded = setTimeout(() => {
+      return true
+    }, 2500)
   }
 }
 </script>
