@@ -66,7 +66,7 @@
 
 <script>
 import Loader from '@/components/Loader.vue'
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
 import { getExperimentSceneList } from '@/config.utils'
@@ -91,8 +91,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['progression']),
-    ...mapGetters(['getHostURI']),
+    ...mapGetters(['getHostURI', 'getAllExperimentProgress']),
 
     numberOfScenes() {
       return this.scenes.length
@@ -106,6 +105,9 @@ export default {
   },
   async mounted() {
     const scenesList = getExperimentSceneList(this.experimentName)
+
+    // retrieve experiment data of user
+    this.progression = this.getAllExperimentProgress()
 
     // Find the selected experiment full name
     this.experimentFullName = Experiments.find(x => x.name === this.experimentName).meta.fullName
