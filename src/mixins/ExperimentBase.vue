@@ -30,7 +30,6 @@ export default {
   computed: {
     ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
   },
-
   mounted() {
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
       this.sendMessage({
