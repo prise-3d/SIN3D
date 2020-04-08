@@ -89,6 +89,9 @@ export default {
     commit('setListScenes', scenes.data)
   },
 
+  updateExperimentProgress({ commit }) {
+    commit('updateExperimentProgress')
+  },
   setExperimentProgress({ commit }, { experimentName, sceneName, data }) {
     commit('setExperimentProgress', { experimentName, sceneName, data })
   },

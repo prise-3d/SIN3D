@@ -30,6 +30,9 @@ router.beforeEach((to, from, next) => {
     // Set the userId and experimentId (to explicitly identify the user)
     store.commit('setUserExperimentId', { userId: request.userId, experimentId: request.experimentId })
 
+    // update experiment progress due to perhaps new ids
+    store.commit('updateExperimentProgress')
+
     // Redirect to the experiment scene selector (or directly to a scene if specified)
     if (request.experimentName) {
       if (request.sceneName)

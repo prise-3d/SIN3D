@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
 import { rand } from '@/functions'
@@ -59,7 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['progression'])
+    ...mapGetters(['getAllExperimentProgress'])
   },
   mounted() {
     this.items = Experiments.map(expe => {
@@ -68,6 +68,10 @@ export default {
         name: expe.meta.fullName,
         link: `/experiments/${expe.name}`
       }
+
+      // load current user progression
+      this.progression = this.getAllExperimentProgress()
+
       // Check cache has an entry for each scenes in this experiment
       if (this.progression && this.progression[expe.name]) {
         // Set experiment completion percentage
