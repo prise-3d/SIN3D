@@ -66,7 +66,7 @@
 
 <script>
 import Loader from '@/components/Loader.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
 import { getExperimentSceneList } from '@/config.utils'
@@ -92,6 +92,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getHostURI', 'getAllExperimentProgress']),
+    ...mapActions(['loadScenesList']),
 
     numberOfScenes() {
       return this.scenes.length
@@ -104,6 +105,9 @@ export default {
     }
   },
   async mounted() {
+    // reload scene list to update
+    await this.loadScenesList
+
     const scenesList = getExperimentSceneList(this.experimentName)
 
     // retrieve experiment data of user

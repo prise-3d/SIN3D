@@ -19,6 +19,8 @@
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBase from '@/mixins/ExperimentBase'
 
+import { mapActions } from 'vuex'
+
 export default {
   components: {
     ExperimentBlock
@@ -56,7 +58,9 @@ export default {
   },
 
   // List of experiment-specific methods
-  methods: {}
+  methods: {
+    ...mapActions(['loadScenesList'])
+  }
 }
 </script>
 
