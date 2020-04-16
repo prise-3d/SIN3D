@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
 import { rand } from '@/functions'
@@ -56,6 +56,7 @@ export default {
   },
   computed: {
     ...mapGetters(['getAllExperimentProgress']),
+    ...mapActions(['loadScenesList']),
 
     hasScenesLeft() {
       return this.availableScenes.length > 0
@@ -64,7 +65,10 @@ export default {
       return this.availableScenes[rand(0, this.availableScenes.length - 1)]
     }
   },
-  mounted() {
+  async mounted() {
+    // reload scene list to update
+    await this.loadScenesList
+
     const scenesList = getExperimentSceneList(this.experimentName)
 
     // load current user progression

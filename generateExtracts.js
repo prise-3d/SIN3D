@@ -67,7 +67,6 @@ const setup = async () => {
 
   // Cut the image
   const extracts = await cutImage(image, extractConfigX, extractConfigY)
-  console.log(extracts)
 
   // Move extracts images if outputDir is specified
   if (outputDir)

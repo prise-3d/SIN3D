@@ -24,6 +24,7 @@ const createProgressionObj = (state, scenes) => {
       if (state.progression[state.experimentId][state.userId][expe.name] && state.progression[state.experimentId][state.userId][expe.name][scene])
         accScene[scene] = state.progression[state.experimentId][state.userId][expe.name][scene]
       else accScene[scene] = { done: false, data: {} }
+
       return accScene
     }, {})
     accExpe[expe.name] = scenesProgressObj
