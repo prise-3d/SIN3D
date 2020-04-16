@@ -206,8 +206,10 @@ export const cutImage = async (image, xExtracts, yExtracts) => {
         height: yCropSize
       }
 
+
       // Check the file already exist
       let fileAlreadyExists = false
+
       try {
         await fs.access(extractPath, fsConstants.R_OK)
         fileAlreadyExists = true

@@ -48,6 +48,25 @@ export default {
       data.extracts = data.extracts.map(x => this.getHostURI + x)
       return data
     },
+    // There was an error loading extracts in v-img
+    // (extracts have probably been removed from the server)
+    // //
+    // Get all extracts qualities and remove duplicates
+    // Then do all the API extract-generation API calls then reload the page
+    async extractsRemovedFromServerFallback() {
+      this.loadingMessage = 'Synchronizing with the server...'
+      try {
+        const qualities = [...new Set(this.extracts.map(x => x.quality))]
+        await Promise.all(qualities.map(x => this.getExtracts(x)))
+      }
+      catch (err) {
+        console.error(err)
+        this.loadingErrorMessage = 'Failed to synchronize with the server. Try reloading the page.'
+      }
+      finally {
+        this.loadingMessage = null
+      }
+    },
 
     // Convert a simple API extracts object to get more informations
     getExtractFullObject(extractsApiObj) {
@@ -74,7 +93,8 @@ export default {
         this.extractConfig.quality = config.quality
         const data = await this.getExtracts(config.quality || undefined)
         this.extractsInfos = data.info
-        this.extracts = this.getExtractFullObject(data)
+        // Put extracts in cache if not already there
+        if (this.extracts.length === 0) this.extracts = this.getExtractFullObject(data)
 
         // If there is a configurator, retract it
         if (configuratorRef) configuratorRef.setVisibility(false)
@@ -93,12 +113,31 @@ export default {
     async extractAction(event, extractObj) {
       const { index, nextQuality, precQuality, quality } = extractObj
 
+      const qualityIndex = this.qualities.indexOf(quality)
       let action, newQuality
+
       if (event.button === 0) action = 'needLess' // Left click
       if (event.button === 2) action = 'needMore' // Right click
 
+      if (event.button === 0 && event.ctrlKey) action = 'need10Less' // ctrl + Right click
+      if (event.button === 2 && event.ctrlKey) action = 'need10More' // ctrl + Left click
+
       if (action === 'needLess') newQuality = precQuality
       if (action === 'needMore') newQuality = nextQuality
+
+
+      if (action === 'need10More') {
+        if (qualityIndex + 10 >= this.qualities.length - 1)
+          newQuality = this.qualities[this.qualities.length - 1]
+        else
+          newQuality = this.qualities[qualityIndex + 10]
+      }
+      if (action === 'need10Less') {
+        if (qualityIndex - 10 <= 0)
+          newQuality = this.qualities[0]
+        else
+          newQuality = this.qualities[qualityIndex - 10]
+      }
 
       // Do not load a new extract if same quality
       if (newQuality === quality) return

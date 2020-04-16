@@ -17,8 +17,8 @@
     </template>
 
     <template v-slot:content>
-      <v-flex xs12 sm6>
-        <v-card dark color="primary" :max-width="maxWidth">
+      <v-flex xs12 sm6 :style="{ 'max-width': maxWidth + 'px', 'min-width': maxWidth + 'px', 'margin-right': 20 + 'px' }">
+        <v-card dark color="primary" :max-width="maxWidth" :min-width="maxWidth">
           <!-- <v-card-text class="px-0">Experiment image</v-card-text> -->
 
           <v-container class="pa-1">
@@ -46,14 +46,10 @@
                       @click.right.prevent="extractAction($event, anExtract)"
                       class="cursor"
                       :class="{ 'extract-hover-border': showHoverBorder === true }"
+                      @error="extractsRemovedFromServerFallback"
                     >
                       <template v-slot:placeholder>
-                        <v-layout
-                          fill-height
-                          align-center
-                          justify-center
-                          ma-0
-                        >
+                        <v-layout fill-height align-center justify-center ma-0>
                           <v-progress-circular indeterminate color="grey lighten-5" />
                         </v-layout>
                       </template>
@@ -65,10 +61,10 @@
           </v-container>
         </v-card>
       </v-flex>
-      <v-flex sm6 xs12>
-        <v-card dark color="primary" :max-width="maxWidth">
+      <v-flex sm6 xs12 :style="{ 'max-width': maxWidth + 'px', 'min-width': maxWidth + 'px' }">
+        <v-card dark color="primary" :max-width="maxWidth" :min-width="maxWidth">
           <!-- <v-card-text>Reference image</v-card-text> -->
-          <v-img v-if="referenceImage" :src="referenceImage" :max-height="maxHeight" :max-width="maxWidth" />
+          <v-img v-if="referenceImage" :src="referenceImage" :max-height="maxHeight" :max-width="maxWidth" :min-width="maxWidth" />
         </v-card>
       </v-flex>
       <!-- Experiment validation button -->
@@ -128,7 +124,8 @@ export default {
     if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
     // Load extracts if none were cached
-    if (this.extracts.length === 0) await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
+    // if (this.extracts.length === 0)
+    await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
     this.saveProgress()
   }

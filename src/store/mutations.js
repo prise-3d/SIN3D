@@ -17,7 +17,6 @@ const checkProgression = (state, experimentName, sceneName) => {
 const createProgressionObj = (state, scenes) => {
   const progressionObj = Experiments.reduce((accExpe, expe) => {
     const scenesProgressObj = scenes.reduce((accScene, scene) => {
-
       // check progression
       checkProgression(state, expe, scene)
 
