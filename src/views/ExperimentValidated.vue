@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import getters from '@/store/getters'
+import { mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
 import { rand } from '@/functions'

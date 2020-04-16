@@ -18,7 +18,7 @@ export const mixins = {
   ExperimentBaseExtracts: {
     defaultConfig: {
       lockConfig: false,
-      showHoverBorder: true,
+      showHoverBorder: false,
       extractConfig: {
         x: 4,
         y: 4
@@ -43,7 +43,7 @@ export const experiments = {
     mixins: [mixins.ExperimentBaseExtracts],
     defaultConfig: {
       lockConfig: true,
-      showHoverBorder: true,
+      showHoverBorder: false,
       extractConfig: {
         x: 4,
         y: 4
