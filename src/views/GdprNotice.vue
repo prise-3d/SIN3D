@@ -96,7 +96,7 @@ This website's main goal is to collect data as part of public research. By using
              <!-- eslint-enable -->
             </v-card-text>
 
-            <v-btn color="primary" @click="setGdprValidated">I concent to this privacy policy</v-btn>
+            <v-btn color="primary" @click="setGdprValidated">I consent to this privacy policy</v-btn>
           </v-layout>
         </v-container>
       </v-card>
