@@ -43,7 +43,7 @@ do
 
     if [[ "$folder" == ${prefix}* ]]; then
 
-        output_scene_folder=$output_folder/${folder}_${width}_${height}
+        output_scene_folder=$output_folder/${folder}_part6
         mkdir -p $output_scene_folder
 
         for file in $(ls ${folder_path}*)
