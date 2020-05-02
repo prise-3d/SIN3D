@@ -2,6 +2,7 @@
 import os, sys
 import argparse
 import json
+import numpy as np
 
 
 def main():
@@ -34,9 +35,9 @@ def main():
 
         for extract in extracts:
             if extract['index'] not in dict_data[scene]:
-                dict_data[scene][extract['index']] = (extract['quality'], 1)
+                dict_data[scene][extract['index']] = [extract['quality']]
             else:
-                dict_data[scene][extract['index']] = (dict_data[scene][extract['index']][0] + extract['quality'], dict_data[scene][extract['index']][1] + 1)
+                dict_data[scene][extract['index']].append(extract['quality'])
             
     
     output_file = open(p_output, 'w')
@@ -45,7 +46,7 @@ def main():
 
         for extract in dict_data[scene]:
             thresholds_data = dict_data[scene][extract]
-            output_file.write(str(int(thresholds_data[0] / thresholds_data[1])) + ';')
+            output_file.write(str(int(np.mean(thresholds_data))) + ';')
 
         output_file.write('\n')
 
