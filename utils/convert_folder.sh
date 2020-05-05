@@ -41,9 +41,9 @@ do
     IFS='/' read -ra ADDR <<< "${folder_path}"
     folder=${ADDR[-1]}
 
-    if [[ "$folder" == ${prefix}* ]]; then
+#    if [[ "$folder" == ${prefix}* ]]; then
 
-        output_scene_folder=$output_folder/${folder}_part6
+        output_scene_folder=$output_folder/${folder}_${width}_${height}
         mkdir -p $output_scene_folder
 
         for file in $(ls ${folder_path}*)
@@ -54,5 +54,5 @@ do
             echo "Images centered saved into $output_scene_folder/$file"
         done
 
-    fi
+#    fi
 done
