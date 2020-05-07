@@ -60,7 +60,6 @@ export const experiments = {
         'p3d_cornel-box-view0_part6',
         'p3d_crown-view0_part6',
         'p3d_dragon-view0_part6',
-        'p3d_dragon_250-view0_part6',
         'p3d_ecosys-view0_part6',
         'p3d_eponge-fractal-5-view0_part6',
         'p3d_eponge-fractal-5-view1_part6',
@@ -68,7 +67,6 @@ export const experiments = {
         'p3d_eponge-fractal-6-view1_part6',
         'p3d_ganesha-view0_part6',
         'p3d_glass-of-water-view0_part6',
-        'p3d_indirect-view0_part6',
         'p3d_kitchen-view0_part6',
         'p3d_landscape-view3_part6',
         'p3d_living-room-view0_part6',
@@ -82,10 +80,7 @@ export const experiments = {
         'p3d_pavilion-night-view1_part6',
         'p3d_pavilion-night-view2_part6',
         'p3d_staircase-view1_part6',
-        'p3d_staircase2-view0_part6',
-        'p3d_staircase2-view1_part6',
-        'p3d_tt-view0_part6',
-        'p3d_vw-van-view0_part6'
+        'p3d_staircase2-view0_part6'
       ],
       blacklist: null
       // No whitelist = Select all scenes
