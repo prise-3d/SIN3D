@@ -98,9 +98,9 @@
           label="Ajouter un commentaire ici"
         />
 
-        <v-btn @click="userBreak" color="primary" large right>Faire une pause</v-btn>
+        <v-btn @click="userBreak" color="primary" large right>Arrêter ou faire une pause</v-btn>
 
-        <v-btn @click="finishExperiment" color="success" large right>Passser à l'image suivante</v-btn>
+        <v-btn @click="finishExperiment" color="success" large right>Valider & passer à l'image suivante</v-btn>
       </v-layout>
       <!--/ Experiment validation button -->
     </template>
