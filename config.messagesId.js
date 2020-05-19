@@ -17,7 +17,7 @@ export const EXPERIMENT = {
   DATA: 'EXPERIMENT_DATA',
 
   // An experiment was validated
-  VALIDATED: 'EXPERIMENT_VALIDATED',
+  VALIDATED: 'EXPERIMENT_VALIDATED'
 
 }
 

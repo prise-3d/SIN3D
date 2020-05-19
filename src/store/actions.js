@@ -82,6 +82,24 @@ export default {
     })
   },
 
+  async checkExistData({ state, getters: { getHostURI } }, { msgId, msg = undefined }) {
+    const res = await fetch(`${getHostURI}${API_ROUTES.experimentCheck}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        uuid: state.uuid,
+        userId: state.userId,
+        experimentId: state.experimentId,
+        msgId,
+        msg
+      })
+    })
+
+    return res.status
+  },
+
   async loadScenesList({ getters: { isHostConfigured, getHostURI }, commit }) {
     if (!isHostConfigured) throw new Error('Host is not configured.')
 

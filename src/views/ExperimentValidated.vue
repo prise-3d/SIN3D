@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h2>"{{ experimentFullName }}"</h2>
+  <div style="text-align:center">
+    <!-- <h2>"{{ experimentFullName }}"</h2> -->
 
-    <v-card>
+    <!-- <v-card>
       <v-card-title primary-title>
         <v-spacer />
         <div class="headline">Experiment validated for the scene "{{ sceneName }}"</div>
@@ -10,7 +10,7 @@
       </v-card-title>
       <v-card-actions>
         <v-spacer />
-        <!-- <v-btn flat exact to="/experiments/">
+        <v-btn flat exact to="/experiments/">
           <v-icon left>home</v-icon>
           Select another experiment
         </v-btn>
@@ -18,7 +18,7 @@
         <v-btn flat exact :to="`/experiments/${experimentName}`">
           <v-icon left>arrow_back</v-icon>
           Go back to scene selection
-        </v-btn> -->
+        </v-btn>
         <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene}`">
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
@@ -26,7 +26,17 @@
         <div v-if="!hasScenesLeft" class="headline">You finished all the scenes, thanks for your contribution!</div>
         <v-spacer />
       </v-card-actions>
-    </v-card>
+    </v-card> -->
+
+    <div style="margin-top:10%">
+      <p style="font-size: 1.4em;">
+        Nous vous remercions d'avoir participé à cette expérience.
+        Elle va nous permettre d'améliorer les calculs d'images.
+      </p>
+    </div>
+
+    <!-- Add of newsletter component -->
+    <Newsletter />
   </div>
 </template>
 
@@ -35,9 +45,13 @@ import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
 import { rand } from '@/functions'
+import Newsletter from '@/components/ExperimentsComponents/Newsletter.vue'
 
 export default {
   name: 'ExperimentValidated',
+  components: {
+    Newsletter
+  },
   props: {
     experimentName: {
       type: String,

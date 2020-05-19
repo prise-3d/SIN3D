@@ -33,4 +33,8 @@ export default class Data {
   static find(dataId) {
     return DataModel.findById(dataId)
   }
+
+  static findOne(data) {
+    return DataModel.findOne(data)
+  }
 }

@@ -4,6 +4,7 @@ export const API_ROUTES = {
 
   dataCollect: `${API_PREFIX}/dataCollect`,
   experimentCollect: `${API_PREFIX}/experimentCollect`,
+  experimentCheck: `${API_PREFIX}/experimentCheck`,
 
   listScenes: `${API_PREFIX}/listScenes`,
 
