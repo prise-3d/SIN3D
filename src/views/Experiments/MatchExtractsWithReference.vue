@@ -18,26 +18,51 @@
     </template>
 
     <template v-slot:content>
-      <v-flex v-if="explanation === true" xs12 sm12>
+      <v-flex v-if="explanation === true || disableStart === true" xs12 sm12>
         <div style="margin-top:15%">
-          <p>
+          <p v-if="disableStart === false && calibrationScene === true" style="font-size: 1.4em;">
             Vous allez voir des images, l'image de droite constitue toujours l'image de référence. Vous devez régler la qualité de l'image de gauche pour qu'elle soit la plus proche de l'image de droite.
             La première image est constitué de carré gris, c'est une partie de calibration. Si vous souhaitez régler votre écran (contraste, luminosité) vous pouvez le faire maintenant mais il vous est demandé de ne plus changer ce réglage au cours de l'expérience.
             Vous allez ensuite voir des scènes d'image de synthèse. Vous pouvez arrêter l'expérience quand vous souhaitez (ou faire une pause).
           </p>
 
-          <v-btn @click="startExperiment" color="#007acc" large>Commencer l'expérience</v-btn>
+          <p v-if="disableStart === true" style="margin-top:2%; color:orange; font-size: 1.4em;">
+            <strong>Attention !</strong> L'expérience requiert un écran de taille minimal de <strong>1920 x 1080</strong>.
+            <br />
+            <br />
+            Vous pouvez redimensionner la fenêtre de votre navigateur pour poursuivre l'expérience.
+          </p>
+
+          <p v-if="disableStart === false" style="margin-top:2%; color:#007acc; font-size: 1.4em;">
+            <strong>La résolution de votre fenêtre de navigateur vous permet d'accéder à l'expérience</strong>.
+          </p>
+
+          <v-btn v-if="disableStart === true" @click="startExperiment" color="#007acc" large disabled>Poursuivre l'expérience</v-btn>
+          <v-btn v-if="disableStart === false" @click="startExperiment" color="#007acc" large>Poursuivre l'expérience</v-btn>
         </div>
       </v-flex>
 
       <v-flex v-if="haveBreak === true" xs12 sm12>
         <div style="margin-top:15%">
-          <p>
+          <p style="font-size: 1.4em;">
             Nous vous remercions d'avoir participé à cette expérience.
             Elle va nous permettre d'améliorer les calculs d'images. Si vous le souhaitez, vous pouvez revenir sur l'expérience via le <a :href="launcherURI" target="_blank">launcher</a> pour revoir de nouvelles images.
           </p>
 
           <v-btn @click="startExperiment" color="#007acc" large>Continuer l'expérience</v-btn>
+        </div>
+
+        <div style="margin-top:15%">
+          <p style="font-size: 1.4em;">Si vous souhaitez être informé des résultats non nomminatifs de ces recherches vous pouvez, sans obligation, laisser votre adresse mail, elle ne sera utilisée que pour vous permettre d'accéder aux résultats de l'étude une fois analysés.</p>
+
+          <v-text-field
+            v-model="email"
+            :rules="emailRules"
+            label="Votre adresse email"
+            required
+          />
+
+          <v-btn @click="finishExperiment" color="success" large disabled>Valider mon adresse</v-btn>
         </div>
       </v-flex>
 
@@ -114,6 +139,8 @@ import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
 
+import { NEWS as newsletter } from '@/../config.messagesId'
+
 export default {
   components: {
     ExperimentBlock,
@@ -129,7 +156,14 @@ export default {
       launcherURI: null,
       explanation: false,
       haveBreak: false,
-      runExpe: false
+      calibrationScene: false,
+      runExpe: false,
+      disableStart: false,
+      emailRules: [
+        v => !!v || 'L\'adresse email est obligatoire',
+        v => /.+@.+/.test(v) || 'L\'email doit être valide'
+      ],
+      email: ''
     }
   },
   computed: {
@@ -166,6 +200,10 @@ export default {
 
     this.saveProgress()
     this.loadExperimentState()
+
+    // check window size
+    this.checkWindow()
+    window.addEventListener('resize', this.checkWindow)
   },
   methods: {
     startExperiment() {
@@ -185,10 +223,34 @@ export default {
 
       if (this.sceneName === '50_shades_of_grey') {
         this.explanation = true
+        this.calibrationScene = true
       }
       else {
         this.runExpe = true
       }
+    },
+    checkWindow() {
+      // check window screen size
+      console.log(window.innerWidth, ' ', window.innerHeight)
+      if (window.innerWidth < 1920 || window.innerHeight < 900) {
+        this.disableStart = true
+        this.explanation = true
+        this.runExpe = false
+        this.haveBreak = false
+      }
+      else {
+        this.disableStart = false
+      }
+    },
+    addNewsletter() {
+      this.sendMessage({
+        msgId: newsletter,
+        msg: {
+          experimentName: this.experimentName,
+          sceneName: this.sceneName,
+          userEmail: this.email
+        }
+      })
     }
   }
 }
