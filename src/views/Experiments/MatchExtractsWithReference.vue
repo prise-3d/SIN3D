@@ -139,7 +139,7 @@
         />
 
 
-        <v-btn @click="userHelp" color="#737373" large right>Comment ça fonctionne ?</v-btn>
+        <v-btn @click="userHelp" color="#737373" large right>Besoin d'aide ?</v-btn>
 
         <v-btn @click="userBreak" color="#cc7a00" large right>Arrêter ou faire une pause</v-btn>
 
