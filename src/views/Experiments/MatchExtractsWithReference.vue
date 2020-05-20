@@ -27,7 +27,7 @@
           </p>
 
           <p v-if="disableStart === true" style="margin-top:2%; color:orange; font-size: 1.4em;">
-            <strong>Attention !</strong> L'expérience requiert un écran de taille minimal de <strong>1920 x 1080</strong>.
+            <strong>Attention !</strong> L'expérience requiert un écran de taille minimale de <strong>1920 x 1080</strong>.
             <br />
             <br />
             Vous pouvez redimensionner la fenêtre de votre navigateur pour poursuivre l'expérience.
