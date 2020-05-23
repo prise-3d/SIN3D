@@ -1,6 +1,7 @@
 <template>
   <ExperimentBlock
     :run-expe="runExpe"
+    :calibration-check="calibrationCheck"
     :experiment-name="experimentName"
     :scene-name="sceneName"
     :loading-message="loadingMessage"
@@ -18,6 +19,128 @@
     </template>
 
     <template v-slot:content>
+      <div class="text-center">
+        <v-dialog
+          v-model="dialogLess"
+          v-if="explanation === false"
+          width="500"
+        >
+          <v-card>
+            <v-card-title
+              class="headline lighten-2"
+              primary-title
+            >
+              <p style="font-size:0.8em;">La qualité de cette zone est déjà à son <strong>minimum</strong></p>
+            </v-card-title>
+
+            <v-divider />
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                text
+                @click="dialogLess = false"
+              >
+                Fermer
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+      <div class="text-center">
+        <v-dialog
+          v-model="dialogMore"
+          v-if="explanation === false"
+          width="500"
+        >
+          <v-card>
+            <v-card-title
+              class="headline lighten-2"
+              primary-title
+            >
+              <p style="font-size:0.8em;">La qualité de cette zone est déjà à son <strong>maximum</strong></p>
+            </v-card-title>
+
+            <v-divider />
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                text
+                @click="dialogMore = false"
+              >
+                Fermer
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+      <div class="text-center">
+        <v-dialog
+          v-model="dialogRefError"
+          v-if="explanation === false"
+          width="600"
+        >
+          <v-card>
+            <v-card-title
+              class="headline lighten-2"
+              primary-title
+            >
+              <p style="font-size:0.8em;">
+                Vous venez de cliquer sur l'image de référence. Celle-ci ne sera pas modifiée par cette action. <br /><br />
+                L'expérience a pour objectif de régler la qualité de l'image de gauche pour qu'elle soit la plus proche de l'image de droite.
+              </p>
+            </v-card-title>
+
+            <v-divider />
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                text
+                @click="dialogRefError = false"
+              >
+                Fermer
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+      <div class="text-center">
+        <v-dialog
+          v-model="calibrationCheck"
+          width="600"
+        >
+          <v-card>
+            <v-card-title
+              class="headline lighten-2"
+              primary-title
+            >
+              <p style="font-size:0.8em;">
+                La scène de calibration vous est proposée de nouveau dans le but de vérifier que l'image de gauche correspond toujours à celle de droite sur votre écran actuel.
+                <br /><br />
+                Vous pouvez la régler de nouveau si cela est nécessaire.
+              </p>
+            </v-card-title>
+
+            <v-divider />
+
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                text
+                @click="calibrationCheck = false"
+              >
+                Fermer
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
       <v-flex v-if="explanation === true || disableStart === true" xs12 sm12>
         <div style="margin-top:10%">
           <p v-if="disableStart === false && calibrationScene === true" style="font-size: 1.4em;">
@@ -55,11 +178,11 @@
           <br />
 
           <p style="font-size: 1.4em;text-align:left">
-            Pour cela deux actions vous sont proposées :
+            Pour cela, deux actions vous sont proposées :
             <br />
             <ul>
-              <li> <strong>clic droit de la souris :</strong> permet d'améliorer la qualité de l'image à l'endroit où de la dégradation vous est encore visible.</li>
-              <li> <strong>clic gauche de la souris :</strong> permet de revenir à une qualité inférieure de l'image si l'amélioration apportée n'était pas nécessaire (aucune amélioration visible apportée après clic droit).</li>
+              <li> <strong>clic gauche de la souris :</strong> permet d'améliorer la qualité de l'image à l'endroit où de la dégradation vous est encore visible.</li>
+              <li> <strong>clic droit de la souris :</strong> permet de revenir à une qualité inférieure de l'image si l'amélioration apportée n'était pas nécessaire (aucune amélioration visible apportée après clic droit).</li>
             </ul>
           </p>
 
@@ -125,7 +248,7 @@
           </v-container>
         </v-card>
       </v-flex>
-      <v-flex v-if="runExpe === true" sm6 xs12 :style="{ 'max-width': maxWidth + 'px', 'min-width': maxWidth + 'px' }">
+      <v-flex @click="dialogRefError = true" v-if="runExpe === true" sm6 xs12 :style="{ 'max-width': maxWidth + 'px', 'min-width': maxWidth + 'px' }">
         <v-card dark color="primary" :max-width="maxWidth" :min-width="maxWidth">
           <!-- <v-card-text>Reference image</v-card-text> -->
           <v-img v-if="referenceImage" :src="referenceImage" :max-height="maxHeight" :max-width="maxWidth" :min-width="maxWidth" />
@@ -143,7 +266,7 @@
 
         <v-btn @click="userBreak" color="#cc7a00" large right>Arrêter ou faire une pause</v-btn>
 
-        <v-btn @click="finishExperiment" color="success" large right>Valider & passer à l'image suivante</v-btn>
+        <v-btn @click="finishExperiment" color="#008000" large right>Valider & passer à l'image suivante</v-btn>
       </v-layout>
       <!--/ Experiment validation button -->
     </template>
@@ -177,47 +300,75 @@ export default {
       haveHelp: false,
       calibrationScene: false,
       runExpe: false,
-      disableStart: false
+      calibrationCheck: false,
+      disableStart: false,
+      dialogRefError: false
     }
   },
   computed: {
-    ...mapGetters(['getHostURI'])
+    ...mapGetters(['getHostURI', 'getAllExperimentProgress'])
   },
   async mounted() {
-    // Load config for this scene to local state
-    this.loadConfig()
+    // redirect by default to calibration scene
+    let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
+    if (nScenes === 0) {
+      console.log('number of scene is', nScenes)
+      window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
+      this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
+    }
+    else {
+      // Load config for this scene to local state
+      this.loadConfig()
 
-    // Load progress from store into local state
-    this.loadProgress()
+      // Load progress from store into local state
+      this.loadProgress()
 
-    this.launcherURI = this.getHostURI + '/launcher/'
+      this.launcherURI = this.getHostURI + '/launcher/'
 
-    let reference = null
+      let reference = null
 
-    // Load scene data from the API
-    await Promise.all([
-      this.getImage('max').then(res => (reference = res)),
-      this.getQualitiesList()
-    ])
+      // Load scene data from the API
+      await Promise.all([
+        this.getImage('max').then(res => (reference = res)),
+        this.getQualitiesList()
+      ])
 
-    this.referenceImage = reference.link
+      this.referenceImage = reference.link
 
-    this.maxWidth = reference.metadata.width
-    this.maxHeight = reference.metadata.height
+      this.maxWidth = reference.metadata.width
+      this.maxHeight = reference.metadata.height
 
-    // Load the cached configuration in the configurator component
-    if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
+      // Load the cached configuration in the configurator component
+      if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
-    // Load extracts if none were cached
-    // if (this.extracts.length === 0)
-    await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
+      // Load extracts if none were cached
+      // if (this.extracts.length === 0)
+      await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
-    this.saveProgress()
-    this.loadExperimentState()
+      this.saveProgress()
+      this.loadExperimentState()
 
-    // check window size
-    this.checkWindow()
-    window.addEventListener('resize', this.checkWindow)
+      // check window size
+      this.checkWindow()
+      window.addEventListener('resize', this.checkWindow)
+
+      // check if calibration is already done
+      if (this.sceneName === '50_shades_of_grey') {
+        // load current user progression
+        this.progression = this.getAllExperimentProgress()
+        let done = this.progression[this.experimentName][this.sceneName].done
+
+        console.log('Calibration scene is done', done)
+
+        if (done === true) {
+          console.log('Change of state for calibration')
+          this.calibrationCheck = true
+          this.runExpe = true
+          this.explanation = false
+          this.calibrationScene = true
+        }
+      }
+    }
   },
   methods: {
     startExperiment() {

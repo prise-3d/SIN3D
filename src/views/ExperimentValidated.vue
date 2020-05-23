@@ -28,7 +28,9 @@
       </v-card-actions>
     </v-card> -->
 
-    <div style="margin-top:10%">
+    <loader v-if="!loaded" :message="loadingMessage" />
+
+    <div v-if="loaded" style="margin-top:10%">
       <p style="font-size: 1.4em;">
         Nous vous remercions d'avoir participé à cette expérience.
         Elle va nous permettre d'améliorer les calculs d'images.
@@ -36,11 +38,12 @@
     </div>
 
     <!-- Add of newsletter component -->
-    <Newsletter />
+    <Newsletter v-if="loaded" />
   </div>
 </template>
 
 <script>
+import Loader from '@/components/Loader.vue'
 import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList } from '@/config.utils'
@@ -50,7 +53,8 @@ import Newsletter from '@/components/ExperimentsComponents/Newsletter.vue'
 export default {
   name: 'ExperimentValidated',
   components: {
-    Newsletter
+    Newsletter,
+    Loader
   },
   props: {
     experimentName: {
@@ -65,7 +69,10 @@ export default {
   data() {
     return {
       experimentFullName: null,
-      availableScenes: []
+      availableScenes: [],
+      showCalibrationEvery: 5,
+      loaded: false,
+      loadingMessage: 'Chargement...'
     }
   },
   computed: {
@@ -98,9 +105,23 @@ export default {
         this.progression[this.experimentName] &&
         !this.progression[this.experimentName][aScene].done)
 
-    if (this.hasScenesLeft) {
-      this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+    // check if necessary to show calibration before new scenes
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
+      let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
+      window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
+
+      console.log('Check ', nScenes, ' => ', this.showCalibrationEvery)
+
+      if (nScenes % this.showCalibrationEvery === 0) {
+        console.log('Start redirect to calibration')
+        this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
+      }
+      else if (this.hasScenesLeft) {
+        this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+      }
     }
+
+    this.loaded = true
   }
 }
 </script>

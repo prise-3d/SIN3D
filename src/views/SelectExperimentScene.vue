@@ -146,10 +146,25 @@ export default {
         }
       }
     }
+
     // Randomize each group
     todo = shuffleArray(todo)
     working = shuffleArray(working)
     done = shuffleArray(done)
+
+    // here push in session (if not already there) current user advancement
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') === null) {
+      window.sessionStorage.setItem('sin3d-nb-scenes', 0)
+    }
+
+    // check if necessary to show calibration before new scenes
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
+      let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
+
+      console.log('Redirect to calibration when selection')
+      if (nScenes % this.showCalibrationEvery === 0)
+        this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
+    }
 
     // for the experiment user is redirect to current working on
     if (working.length > 0) {

@@ -31,6 +31,11 @@ export default {
     ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
   },
   mounted() {
+    // here push in session (if not already there) current user advancement
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') === null) {
+      window.sessionStorage.setItem('sin3d-nb-scenes', 0)
+    }
+
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)
       this.sendMessage({
         msgId: experimentMsgId.STARTED,
@@ -41,7 +46,7 @@ export default {
       })
 
     // Check if the experiment is already finished
-    if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName })) {
+    if (this.experimentName && this.sceneName && this.isExperimentDone({ experimentName: this.experimentName, sceneName: this.sceneName }) && this.sceneName !== '50_shades_of_grey') {
       console.warn('Redirected from experiment. You can\'t go back in an experiment after finishing it.')
       this.$router.push(`/experiments/${this.experimentName}`)
     }
