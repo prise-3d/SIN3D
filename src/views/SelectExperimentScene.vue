@@ -124,6 +124,7 @@ export default {
     for (const aScene of scenesList) {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
+        .catch(e => console.log(e))
 
       let sceneObj = {
         name: thumb.sceneName,
@@ -161,7 +162,6 @@ export default {
     if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
       let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
 
-      console.log('Redirect to calibration when selection')
       if (nScenes % this.showCalibrationEvery === 0)
         this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
     }

@@ -31,9 +31,11 @@ export default {
     ...mapGetters(['getHostURI', 'getExperimentProgress', 'isExperimentDone'])
   },
   mounted() {
-    // here push in session (if not already there) current user advancement
+    // when new session push (if not already there) current user advancement (number of scenes) and redirect to calibration
     if (window.sessionStorage.getItem('sin3d-nb-scenes') === null) {
-      window.sessionStorage.setItem('sin3d-nb-scenes', 0)
+      window.sessionStorage.setItem('sin3d-nb-scenes', 1)
+      this.sceneName = '50_shades_of_grey'
+      this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
     }
 
     if (!this.getExperimentProgress({ experimentName: this.experimentName, sceneName: this.sceneName }).experimentName)

@@ -309,64 +309,53 @@ export default {
     ...mapGetters(['getHostURI', 'getAllExperimentProgress'])
   },
   async mounted() {
-    // redirect by default to calibration scene
-    let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
-    if (nScenes === 0) {
-      console.log('number of scene is', nScenes)
-      window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
-      this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
-    }
-    else {
-      // Load config for this scene to local state
-      this.loadConfig()
+    // Load config for this scene to local state
+    this.loadConfig()
 
-      // Load progress from store into local state
-      this.loadProgress()
+    // Load progress from store into local state
+    this.loadProgress()
 
-      this.launcherURI = this.getHostURI + '/launcher/'
+    this.launcherURI = this.getHostURI + '/launcher/'
 
-      let reference = null
+    let reference = null
 
-      // Load scene data from the API
-      await Promise.all([
-        this.getImage('max').then(res => (reference = res)),
-        this.getQualitiesList()
-      ])
+    // Load scene data from the API
+    await Promise.all([
+      this.getImage('max').then(res => (reference = res)).catch(e => console.log(e)),
+      this.getQualitiesList()
+    ])
 
-      this.referenceImage = reference.link
+    this.referenceImage = reference.link
 
-      this.maxWidth = reference.metadata.width
-      this.maxHeight = reference.metadata.height
+    this.maxWidth = reference.metadata.width
+    this.maxHeight = reference.metadata.height
 
-      // Load the cached configuration in the configurator component
-      if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
+    // Load the cached configuration in the configurator component
+    if (this.lockConfig === false) this.$refs.configurator.setDefaultConfig(this.extractConfig)
 
-      // Load extracts if none were cached
-      // if (this.extracts.length === 0)
-      await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
+    // Load extracts if none were cached
+    // if (this.extracts.length === 0)
+    await this.setExtractConfig(this.extractConfig, this.$refs.configurator)
 
-      this.saveProgress()
-      this.loadExperimentState()
+    this.saveProgress()
+    this.loadExperimentState()
 
-      // check window size
-      this.checkWindow()
-      window.addEventListener('resize', this.checkWindow)
+    // check window size
+    this.checkWindow()
+    window.addEventListener('resize', this.checkWindow)
 
-      // check if calibration is already done
-      if (this.sceneName === '50_shades_of_grey') {
-        // load current user progression
-        this.progression = this.getAllExperimentProgress()
-        let done = this.progression[this.experimentName][this.sceneName].done
+    // check if calibration is already done
+    if (this.sceneName === '50_shades_of_grey') {
+      // load current user progression
+      this.progression = this.getAllExperimentProgress()
+      let done = this.progression[this.experimentName][this.sceneName].done
 
-        console.log('Calibration scene is done', done)
-
-        if (done === true) {
-          console.log('Change of state for calibration')
-          this.calibrationCheck = true
-          this.runExpe = true
-          this.explanation = false
-          this.calibrationScene = true
-        }
+      // change variable state for calibration if already done
+      if (done === true) {
+        this.calibrationCheck = true
+        this.runExpe = true
+        this.explanation = false
+        this.calibrationScene = true
       }
     }
   },

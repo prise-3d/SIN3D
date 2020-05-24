@@ -110,10 +110,7 @@ export default {
       let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
       window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
 
-      console.log('Check ', nScenes, ' => ', this.showCalibrationEvery)
-
       if (nScenes % this.showCalibrationEvery === 0) {
-        console.log('Start redirect to calibration')
         this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
       }
       else if (this.hasScenesLeft) {
