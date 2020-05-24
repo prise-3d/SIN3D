@@ -276,6 +276,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import { getCalibrationScene } from '@/config.utils'
 import ExperimentBlock from '@/components/ExperimentBlock.vue'
 import ExperimentBaseExtracts from '@/mixins/ExperimentBaseExtracts'
 import ExtractConfiguration from '@/components/ExperimentsComponents/ExtractConfiguration.vue'
@@ -309,6 +310,9 @@ export default {
     ...mapGetters(['getHostURI', 'getAllExperimentProgress'])
   },
   async mounted() {
+    // load calibration for this experiment
+    let calibrationScene = getCalibrationScene(this.experimentName)
+
     // Load config for this scene to local state
     this.loadConfig()
 
@@ -345,7 +349,7 @@ export default {
     window.addEventListener('resize', this.checkWindow)
 
     // check if calibration is already done
-    if (this.sceneName === '50_shades_of_grey') {
+    if (this.sceneName === calibrationScene) {
       // load current user progression
       this.progression = this.getAllExperimentProgress()
       let done = this.progression[this.experimentName][this.sceneName].done

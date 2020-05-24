@@ -69,7 +69,7 @@ import Loader from '@/components/Loader.vue'
 import { mapGetters, mapActions } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
-import { getExperimentSceneList } from '@/config.utils'
+import { getExperimentSceneList, getCalibrationScene, getCalibrationFrequency } from '@/config.utils'
 
 export default {
   name: 'SelectExperimentScene',
@@ -105,6 +105,10 @@ export default {
     }
   },
   async mounted() {
+    // get information from calibration scene
+    let calibrationScene = getCalibrationScene(this.experimentName)
+    let calibrationSceneFreq = getCalibrationFrequency(this.experimentName)
+
     // reload scene list to update
     await this.loadScenesList
 
@@ -155,15 +159,16 @@ export default {
 
     // here push in session (if not already there) current user advancement
     if (window.sessionStorage.getItem('sin3d-nb-scenes') === null) {
-      window.sessionStorage.setItem('sin3d-nb-scenes', 0)
+      window.sessionStorage.setItem('sin3d-nb-scenes', 1)
+      this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
     }
 
     // check if necessary to show calibration before new scenes
     if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
       let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
 
-      if (nScenes % this.showCalibrationEvery === 0)
-        this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
+      if (nScenes % calibrationSceneFreq === 0)
+        this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
     }
 
     // for the experiment user is redirect to current working on

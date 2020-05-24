@@ -118,8 +118,6 @@ export default {
       const qualityIndex = this.qualities.indexOf(quality)
       let action, newQuality
 
-      console.log(qualityIndex)
-
       if (event.button === 0) action = 'needMore' // Left click
       if (event.button === 2) action = 'needLess' // Right click
 

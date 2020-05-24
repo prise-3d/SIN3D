@@ -46,7 +46,7 @@
 import Loader from '@/components/Loader.vue'
 import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
-import { getExperimentSceneList } from '@/config.utils'
+import { getExperimentSceneList, getCalibrationScene, getCalibrationFrequency } from '@/config.utils'
 import { rand } from '@/functions'
 import Newsletter from '@/components/ExperimentsComponents/Newsletter.vue'
 
@@ -70,7 +70,6 @@ export default {
     return {
       experimentFullName: null,
       availableScenes: [],
-      showCalibrationEvery: 5,
       loaded: false,
       loadingMessage: 'Chargement...'
     }
@@ -87,6 +86,10 @@ export default {
     }
   },
   async mounted() {
+    // get information about calibration scene
+    let calibrationScene = getCalibrationScene(this.experimentName)
+    let calibrationSceneFreq = getCalibrationFrequency(this.experimentName)
+
     // reload scene list to update
     await this.loadScenesList
 
@@ -110,8 +113,8 @@ export default {
       let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
       window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
 
-      if (nScenes % this.showCalibrationEvery === 0) {
-        this.$router.push(`/experiments/${this.experimentName}/50_shades_of_grey`)
+      if (nScenes % calibrationSceneFreq === 0) {
+        this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
       }
       else if (this.hasScenesLeft) {
         this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
