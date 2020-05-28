@@ -47,8 +47,9 @@ import Loader from '@/components/Loader.vue'
 import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
 import { getExperimentSceneList, getCalibrationScene, getCalibrationFrequency } from '@/config.utils'
-import { rand } from '@/functions'
+// import { rand } from '@/functions'
 import Newsletter from '@/components/ExperimentsComponents/Newsletter.vue'
+import stats from './../../results/match_extracts_probs.json'
 
 export default {
   name: 'ExperimentValidated',
@@ -82,7 +83,35 @@ export default {
       return this.availableScenes.length > 0
     },
     getRandomScene() {
-      return this.availableScenes[rand(0, this.availableScenes.length - 1)]
+      // need to get only data from available data
+      let availableStats = {}
+      let sumProbs = 0
+
+      for (let scene of this.availableScenes) {
+        availableStats[scene] = stats[scene]
+        sumProbs += stats[scene]
+      }
+
+      // renormalize probs for specific available scenes
+      for (let scene of this.availableScenes) {
+        availableStats[scene] /= sumProbs
+      }
+
+      let sceneChoice = this.availableScenes[0] // default choice
+      let sum = 0 // store sum prob during choice selection
+      let p = Math.random() // random number between 0 and 1
+
+      for (let scene of this.availableScenes) {
+        sum += availableStats[scene]
+
+        // get choice selection
+        if (sum >= p) {
+          sceneChoice = scene
+          break
+        }
+      }
+
+      return sceneChoice
     }
   },
   async mounted() {

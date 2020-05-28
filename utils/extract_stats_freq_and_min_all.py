@@ -41,7 +41,7 @@ def main():
             
     
     output_file = open(p_output, 'w')
-    output_file.write('scene;n_users;min_scene;\n')
+    # output_file.write('scene;n_users;min_scene;\n')
 
     for scene in dict_data:
         output_file.write(scene + ';')
