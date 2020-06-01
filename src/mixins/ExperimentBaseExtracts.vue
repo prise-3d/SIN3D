@@ -26,7 +26,9 @@ export default {
 
       showHoverBorder: null,
       lockConfig: null,
-      comment: null
+      comment: null,
+      dialogMore: false,
+      dialogLess: false
     }
   },
   computed: {
@@ -116,11 +118,11 @@ export default {
       const qualityIndex = this.qualities.indexOf(quality)
       let action, newQuality
 
-      if (event.button === 0) action = 'needLess' // Left click
-      if (event.button === 2) action = 'needMore' // Right click
+      if (event.button === 0) action = 'needMore' // Left click
+      if (event.button === 2) action = 'needLess' // Right click
 
-      if (event.button === 0 && event.ctrlKey) action = 'need10Less' // ctrl + Right click
-      if (event.button === 2 && event.ctrlKey) action = 'need10More' // ctrl + Left click
+      if (event.button === 0 && event.ctrlKey) action = 'need10More' // ctrl + Right click
+      if (event.button === 2 && event.ctrlKey) action = 'need10Less' // ctrl + Left click
 
       if (action === 'needLess') newQuality = precQuality
       if (action === 'needMore') newQuality = nextQuality
@@ -140,7 +142,17 @@ export default {
       }
 
       // Do not load a new extract if same quality
-      if (newQuality === quality) return
+      if (newQuality === quality) {
+        // display alert once limit is reached
+        if (action === 'needLess' || action === 'need10Less') {
+          this.dialogLess = true
+        }
+        if (action === 'needMore' || action === 'need10More') {
+          this.dialogMore = true
+        }
+
+        return
+      }
 
       // Set loading state
       this.extracts[index].loading = true

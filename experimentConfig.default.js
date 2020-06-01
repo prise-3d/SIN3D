@@ -49,6 +49,8 @@ export const experiments = {
         y: 4
       }
     },
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     scenesConfig: {},
     availableScenes: {
       whitelist: [
@@ -56,6 +58,7 @@ export const experiments = {
         'p3d_bunny-fur-view0_part6',
         'p3d_car2-view0_part6',
         'p3d_caustic-view0_part6',
+        'p3d_chopper-titan-view0_part6',
         'p3d_coffee-splash-view0_part6',
         'p3d_cornel-box-view0_part6',
         'p3d_crown-view0_part6',
@@ -81,9 +84,9 @@ export const experiments = {
         'p3d_pavilion-night-view0_part6',
         'p3d_pavilion-night-view1_part6',
         'p3d_pavilion-night-view2_part6',
+        'p3d_sportscar-view0_part6',
         'p3d_staircase-view1_part6',
         'p3d_staircase2-view0_part6',
-        'p3d_staircase2-view1_part6',
         'p3d_tt-view0_part6',
         'p3d_vw-van-view0_part6'
       ],
@@ -99,6 +102,8 @@ export const experiments = {
     mixins: [mixins.ExperimentBaseAreSameImages],
     defaultConfig: {},
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: null,
       blacklist: null
@@ -108,6 +113,8 @@ export const experiments = {
     mixins: [mixins.ExperimentBaseAreSameImages],
     defaultConfig: {},
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: null,
       blacklist: null
@@ -117,6 +124,8 @@ export const experiments = {
     mixins: [mixins.ExperimentBaseAreSameImages, mixins.ExperimentBaseExtracts],
     defaultConfig: {},
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: null,
       blacklist: null
@@ -126,6 +135,8 @@ export const experiments = {
     mixins: [mixins.ExperimentBase],
     defaultConfig: {},
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: ['Appart1opt02', 'EchecsBas'],
       blacklist: null
@@ -142,6 +153,8 @@ export const experiments = {
       }
     },
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: ['Appart1opt02', 'EchecsBas'],
       blacklist: null
@@ -158,6 +171,8 @@ export const experiments = {
       }
     },
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: null,
       blacklist: null
@@ -169,6 +184,8 @@ export const experiments = {
       lockConfig: true
     },
     scenesConfig: {},
+    calibrationScene: '50_shades_of_grey',
+    showCalibrationEvery: 5,
     availableScenes: {
       whitelist: ['50_shades_of_grey'],
       blacklist: null

@@ -5,6 +5,9 @@
 // Message ID for data collection
 export const COLLECT_DATA = 'COLLECT_DATA'
 
+// newsletter has been asked
+export const NEWS = 'NEWSLETTER'
+
 // Message IDs for experiments events
 export const EXPERIMENT = {
   // An experiment was started
@@ -15,6 +18,7 @@ export const EXPERIMENT = {
 
   // An experiment was validated
   VALIDATED: 'EXPERIMENT_VALIDATED'
+
 }
 
 export default { COLLECT_DATA, EXPERIMENT }

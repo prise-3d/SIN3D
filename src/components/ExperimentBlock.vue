@@ -15,7 +15,8 @@
           </v-layout>
           -->
 
-          <h2>"{{ $route.meta.fullName }}"</h2>
+          <h2 v-if="runExpe === true">"{{ $route.meta.fullName }}"</h2>
+
           <!-- <h3>{{ sceneName }}</h3> -->
 
           <slot name="header"></slot>
@@ -63,6 +64,11 @@ export default {
       type: String,
       required: false,
       default: null
+    },
+    runExpe: {
+      type: Boolean,
+      required: false,
+      default: true
     }
   }
 }

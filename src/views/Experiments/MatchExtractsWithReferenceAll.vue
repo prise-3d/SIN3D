@@ -111,7 +111,7 @@ export default {
 
     // Load scene data from the API
     await Promise.all([
-      this.getImage('max').then(res => (reference = res)),
+      this.getImage('max').then(res => (reference = res)).catch(e => console.log(e)),
       this.getQualitiesList()
     ])
 

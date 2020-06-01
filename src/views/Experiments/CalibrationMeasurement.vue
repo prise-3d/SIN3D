@@ -131,7 +131,7 @@ export default {
       const URI = `${this.getHostURI}${API_ROUTES.listSceneQualities(
         this.sceneName
       )}`
-      const { data } = await fetch(URI).then(res => res.json())
+      const { data } = await fetch(URI).then(res => res.json()).catch(e => console.log(e))
       this.qualities = data
 
       // remove reference
@@ -140,7 +140,7 @@ export default {
 
     // get reference size of image
     await Promise.all([
-      this.getImage('max').then(res => (reference = res))
+      this.getImage('max').then(res => (reference = res)).catch(e => console.log(e))
     ])
 
     this.maxWidth = reference.metadata.width

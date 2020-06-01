@@ -8,6 +8,7 @@ import getImageExtracts from './getImageExtracts'
 import ping from './ping'
 import dataCollect from './dataCollect'
 import experimentCollect from './experimentCollect'
+import experimentCheck from './experimentCheck'
 
 const router = express.Router()
 
@@ -17,6 +18,7 @@ router.use('/getImage', getImage)
 router.use('/getImageExtracts', getImageExtracts)
 router.use('/dataCollect', dataCollect)
 router.use('/experimentCollect', experimentCollect)
+router.use('/experimentCheck', experimentCheck)
 router.use('/ping', ping)
 
 export default router

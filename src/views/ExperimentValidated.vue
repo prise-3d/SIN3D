@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <h2>"{{ experimentFullName }}"</h2>
+  <div style="text-align:center">
+    <!-- <h2>"{{ experimentFullName }}"</h2> -->
 
-    <v-card>
+    <!-- <v-card>
       <v-card-title primary-title>
         <v-spacer />
         <div class="headline">Experiment validated for the scene "{{ sceneName }}"</div>
@@ -10,7 +10,7 @@
       </v-card-title>
       <v-card-actions>
         <v-spacer />
-        <!-- <v-btn flat exact to="/experiments/">
+        <v-btn flat exact to="/experiments/">
           <v-icon left>home</v-icon>
           Select another experiment
         </v-btn>
@@ -18,7 +18,7 @@
         <v-btn flat exact :to="`/experiments/${experimentName}`">
           <v-icon left>arrow_back</v-icon>
           Go back to scene selection
-        </v-btn> -->
+        </v-btn>
         <v-btn v-if="hasScenesLeft" flat exact :to="`/experiments/${experimentName}/${getRandomScene}`">
           <v-icon left>shuffle</v-icon>
           Continue with a random scene
@@ -26,18 +26,37 @@
         <div v-if="!hasScenesLeft" class="headline">You finished all the scenes, thanks for your contribution!</div>
         <v-spacer />
       </v-card-actions>
-    </v-card>
+    </v-card> -->
+
+    <loader v-if="!loaded" :message="loadingMessage" />
+
+    <div v-if="loaded" style="margin-top:10%">
+      <p style="font-size: 1.4em;">
+        Nous vous remercions d'avoir participé à cette expérience.
+        Elle va nous permettre d'améliorer les calculs d'images.
+      </p>
+    </div>
+
+    <!-- Add of newsletter component -->
+    <Newsletter v-if="loaded" />
   </div>
 </template>
 
 <script>
+import Loader from '@/components/Loader.vue'
 import { mapActions, mapGetters } from 'vuex'
 import Experiments from '@/router/experiments'
-import { getExperimentSceneList } from '@/config.utils'
-import { rand } from '@/functions'
+import { getExperimentSceneList, getCalibrationScene, getCalibrationFrequency } from '@/config.utils'
+// import { rand } from '@/functions'
+import Newsletter from '@/components/ExperimentsComponents/Newsletter.vue'
+import stats from './../../results/match_extracts_probs.json'
 
 export default {
   name: 'ExperimentValidated',
+  components: {
+    Newsletter,
+    Loader
+  },
   props: {
     experimentName: {
       type: String,
@@ -51,7 +70,9 @@ export default {
   data() {
     return {
       experimentFullName: null,
-      availableScenes: []
+      availableScenes: [],
+      loaded: false,
+      loadingMessage: 'Chargement...'
     }
   },
   computed: {
@@ -62,10 +83,42 @@ export default {
       return this.availableScenes.length > 0
     },
     getRandomScene() {
-      return this.availableScenes[rand(0, this.availableScenes.length - 1)]
+      // need to get only data from available data
+      let availableStats = {}
+      let sumProbs = 0
+
+      for (let scene of this.availableScenes) {
+        availableStats[scene] = stats[scene]
+        sumProbs += stats[scene]
+      }
+
+      // renormalize probs for specific available scenes
+      for (let scene of this.availableScenes) {
+        availableStats[scene] /= sumProbs
+      }
+
+      let sceneChoice = this.availableScenes[0] // default choice
+      let sum = 0 // store sum prob during choice selection
+      let p = Math.random() // random number between 0 and 1
+
+      for (let scene of this.availableScenes) {
+        sum += availableStats[scene]
+
+        // get choice selection
+        if (sum >= p) {
+          sceneChoice = scene
+          break
+        }
+      }
+
+      return sceneChoice
     }
   },
   async mounted() {
+    // get information about calibration scene
+    let calibrationScene = getCalibrationScene(this.experimentName)
+    let calibrationSceneFreq = getCalibrationFrequency(this.experimentName)
+
     // reload scene list to update
     await this.loadScenesList
 
@@ -84,9 +137,20 @@ export default {
         this.progression[this.experimentName] &&
         !this.progression[this.experimentName][aScene].done)
 
-    if (this.hasScenesLeft) {
-      this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+    // check if necessary to show calibration before new scenes
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
+      let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
+      window.sessionStorage.setItem('sin3d-nb-scenes', nScenes + 1)
+
+      if (nScenes % calibrationSceneFreq === 0) {
+        this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
+      }
+      else if (this.hasScenesLeft) {
+        this.$router.push(`/experiments/${this.experimentName}/${this.getRandomScene}`)
+      }
     }
+
+    this.loaded = true
   }
 }
 </script>

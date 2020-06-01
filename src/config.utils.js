@@ -72,3 +72,27 @@ export const getExperimentSceneList = experimentName => {
 
   return configuredScenesList
 }
+
+/**
+ * Read config to get calibration scene for a given experiment.
+ *
+ * @param {Object} experimentName The selected experiment
+ * @returns {String} The calibration scene name
+ */
+export const getCalibrationScene = experimentName => {
+  const config = getConfigObject(experimentName)
+
+  return config[experimentName].calibrationScene
+}
+
+/**
+ * Read config to get calibration expected frequency for a given experiment.
+ *
+ * @param {Object} experimentName The selected experiment
+ * @returns {Number} The frequency expected
+ */
+export const getCalibrationFrequency = experimentName => {
+  const config = getConfigObject(experimentName)
+
+  return Number(config[experimentName].showCalibrationEvery)
+}

@@ -5,7 +5,7 @@ export default [
     component: () => import('@/views/Experiments/MatchExtractsWithReference'),
     props: true,
     meta: {
-      fullName: 'Cliquer sur les zones de l\'image de gauche (clic droit de la souris)  afin de la faire correspondre à celle de droite'
+      fullName: 'Cliquer sur les zones de l\'image de gauche (clic gauche de la souris)  afin de la faire correspondre à celle de droite'
       // fullName: 'Match extracts qualities to reference image'
     }
   },
@@ -69,7 +69,7 @@ export default [
     component: () => import('@/views/Experiments/CalibrationMeasurement'),
     props: true,
     meta: {
-      fullName: 'Cliquer sur les zones de l\'image de gauche (clic droit de la souris)  afin de faire correspondre la teinte à celle de droite'
+      fullName: 'Cliquer sur les zones de l\'image de gauche (clic gauche de la souris)  afin de faire correspondre la teinte à celle de droite'
     }
   }
 ]

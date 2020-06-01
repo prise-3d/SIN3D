@@ -69,7 +69,7 @@ import Loader from '@/components/Loader.vue'
 import { mapGetters, mapActions } from 'vuex'
 import Experiments from '@/router/experiments'
 import { API_ROUTES, shuffleArray } from '@/functions'
-import { getExperimentSceneList } from '@/config.utils'
+import { getExperimentSceneList, getCalibrationScene, getCalibrationFrequency } from '@/config.utils'
 
 export default {
   name: 'SelectExperimentScene',
@@ -105,6 +105,10 @@ export default {
     }
   },
   async mounted() {
+    // get information from calibration scene
+    let calibrationScene = getCalibrationScene(this.experimentName)
+    let calibrationSceneFreq = getCalibrationFrequency(this.experimentName)
+
     // reload scene list to update
     await this.loadScenesList
 
@@ -124,6 +128,7 @@ export default {
     for (const aScene of scenesList) {
       const { data: thumb } = await fetch(`${this.getHostURI}${API_ROUTES.getImage(aScene, 'max')}`)
         .then(res => res.json())
+        .catch(e => console.log(e))
 
       let sceneObj = {
         name: thumb.sceneName,
@@ -146,10 +151,25 @@ export default {
         }
       }
     }
+
     // Randomize each group
     todo = shuffleArray(todo)
     working = shuffleArray(working)
     done = shuffleArray(done)
+
+    // here push in session (if not already there) current user advancement
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') === null) {
+      window.sessionStorage.setItem('sin3d-nb-scenes', 1)
+      this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
+    }
+
+    // check if necessary to show calibration before new scenes
+    if (window.sessionStorage.getItem('sin3d-nb-scenes') !== null) {
+      let nScenes = Number(window.sessionStorage.getItem('sin3d-nb-scenes'))
+
+      if (nScenes % calibrationSceneFreq === 0)
+        this.$router.push(`/experiments/${this.experimentName}/${calibrationScene}`)
+    }
 
     // for the experiment user is redirect to current working on
     if (working.length > 0) {
