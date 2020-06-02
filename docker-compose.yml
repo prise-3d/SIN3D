@@ -34,6 +34,7 @@ services:
             - mongo
         volumes:
             - "${IMAGES_PATH:-./images}:/usr/src/app/images"
+            - "./results:/usr/src/app/results"
             - "./logs:/usr/src/app/logs"
         depends_on:
             - mongo
