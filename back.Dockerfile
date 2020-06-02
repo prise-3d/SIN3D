@@ -9,8 +9,8 @@ WORKDIR /usr/src/app
 EXPOSE 5000
 
 # Install python
-RUN apt install -y python3-pip
-RUN apt install build-essential libssl-dev libffi-dev python3-dev
+RUN apk add --update --no-cache python python-dev py-pip
+RUN pip install pymongo
 
 # Install dependencies and generate documentation
 RUN yarn install && yarn doc
@@ -22,7 +22,7 @@ CMD if [ "$SERVE_CLIENT" == "true" ] ; \
       echo "Experiment configuration found" \
       || (echo "Experiment configuration not found, copying default" && cp experimentConfig.default.js experimentConfig.js)) && \
     ([ -d ./results ] || mkdir results) && \
-    ([ -f ./results/match_extracts_probs.json ] || echo "[]" >> results/match_extracts_probs.json)
+    ([ -f ./results/match_extracts_probs.json ] || echo "[]" >> results/match_extracts_probs.json) && \
     NODE_ENV=test yarn test && \
     yarn run app:build && \
     yarn run server:start ; \
