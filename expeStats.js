@@ -2,11 +2,18 @@
 
 // import { experiments } from './experimentConfig'
 const config = require('./experimentConfig')
-
+const mongoose = require('mongoose')
+const configApp = require('./config')
+const mongoDatabaseURI = configApp.mongoDatabaseURI
 const fs = require('fs-extra')
 
 const winston = require('winston')
 const execSync = require('child_process').execSync
+
+// const connectDb = async () => {
+//   await mongoose.connect(mongoDatabaseURI, { useNewUrlParser: true, useFindAndModify: false })
+//   mongoose.connection.on('error', (err) => console.log(err))
+// }
 
 // get whitelist scene for MatchExtractsWithReference experiment
 const scenes = config.experiments.MatchExtractsWithReference.availableScenes.whitelist
@@ -28,6 +35,8 @@ const fileLogger = winston.createLogger({
 })
 
 const setup = async (logToFile = false) => {
+  // await connectDb()
+
   if (logToFile) fileLogger.info({ log: 'Start extraction of data from mongo for `MatchExtractsExperiments`.', date: new Date() })
 
   execSync('python utils/extract_experiment.py', { encoding: 'utf-8' })

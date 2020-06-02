@@ -9,8 +9,9 @@ WORKDIR /usr/src/app
 EXPOSE 5000
 
 # Install python
-RUN apk add --update --no-cache python python-dev py-pip
+RUN apk add --update --no-cache gcc gfortran python python-dev py-pip build-base wget freetype-dev libpng-dev openblas-dev
 RUN pip install pymongo
+RUN pip install numpy
 
 # Install dependencies and generate documentation
 RUN yarn install && yarn doc

@@ -2,7 +2,7 @@
 from pymongo import MongoClient
 import json, os
 
-connection = MongoClient()
+connection = MongoClient('mongodb://mongo:27017')
 
 db = connection['sin3d']
 data_collection = db['datas']
