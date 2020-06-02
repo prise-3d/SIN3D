@@ -20,7 +20,9 @@ CMD if [ "$SERVE_CLIENT" == "true" ] ; \
   then \
     ([ -f ./experimentConfig.js ] && \
       echo "Experiment configuration found" \
-      || (echo "Experiment configuration not found, copying default" && cp experimentConfig.default.js experimentConfig.js && mkdir results && echo "[]" >> results/match_extracts_probs.json)) && \
+      || (echo "Experiment configuration not found, copying default" && cp experimentConfig.default.js experimentConfig.js)) && \
+    ([ -d ./results ] || mkdir results) && \
+    ([ -f ./results/match_extracts_probs.json ] || echo "[]" >> results/match_extracts_probs.json)
     NODE_ENV=test yarn test && \
     yarn run app:build && \
     yarn run server:start ; \
