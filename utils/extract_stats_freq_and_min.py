@@ -41,13 +41,20 @@ def main():
             
     
     output_file = open(p_output, 'w')
+    #output_file.write('scene;n_users;min_scene;\n')
 
     for scene in dict_data:
         output_file.write(scene + ';')
         
+        all_thresholds = []
+        n_users = 0
         for extract in dict_data[scene]:
             thresholds_data = dict_data[scene][extract]
-            output_file.write(str(int(np.min(thresholds_data))) + ';')
+            
+            all_thresholds.append(int(np.min(thresholds_data)))
+            n_users = len(thresholds_data)
+
+        output_file.write(str(n_users) + ';' + str(np.min(all_thresholds)) + ';')
 
         output_file.write('\n')
 
