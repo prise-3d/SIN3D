@@ -54,10 +54,6 @@ export const experiments = {
     scenesConfig: {},
     availableScenes: {
       whitelist: [
-        'p3d_bunny-fur-view0_part6',
-        'p3d_coffee-splash-view0_part6',
-        'p3d_ecosys-view0_part6',
-        'p3d_eponge-fractal-6-view0_part6',
         'p3d_arcsphere-view0_part6',
         'p3d_car2-view0_part6',
         'p3d_caustic-view0_part6',
