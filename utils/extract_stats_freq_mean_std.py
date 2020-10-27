@@ -13,11 +13,13 @@ def main():
 
     parser.add_argument('--file', type=str, help='image to convert', required=True)
     parser.add_argument('--output', type=str, help='output csv filename', required=True)
+    parser.add_argument('--freq', type=int, help='display user freq', choices=[0, 1], required=True)
 
     args = parser.parse_args()
 
     p_file   = args.file
     p_output = args.output
+    p_freq = bool(args.freq)
 
     f = open(p_file)
     json_data = json.load(f)
@@ -44,21 +46,23 @@ def main():
     #output_file.write('scene;n_users;min_scene;\n')
 
     for scene in dict_data:
-        output_file.write(scene + ';')
+        output_file.write(scene)
         
         all_thresholds = []
         n_users = 0
         for extract in dict_data[scene]:
             thresholds_data = dict_data[scene][extract]
             
-            all_thresholds.append(int(np.min(thresholds_data)))
+            all_thresholds.append(int(np.mean(thresholds_data) + np.std(thresholds_data)))
             n_users = len(thresholds_data)
 
-        output_file.write(str(n_users) + ';' + str(np.min(all_thresholds)) + ';')
+        if p_freq:
+            output_file.write(';' + str(n_users))
+        else:
+            for t in all_thresholds:
+                output_file.write(';' + str(t))
 
-        output_file.write('\n')
-
-
+        output_file.write(';\n')
 
 if __name__ == "__main__":
     main()
